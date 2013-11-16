@@ -1,0 +1,283 @@
+<?php
+namespace application\modules\administration\games;
+use application\core\mvc\MainController as MainController;
+use application\modules\administration\games\model as Model;
+use classes\SimpleImage;
+use classes\url;
+
+class Controller extends MainController
+{
+    private static $storage_path = "storage/guide-games/111/";
+    private static $storagePath = "storage/guide-games/";
+    private $filter = array("year" => "", "month" => "", "day" => "", "page" => 1);
+    public $model;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->model = new Model();
+        $this->RunAjax();
+    }
+
+    public function ActionIndex()
+    {
+        $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/index.tpl.php', '', 'index-admin.tpl.php');
+    }
+    /* Начало добавление списка игр*/
+    public function ActionAddMainListGame()
+    {
+        if(isset($_GET['action']) && $_GET['action'] == 'edit')
+        {
+            $data = $this->model->GetGame($_GET['id']);
+            $tplGames = 'administration/games/edit-games.tpl.php';
+        }
+        else
+        {
+            $tplGames = 'administration/games/list-games.tpl.php';
+            $data = $this->model->ListGames();
+        }
+
+        $this->view->Generate('menu/admin-menu.tpl.php', $tplGames, $this->GetTplView(), 'index-admin.tpl.php', $data);
+    }
+    /* Конец добавление списка игр*/
+
+    public function ActionGame($id)
+    {
+        if(isset($id) && $id > 0)
+        {
+            $data = $this->model->GetGame($id);
+
+            $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/game.tpl.php', '', 'index-admin.tpl.php', $data);
+        }
+        else
+        {
+            echo "Игра не найдена";
+        }
+
+    }
+
+    public function ActionSearchGames($param)
+    {
+        $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/search.tpl.php', '', 'index-admin.tpl.php');
+    }
+
+    public function ActionMainPage()
+    {
+        if(isset($_GET['id']))
+        {
+            $data['game'] = $this->model->GetGame($_GET['id']);
+            $data['main-page'] = $this->model->GetMainPageGame($_GET['id']);
+            $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/main-page.tpl.php', '', 'index-admin.tpl.php', $data);
+        }
+
+    }
+
+    public function ActionMainPageEdit() // редактирование главной стринцы для игр
+    {
+        $game = $this->model->GetGame($this->_p['id-game']);
+        if($this->_p['id']>0)
+        {
+            $this->model->EditMainPageGame($game);
+        }
+        else
+        {
+            $this->model->AddMainPageGame($game);
+        }
+        $this->Redirect("index");
+    }
+
+    public function ActionAddQuest()
+    {
+        $data = array("id" => 0, "date" => date("d.m.Y"), "header" => "", "event_date" => "", "short" => "", "text" => "", "title" => "", "description" => "", "keywords" => "");
+        $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/edit.tpl.php', '', 'index-admin.tpl.php', $data);
+    }
+    public function ActionAddGame()
+    {
+        $data = array("id" => 0, "date" => date("d.m.Y"), "header" => "", "event_date" => "", "short" => "", "text" => "", "title" => "", "description" => "", "keywords" => "");
+        $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/game.tpl.php', '', 'index-admin.tpl.php', $data);
+    }
+
+    public function ActionEditGame()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->PrepareImages();
+            if ($this->_p["id"] > 0)
+                $res = $this->model->Edit($this->_p);
+            else
+                $res = $this->model->Add($this->_p);
+            $this->DeleteImages($res["id"]);
+            $this->Redirect("index");
+        } else {
+            $data = $this->model->GetById($_GET["id"]);
+            if ($data["source_img_top"])
+                $data["source_img"] = array(array("filename" => $data["source_img_top"], "filename_b" => $data["source_img"]));
+            $data["publ_images"] = $this->model->GetImages($_GET["id"]);
+            $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/game.tpl.php', '', 'index-admin.tpl.php', $data);
+        }
+    }
+
+    public function ActionUploadIMgMainPage()
+    {
+        /*if ($_SERVER['REQUEST_METHOD'] === 'POST')
+        {
+            if(count($_FILES) > 9)
+            {
+                print_r(json_encode(array("error" => "Количество файлов не должно превышать 10")));
+                exit();
+            }
+            $idGuide = $this->model->GetMainPageGame($this->_g['id']);
+            $objImage = new SimpleImage();
+            foreach ($_FILES as $key => $value)
+            {
+                $this->UploadImg($objImage, $value, $idGuide);
+                $rootApp = Url::RootApp();
+                // нужен вывод для одной картинки и для нескольких с условием если одна загрузилась, то её отображаем и сразу же грузим следующую
+
+                //$this->Json(array("result" => "success", "filename" => $rootApp . $fileName, "filename_b" => $rootApp . $fileName_b));
+                else
+                {
+                    $arrFile['big'][] = $fileName_b;
+                    $arrFile['small'][] = $fileName;
+                }
+            }
+            print_r(json_encode($arrFile));
+            unset($_SESSION['multi-load']);
+        }
+        exit();*/
+    }
+
+    private function UploadImg($objImage, $value, $idGuide)
+    {
+        $ext = "." . pathinfo($value['name'], PATHINFO_EXTENSION);
+        $name = self::$storagePath . $idGuide->id . "/"  . md5(microtime() + rand(0, 10000));
+        $fileName = $name . $ext;
+        $fileName_b = $name . "_b" . $ext;
+        $objImage->load($value['tmp_name'])->square_crop(100)->save($fileName);
+        $objImage->load($value['tmp_name'])->save($fileName_b);
+    }
+
+    public function ActionFilter()
+    {
+        $this->filter["year"] = (int)$_REQUEST["year"];
+        $this->filter["month"] = (int)$_REQUEST["month"];
+        $this->filter["day"] = strtotime($_REQUEST["day"]);
+        $this->filter["page"] = isset($_REQUEST["page"]) ? (int)$_REQUEST["page"] : 1;
+        $data["count"] = $this->model->GetFilterCount($this->filter);
+        $data["rows"] = $this->model->GetFilterData($this->filter);
+        $data["current_page"] = $this->filter["page"];
+        $this->Json($data);
+    }
+
+    public function ActionCreate()
+    {
+        $data = array("id" => 0, "date" => date("d.m.Y"), "header" => "", "event_date" => "", "short" => "", "text" => "", "title" => "", "description" => "", "keywords" => "");
+        $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/edit.tpl.php', '', 'index-admin.tpl.php', $data);
+    }
+
+    public function ActionEdit()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->PrepareImages();
+            if ($this->_p["id"] > 0)
+                $res = $this->model->Edit($this->_p);
+            else
+                $res = $this->model->Add($this->_p);
+            $this->DeleteImages($res["id"]);
+            $this->Redirect("index");
+        } else {
+            $data = $this->model->GetById($_GET["id"]);
+            if ($data["source_img_top"])
+                $data["source_img"] = array(array("filename" => $data["source_img_top"], "filename_b" => $data["source_img"]));
+            $data["publ_images"] = $this->model->GetImages($_GET["id"]);
+            $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/edit.tpl.php', '', 'index-admin.tpl.php', $data);
+        }
+    }
+
+    public function ActionDelete()
+    {
+        $id = $_REQUEST["id"];
+        if ($id > 0)
+        {
+            $res = $this->model->Delete($id);
+            return $res;
+        }
+        return Route::ErrorPage404();
+    }
+
+    public function ActionUpload()
+    {
+        // todo сделать хранилище для временных картинок добавляем картинку во временную папку, после чего пишем в базу запись о картинке, и сохраняем
+        // todo перенести пути хранение файлов в текущий метод сделав в шаблоне некий hidden
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if(!empty($this->_p["multi-load"]))
+            {
+                $_SESSION['multi-load'] = 1;
+                exit();
+            }
+            if(count($_FILES) > 9)
+            {
+                print_r(json_encode(array("error" => "Количество файлов не должно превышать 10")));
+                exit();
+            }
+            $objImage = new SimpleImage();
+            foreach ($_FILES as $key => $value)
+            {
+                $ext = "." . pathinfo($value['name'], PATHINFO_EXTENSION);
+                $name = self::$storage_path . md5(microtime() + rand(0, 10000));
+                $fileName = $name . $ext;
+                $fileName_b = $name . "_b" . $ext;
+                $objImage->load($value['tmp_name'])->square_crop(360)->save($fileName);
+                $objImage->load($value['tmp_name'])->save($fileName_b);
+                $rootApp = Url::RootApp();
+                if(empty($_SESSION['multi-load']))
+                    $this->Json(array("result" => "success", "filename" => $rootApp . $fileName, "filename_b" => $rootApp . $fileName_b));
+                else
+                {
+                    $arrFile['big'][] = $fileName_b;
+                    $arrFile['small'][] = $fileName;
+                }
+            }
+            print_r(json_encode($arrFile));
+            unset($_SESSION['multi-load']);
+        }
+        exit();
+    }
+
+    private function PrepareImages()
+    {
+        $images = json_decode($this->_p['img-main']);
+        if (count($images) == 0)
+        {
+            $this->_p['source_img'] = "";
+            $this->_p['source_img_top'] = "";
+        }
+        else
+        {
+            $this->_p['source_img'] = $images->filename_b;
+            $this->_p['source_img_top'] = $images->filename;
+        }
+    }
+
+    private function DeleteImages($id)
+    {
+        $deleteImages = json_decode($this->_p["source_img_delete"]);
+        if ($deleteImages)
+        {
+            foreach ($deleteImages as $image)
+            {
+                unlink($_SERVER['DOCUMENT_ROOT'] . $image->filename);
+                unlink($_SERVER['DOCUMENT_ROOT'] . $image->filename_b);
+            }
+        }
+        $deleteImagesList = json_decode($this->_p["publ_images_delete"]);
+
+        foreach ($deleteImagesList as $image)
+        {
+            unlink($_SERVER['DOCUMENT_ROOT'] . $image->filename);
+            unlink($_SERVER['DOCUMENT_ROOT'] . $image->filename_b);
+            $this->model->DeleteImage($id, $image->filename);
+        }
+    }
+
+
+}
