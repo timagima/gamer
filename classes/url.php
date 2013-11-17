@@ -1,5 +1,5 @@
 <?php
-namespace classes;
+namespace classes; //
 use application\core\config\route;
 
 class Url
