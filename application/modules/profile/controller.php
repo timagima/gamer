@@ -79,6 +79,7 @@ class Controller extends MainController
     }
     private function CreateDir()
     {
+
         $randSecondParam = substr("999999999", 0, -strlen($_SESSION['user-data']['id']));
         $randFirstParam = "1";
         for($i = 0; $i<strlen($randSecondParam)-1; $i++)
@@ -105,4 +106,6 @@ class Controller extends MainController
             $this->Json(array("result" => "success", "filename" => "/" . $fileName, "filename_b" => "/" . $fileName_b));
         }
     }
+
+
 }
