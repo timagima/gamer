@@ -245,7 +245,7 @@ class Model extends MainModel
         return $this->conn->dbh->query("SELECT t.header, t.end_date, t.pay, w.id, w.description, u.nick, g.name as game, g.source_img_s as game_img  FROM winners w
                                         LEFT JOIN users u ON u.id = w.winner
                                         LEFT JOIN tournaments t ON w.id_tournament = t.id
-                                        LEFT JOIN games g ON g.id=t.id_game ORDER BY end_date ASC")->fetchAll(PDO::FETCH_OBJ);
+                                        LEFT JOIN games g ON g.id=t.id_game ORDER BY end_date ASC")->fetchAll(PDO::FETCH_OBJ); //
 
     }
     public function WinnerPage($id)
