@@ -18,5 +18,5 @@ Date.prototype.toServerTime = function() {
 	return new Date(this.getTime() + cs_time_diff);
 	}
 var now = new Date();
-now.toServerTime();
+now.toServerTime(); //
 </script>
