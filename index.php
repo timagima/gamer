@@ -2,7 +2,7 @@
 header('Content-Type: text/html; charset=utf-8'); // start
 date_default_timezone_set('UTC');
 error_reporting(0);
-ini_set('display_errors', isset($_GET["debug"]) ? 1 : 1);
+ini_set('display_errors', isset($_GET["debug"]) ? 1 : 1); //
 
 require_once 'application/bootstrap.php';
 //echo 'Время выполнения скрипта: ' . (microtime(true) - $start) . ' сек.<br />';
