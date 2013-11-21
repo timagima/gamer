@@ -43,6 +43,7 @@
             </div>
         </div>
     </div>
+
     <div class="search-menu">
         <input type="text" class="search-field" id="autocomplete-ajax" placeholder="Поиск"/>
         <div id="selction-ajax"></div>

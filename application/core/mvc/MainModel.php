@@ -5,6 +5,7 @@ use classes\cryptography;
 use classes\Plinq;
 
 
+
 use PDO;
 class MainModel
 {
@@ -22,6 +23,7 @@ class MainModel
         if(empty($_SESSION['auth']))
             $this->AuthCookie();
     }
+
     /* Модель обычно включает методы выборки данных, это могут быть:
             > методы нативных библиотек pgsql или mysql;
             > методы библиотек, реализующих абстракицю данных. Например, методы библиотеки PEAR MDB2;
@@ -30,7 +32,7 @@ class MainModel
             > и др. */
 
     public function GetData(){}
-    
+
     public function CountQuery()
     {
         $count = $this->conn->dbh->countQuery;

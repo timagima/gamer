@@ -6,7 +6,7 @@ use classes\SimpleImage;
 
 
 class Controller extends MainController
-{    
+{
     public $block, $model, $sms;
     public function __construct()
     {
@@ -20,7 +20,7 @@ class Controller extends MainController
     {
         $data['games'] = $this->model->GetGames();
         $data['genre'] = $this->model->GetGenre();
-        $data['rank'] = $this->model->GetRanks();
+        $data['rank']  = $this->model->GetRanks();
         $data['award'] = $this->model->GetAwards();
         $this->headerTxt['title'] = $this->view->user['first_name'] . " " . $this->view->user['last_name'] . "  профиль пользователя - GS11";
         $this->view->Generate('menu/auth-menu.tpl.php', 'profile/index.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());

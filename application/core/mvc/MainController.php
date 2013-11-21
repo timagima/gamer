@@ -48,7 +48,7 @@ class MainController
             exit();
         }
     }
-    
+
     public function GetTplView()
     {
         return array('main' => 'main/show.tpl.php',
@@ -96,11 +96,13 @@ class MainController
     }
     public function RunAjax($msg = null, $object = null)
     {
-        if(isset($this->_p['ajax-query']))
+        if( isset($this->_p['ajax-query']) )
         {
-            $method = $this->_p['method'];
+            // print_r($this);
+            // exit();
+            $method    = $this->_p['method'];
             $typeClass = $this->_p['type-class'];
-            $result = $this->$typeClass->$method();
+            $result    = $this->$typeClass->$method();
             if($result) echo  $result;
             exit();
         }

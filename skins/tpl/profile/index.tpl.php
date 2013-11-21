@@ -1,3 +1,5 @@
+
+
 <script>
     $(document).ready(function(){
         birthday();
@@ -6,6 +8,7 @@
     })
 
     $(function(){
+
         $('.hints').poshytip({
             className: 'tip-black',
             showOn: 'focus',
@@ -16,13 +19,29 @@
             offsetY: 5,
             showTimeout: 100
         });
+
+
+        $('#city').autocomplete({
+            serviceUrl: document.location.href,
+            zIndex: 99999, // z-index списка
+            type: 'POST',
+            params: {
+                'ajax-query': 'true',
+                'type-class':'model',
+                'method': 'GetCitys',
+                'limit': '10'
+            },
+            dataType: 'html',
+            deferRequestBy: 200,
+        });
+
     });
 
     function editGamerData(){
         var gameExperience = $("#game-experience").val();
-        var loveGenre = $("#love-genre").val();
+        var loveGenre      = $("#love-genre").val();
         var loveComplexity = $("#love-complexity").val();
-        var loveGame = $("#love-game").val();
+        var loveGame       = $("#love-game").val();
 
         $.ajax({
             type: 'POST',
@@ -37,15 +56,18 @@
             }
         });
     }
+
+    // РЕДАКТИРОВАНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЯ
     function editUserOtherData(){
-        var nick = $("#nick").val();
+        var nick    = $("#nick").val();
+        var city    = $("#city").val();
         var aboutMe = $("#about-me").val();
 
         $.ajax({
             type: 'POST',
             url: document.location.href,
             dataType: 'html',
-            data: {'ajax-query': 'true', 'type-class': 'model', 'method':'MainEditUserOtherData', 'nick': nick, 'about-me': aboutMe},
+            data: {'ajax-query': 'true', 'type-class': 'model', 'method':'MainEditUserOtherData', 'nick': nick, 'city': city, 'about-me': aboutMe},
             beforeSend: function(){
                 $('#send').before('<img id="ajax-img-loader" src="/skins/img/ajax/loader-page.gif">');
             },
@@ -57,15 +79,15 @@
 
 
     function editUserData(){
-        var firstName = $("#edit-first-name").val();
-        var lastName = $("#edit-last-name").val();
+        var firstName  = $("#edit-first-name").val();
+        var lastName   = $("#edit-last-name").val();
         var patronymic = $("#edit-patronymic").val();
-        var sex = $("input[name=edit-sex]:checked").val();
-        var aboutMe = $("#edit-about-me").val();
-        var day = $("#edit-age-day").val();
-        var month = $("#edit-age-month").val();
-        var year = $("#edit-age-year").val();
-        day = day.length == 1 ? "0"+  day : day;
+        var sex        = $("input[name=edit-sex]:checked").val();
+        var aboutMe    = $("#edit-about-me").val();
+        var day        = $("#edit-age-day").val();
+        var month      = $("#edit-age-month").val();
+        var year       = $("#edit-age-year").val();
+        day   = day.length == 1 ? "0"+  day : day;
         month = month.length == 1 ? "0"+  month : month;
         var birthday = day + "." + month + "."+ year;
 
@@ -90,11 +112,11 @@
 
 
     function birthdayActualDate(){
-        var month = parseInt($("#edit-age-month").val());
-        var year = parseInt($("#edit-age-year").val());
-        var day = parseInt($("#edit-age-day").val());
-        var dataDay = '';
-        var integerDayForYear = (year - 1948) / 4;
+        var month              = parseInt($("#edit-age-month").val());
+        var year               = parseInt($("#edit-age-year").val());
+        var day                = parseInt($("#edit-age-day").val());
+        var dataDay            = '';
+        var integerDayForYear  = (year - 1948) / 4;
         var integerDayForMonth = month / 2;
         if(month >= 8)
             var resDay = ((integerDayForMonth + "").indexOf(".") > 0) ? 30 : 31;
@@ -123,14 +145,19 @@
         $("#edit-age-year").append(dataYear);
         $("#edit-age-day").append(dataDay);
     }
+
     function confirmSaveInfo(){
         $("#box-modal-main-save").arcticmodal();
     }
+
+
+
 
 </script>
 
 
 <h2>Мой профиль</h2>
+
 <? if(!empty($data['user']['first_name']) && !empty($data['user']['last_name']) &&
     !empty($data['user']['patronymic']) && !empty($data['user']['age']) && !empty($data['user']['sex']) && !empty($data['user']['about_me'])) { ?>
     <div id="edit-main-data" class="reveal-modal">
@@ -204,6 +231,10 @@
                                         <div class="block-profile-info-txt"><?=$nameProfile; ?></div>
                                     </div>
                                     <div class="block-profile-info-wrapper">
+                                        <div class="block-profile-info-header left">Город</div>
+                                        <div class="block-profile-info-txt"><?= $this->GetCity(); ?></div>
+                                    </div>
+                                    <div class="block-profile-info-wrapper">
                                         <div class="block-profile-info-header left">Возраст</div>
                                         <div class="block-profile-info-txt"><?= $this->GetHappyBirthday(); ?></div>
                                     </div>
@@ -220,6 +251,8 @@
                             </td>
                         </tr>
                     </table>
+
+                    <!-- Модальная форма редактировнаия общих данных -->
                     <div class="hide">
                         <div class="box-modal" id="box-modal-data-gamer" style="width: 390px">
                             <div class="header-modal">
@@ -234,26 +267,21 @@
                                         <td class="modal-gamer-data-td">Игровой стаж на PC:</td>
                                         <td>
                                             <select id="game-experience" class="styled" style="width: 180px; height: 15px;">
-                                                <option value="1 год">1 год</option>
-                                                <option value="2 года">2 года</option>
-                                                <option value="3 года">3 года</option>
-                                                <option value="4 года">4 года</option>
-                                                <option value="5 лет">5 лет</option>
-                                                <option value="6 лет">6 лет</option>
-                                                <option value="7 лет">7 лет</option>
-                                                <option value="8 лет">8 лет</option>
-                                                <option value="9 лет">9 лет</option>
-                                                <option value="10 лет">10 лет</option>
-                                                <option value="11 лет">11 лет</option>
-                                                <option value="12 лет">12 лет</option>
-                                                <option value="13 лет">13 лет</option>
-                                                <option value="14 лет">14 лет</option>
-                                                <option value="15 лет">15 лет</option>
-                                                <option value="16 лет">16 лет</option>
-                                                <option value="17 лет">17 лет</option>
-                                                <option value="18 лет">18 лет</option>
-                                                <option value="19 лет">19 лет</option>
-                                                <option value="20 лет">20 лет</option>
+                                                <?php
+                                                    for ($year = 1; $year <= 20; $year++) {
+                                                        if($year == "1")  $str = " год";
+                                                        else if($year >= "2" && (string)$year <= "4" && $year > "1") $str = " года";
+                                                        else $str = " лет";
+                                                        $game_exp = $year .' '. $str;
+                                                        ?>
+
+                                                        <?php if ( (int)$game_exp == (int)$this -> GetGameExp() ) { ?>
+                                                            <option selected='selected' value="<?= $game_exp ?>"><?= $game_exp ?></option>
+                                                        <?php } else { ?>
+                                                            <option value="<?= $game_exp ?>"><?= $game_exp ?></option>
+                                                        <?php } ?>
+                                                <?php } ?>
+
                                             </select>
                                         </td>
                                     </tr>
@@ -261,13 +289,17 @@
                                         <td class="modal-gamer-data-td" >Любимый жанр:</td>
                                         <td>
                                             <select id="love-genre" class="styled" style="width: 180px; height: 15px;">
-                                                <?php
-                                                foreach($data['genre'] as $r)
-                                                {
-                                                    echo '<option value="'.$r->name.'">'.$r->name.'</option>';
+                                                <?php foreach($data['genre'] as $genre) {
+                                                    $name = $genre -> name;
+                                                    ?>
 
-                                                }
-                                                ?>
+                                                    <?php if ( $name == $this -> GetLoveGenre() ) { ?>
+                                                        <option selected='selected' value="<?= $name ?>"><?= $name ?></option>
+                                                    <?php } else { ?>
+                                                        <option value="<?= $name ?>"><?= $name ?></option>
+                                                    <?php } ?>
+
+                                                <?php } ?>
                                             </select>
                                         </td>
                                     </tr>
@@ -275,9 +307,15 @@
                                         <td class="modal-gamer-data-td">Предпочтительная сложность:</td>
                                         <td>
                                             <select id="love-complexity" class="styled" style="width: 180px; height: 15px;">
-                                                <option value="Люблю пройти на лёгком">Люблю пройти на лёгком</option>
-                                                <option value="Выбираю нечто среднее">Выбираю нечто среднее</option>
-                                                <option value="Всегда всё самое тяжёлое">Всегда всё самое тяжёлое</option>
+                                                <?php foreach (self::$types_complexity as $type) {?>
+
+                                                    <?php if ( $type == $this -> GetLoveComplexity() ) { ?>
+                                                        <option selected='selected' value="<?= $type ?>"><?= $type ?></option>
+                                                    <?php } else { ?>
+                                                        <option value="<?= $type ?>"><?= $type ?></option>
+                                                    <?php } ?>
+
+                                                <?php } ?>
                                             </select>
                                         </td>
                                     </tr>
@@ -285,13 +323,17 @@
                                         <td class="modal-gamer-data-td">Любимая игра:</td>
                                         <td>
                                             <select id="love-game" class="styled" style="width: 180px; height: 15px;">
-                                                <?php
-                                                    foreach($data['games'] as $r)
-                                                    {
-                                                        echo '<option value="'.$r->name.'">'.$r->name.'</option>';
+                                                <?php foreach($data['games'] as $game){
+                                                    $name = $game -> name;
+                                                    ?>
 
-                                                    }
-                                                ?>
+                                                    <?php if ( $name == $this -> GetLoveGame() ) { ?>
+                                                        <option selected='selected' value="<?= $name ?>"><?= $name ?></option>
+                                                    <?php } else { ?>
+                                                        <option value="<?= $name ?>"><?= $name ?></option>
+                                                    <?php } ?>
+
+                                                <?php } ?>
                                             </select>
                                         </td>
                                     </tr>
@@ -300,7 +342,9 @@
                                     <a style="margin-left: 10px; background: #b4b4b4 !important;" href="javascript:closeModalAll()" class="btn-login">Отмена</a></div>
                             </div>
                         </div>
-                    </div> <!-- Модальная форма редактировнаия общих данных -->
+                    </div>
+
+                    <!-- Модальная форма редактировнаия данных игрока -->
                     <div class="hide">
                         <div class="box-modal" id="box-modal-data-user" style="width: 390px">
                             <div class="header-modal">
@@ -314,13 +358,20 @@
                                     <tr>
                                         <td class="modal-gamer-data-td">Ник:</td>
                                         <td>
-                                            <input type="text" id="nick" class="input-txt-profile" value="<?=$this->user['nick'];?>" >
+                                            <input type="text" id="nick" class="input-txt-profile" value="<?=$this -> user['nick'];?>" >
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="modal-gamer-data-td">Город:</td>
+                                        <td>
+                                            <input type="text" id="city" class="input-txt-profile" value="<?= $this -> user['city']; ?>" >
+                                            <div id="selction-ajax"></div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="modal-gamer-data-td" >О себе:</td>
                                         <td>
-                                            <textarea type="text" id="about-me" class="input-txt-profile" ><?=$this->user['about_me'];?></textarea>
+                                            <textarea type="text" id="about-me" class="input-txt-profile" ><?= $this -> user['about_me']; ?></textarea>
                                         </td>
                                     </tr>
                                 </table><br>
@@ -328,7 +379,8 @@
                                     <a style="margin-left: 10px; background: #b4b4b4 !important;" href="javascript:closeModalAll()" class="btn-login">Отмена</a></div>
                             </div>
                         </div>
-                    </div> <!-- Модальная форма редактировнаия данных игрока -->
+                    </div>
+
                     <table>
                         <tr>
                             <td>
@@ -489,7 +541,7 @@
 									<label class="radio" style="margin-left:25px">
 										<input type="radio" name="edit-sex" value="2">женский
 									</label>
-                                        
+
                                     </div>
                                 </div>
                                 <div class="block-profile-info-wrapper">

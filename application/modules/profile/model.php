@@ -2,9 +2,11 @@
 namespace application\modules\profile;
 use application\core\mvc\MainModel;
 use PDO;
+use classes\OftenFunctions;
 
 class Model extends MainModel
 {
+
     public function __construct()
     {
         parent::__construct();
@@ -48,12 +50,17 @@ class Model extends MainModel
         $stmt->execute();
         $this->GetRefreshDataUser();
     }
+
+    /*
+    *   ОБЩИЕ ДАННЫЕ
+    */
     public function MainEditUserOtherData()
     {
-        $stmt = $this->conn->dbh->prepare("UPDATE users SET nick = :nick, about_me = :about_me  WHERE id = :id");
-        $stmt->bindParam(":nick", $this->_p['nick'], PDO::PARAM_STR);
-        $stmt->bindParam(":about_me", $this->_p['about-me'], PDO::PARAM_STR);
-        $stmt->bindParam(":id", $_SESSION['user-data']['id'], PDO::PARAM_INT);
+        $stmt = $this -> conn -> dbh -> prepare("UPDATE users SET nick = :nick, about_me = :about_me, city = :city  WHERE id = :id");
+        $stmt->bindParam(":nick",       $this -> _p['nick'], PDO::PARAM_STR);
+        $stmt->bindParam(":about_me",   $this -> _p['about-me'], PDO::PARAM_STR);
+        $stmt->bindParam(":city",       $this -> _p['city'], PDO::PARAM_STR);
+        $stmt->bindParam(":id",         $_SESSION['user-data']['id'], PDO::PARAM_INT);
         $stmt->execute();
         $this->GetRefreshDataUser();
     }
@@ -93,6 +100,27 @@ class Model extends MainModel
         $this->GetRefreshDataUser();
     }
 
+    /*
+    *   ПОЛУЧАЕТ НАЗВАНИЕ ГОРОДОВ
+    */
+    public function GetCitys() {
+        $result = [];
 
+        $query =  $this -> _p['query'];
+        $limit = !empty($this -> _p['limit']) ? $this -> _p['limit'] : '10';
+
+        if ( !empty($query) ) {
+            $query = OftenFunctions::getCorrectText($query);
+            $query = ' AND city.name like \'%'. $query.'%\'';
+
+            $sql   = "SELECT city.name FROM city WHERE city.socr = 'г' ". $query ." LIMIT ". $limit;
+            $sql   = $this -> conn -> dbh -> query($sql);
+            foreach ( $sql as $value ) {
+                $result['suggestions'][] = $value[0];
+            }
+        }
+
+        return json_encode($result);
+    }
 }
 

@@ -2,6 +2,14 @@
 // todo Исправить ошибку с вёрсткой (текст в полях наезжают на иконки)
 // todo Доработать вёрстку иконки в полях сделать более чёткие
 // todo В некоторых случаях модальное окно на крестик не закрывается
+
+/*
+* ПРОВЕРКА НА ПУСТОЕ ЗНАЧЕНИЕ
+*/
+function empty(data) {
+    return (typeof(data) == 'undefined' || data == null || data == '' )
+}
+
 function addSoc(a){
     h=encodeURIComponent(window.location.href+window.location.hash);
     t=encodeURIComponent(document.title);
@@ -234,14 +242,20 @@ $.fn.toggleClick = function(){
         });
     });
 };
+
+
+
+
 $(function () {
+
+    // РАБОТА С АВТОКОМПЛИТОМ (OLD)
     'use strict';
     $.ajax({
         url: '/storage/suggestion/suggestion.json',
         dataType: 'json'
     }).done(function (source) {
-            var txtArray = $.map(source, function (value, key) { return { value: value, data: key }; }),
-                txt = $.map(source, function (value) { return value; });
+        var txtArray = $.map(source, function (value, key) { return { value: value, data: key }; }),
+            txt      = $.map(source, function (value) { return value; });
 
             $('#autocomplete-ajax').autocomplete({
                 lookup: txtArray,
@@ -254,6 +268,7 @@ $(function () {
                 }
             });
         });
+
 });
 $(function () {
     $('select.styled').customSelect();

@@ -13,10 +13,10 @@ list($sms_id, $sms_cnt, $cost, $balance) = $obj->SendSms("375293073228", "GS11 Ð
 */
 ?>
 <script>
-	var cs_time_diff = '1380782324000' - Date.now();
-Date.prototype.toServerTime = function() {
-	return new Date(this.getTime() + cs_time_diff);
-	}
-var now = new Date();
-now.toServerTime(); //
+    var cs_time_diff = '1380782324000' - Date.now();
+    Date.prototype.toServerTime = function () {
+        return new Date(this.getTime() + cs_time_diff);
+    }
+    var now = new Date();
+    now.toServerTime(); //
 </script>

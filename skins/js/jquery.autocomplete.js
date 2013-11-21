@@ -433,9 +433,11 @@
                 if(this.currentRequest != null) {
                     this.currentRequest.abort();
                 }
+                // debugger
                 this.currentRequest = $.ajax({
                     url: serviceUrl,
                     data: options.ignoreParams ? null : options.params,
+                    // type: 'POST',
                     type: options.type,
                     dataType: options.dataType
                 }).done(function (data) {
