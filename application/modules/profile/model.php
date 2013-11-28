@@ -56,13 +56,25 @@ class Model extends MainModel
     */
     public function MainEditUserOtherData()
     {
-        $stmt = $this -> conn -> dbh -> prepare("UPDATE users SET nick = :nick, about_me = :about_me, city = :city  WHERE id = :id");
-        $stmt->bindParam(":nick",       $this -> _p['nick'], PDO::PARAM_STR);
-        $stmt->bindParam(":about_me",   $this -> _p['about-me'], PDO::PARAM_STR);
-        $stmt->bindParam(":city",       $this -> _p['city'], PDO::PARAM_STR);
-        $stmt->bindParam(":id",         $_SESSION['user-data']['id'], PDO::PARAM_INT);
-        $stmt->execute();
-        $this->GetRefreshDataUser();
+        $result = [];
+
+        $city       = $this -> _p['city'];
+        $check_city = $this -> conn -> dbh -> query("SELECT name FROM city WHERE name = '". $city ."' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+        if ( !empty($check_city) ) {
+            $stmt = $this -> conn -> dbh -> prepare("UPDATE users SET nick = :nick, about_me = :about_me, city = :city  WHERE id = :id");
+            $stmt -> bindParam(":nick",       $this -> _p['nick'], PDO::PARAM_STR);
+            $stmt -> bindParam(":about_me",   $this -> _p['about-me'], PDO::PARAM_STR);
+            $stmt -> bindParam(":city",       $this -> _p['city'], PDO::PARAM_STR);
+            $stmt -> bindParam(":id",         $_SESSION['user-data']['id'], PDO::PARAM_INT);
+            $stmt -> execute();
+            $result['city_success'] = true;
+            $this -> GetRefreshDataUser();
+        } else {
+            $result['city_success'] = false;
+        }
+
+        return json_encode($result);
+
     }
     public function GetGames()
     {
@@ -103,7 +115,7 @@ class Model extends MainModel
     /*
     *   ПОЛУЧАЕТ НАЗВАНИЕ ГОРОДОВ
     */
-    public function GetCitys() {
+    public function GetCities() {
         $result = [];
 
         $query =  $this -> _p['query'];
@@ -111,9 +123,9 @@ class Model extends MainModel
 
         if ( !empty($query) ) {
             $query = OftenFunctions::getCorrectText($query);
-            $query = ' AND city.name like \'%'. $query.'%\'';
+            $query = ' AND city.name like "%'. $query.'%"';
 
-            $sql   = "SELECT city.name FROM city WHERE city.socr = 'г' ". $query ." LIMIT ". $limit;
+            $sql   = "SELECT DISTINCT city.name FROM city WHERE city.socr in ('г', 'п', 'аул') ". $query ." LIMIT ". $limit;
             $sql   = $this -> conn -> dbh -> query($sql);
             foreach ( $sql as $value ) {
                 $result['suggestions'][] = $value[0];

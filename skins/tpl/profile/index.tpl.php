@@ -1,4 +1,38 @@
+<script type="text/javascript" src="/skins/js/validation.js"></script>
+<style type="text/css">
+    .b-validation .tooltip {
+        display: none;
+        z-index:10;
+        padding: 5px;
+        line-height:16px;
 
+        position:absolute;
+        color:#111;
+        border:1px solid #DCA;
+        background:#FEFFD6;
+
+        border-radius:4px;
+        -moz-border-radius: 4px;
+        -webkit-border-radius: 4px;
+        -moz-box-shadow: 5px 5px 8px #CCC;
+        -webkit-box-shadow: 5px 5px 8px #CCC;
+
+        width: 200px;
+        z-index: 99;
+        color:#FFFFFF;
+        min-height: 32px;
+        min-width: 200px;
+    }
+
+    .b-validation .error {
+        display: block;
+    }
+
+    .b-validation .tooltip { position: relative; background: #1ABC9C; border: 4px solid #2C3E50; }
+    .b-validation .tooltip:after, .b-validation .tooltip:before { right: 100%; top: 50%; border: solid transparent; content: " "; height: 0; width: 0; position: absolute; pointer-events: none; }
+    .b-validation .tooltip:after { border-color: rgba(26, 188, 156, 0); border-right-color: #1ABC9C; border-width: 10px; margin-top: -10px; }
+    .b-validation .tooltip:before { border-color: rgba(44, 62, 80, 0); border-right-color: #2C3E50; border-width: 16px; margin-top: -16px; }
+</style>
 
 <script>
     $(document).ready(function(){
@@ -28,12 +62,20 @@
             params: {
                 'ajax-query': 'true',
                 'type-class':'model',
-                'method': 'GetCitys',
+                'method': 'GetCities',
                 'limit': '10'
             },
             dataType: 'html',
             deferRequestBy: 200,
         });
+
+        // ВАЛИДАЦИЯ
+        // $('.btn-login, input, textarea, div').click(function(){
+        $('.btn-login').click(function(){
+            if (!_validation()) {
+                return false;
+            }
+        })
 
     });
 
@@ -72,7 +114,14 @@
                 $('#send').before('<img id="ajax-img-loader" src="/skins/img/ajax/loader-page.gif">');
             },
             success: function(data){
-                location.reload();
+                var data = $.parseJSON(data)
+                if ( data.city_success == true ) {
+                    $('.tooltip#city').removeClass('error')
+                     location.reload();
+                } else {
+                    $('.tooltip#city').addClass('error').html('В нашей базе нет такого населённого пункта')
+                    return false;
+                }
             }
         });
     }
@@ -353,25 +402,31 @@
                                     <img src="/skins/img/interface/close-modal.png"></div>
                             </div>
 
+
                             <div style="padding:15px; padding-bottom: 45px;">
                                 <table class="modal-gamer-data-table">
                                     <tr>
                                         <td class="modal-gamer-data-td">Ник:</td>
                                         <td>
-                                            <input type="text" id="nick" class="input-txt-profile" value="<?=$this -> user['nick'];?>" >
+                                            <input  style="width: 280px" type="text" id="nick" class="input-txt-profile" value="<?=$this -> user['nick'];?>" >
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="modal-gamer-data-td">Город:</td>
                                         <td>
-                                            <input type="text" id="city" class="input-txt-profile" value="<?= $this -> user['city']; ?>" >
+                                            <input style="width: 280px" type="text" id="city" class="input-txt-profile" data-type="validation" value="<?= $this -> user['city']; ?>" >
+                                            <div style="float: right; margin: -45px -235px 0px 0px;" class="b-validation">
+                                                <div class="tooltip " id="city" style="margin-left: 28px;">
+                                                </div>
+                                            </div>
                                             <div id="selction-ajax"></div>
                                         </td>
                                     </tr>
+
                                     <tr>
                                         <td class="modal-gamer-data-td" >О себе:</td>
                                         <td>
-                                            <textarea type="text" id="about-me" class="input-txt-profile" ><?= $this -> user['about_me']; ?></textarea>
+                                            <textarea style="width: 280px" type="text" id="about-me" class="input-txt-profile" data-type="validation" ><?= $this -> user['about_me']; ?></textarea>
                                         </td>
                                     </tr>
                                 </table><br>
