@@ -7,7 +7,7 @@ ini_set('display_errors', 0);//
 
 require_once 'application/bootstrap.php';
 //echo 'Время выполнения скрипта: ' . (microtime(true) - $start) . ' сек.<br />';
-
+//
 /*include_once "smsc_api.php";
 $obj = new Sms();
 list($sms_id, $sms_cnt, $cost, $balance) = $obj->SendSms("375293073228", "GS11 проверка связи", 0); sdas
