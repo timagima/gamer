@@ -167,19 +167,6 @@ use classes\url;
     <div class="field fill search-index" style="width: 32%">
         <?=Render::LabelEdit($data['main-page']->keywords, "keywords", "Ключевые слова")?>
     </div>
-
-    <div class="field">
-        <div class="container upload">
-            <span class="btn" style="width: 220px;">Коллекция изображений</span>
-            <input id="file" type="file" style="width: 220px;" multiple="multiple" name="file[]"/>
-        </div>
-        <div id="files" style="padding: 10px;">
-            <div class="img-upload">
-            <img src="/storage/img-tournament/Nevermore_the_Shadow_Fiend_by_Makrura.png" />
-            <div style="background-image:url(/skins/img/interface/delete-img.png); width: 10px; height: 10px"></div>
-        </div>
-    </div>
-
     <div style="height: 50px; width: 100%">
         <input type="submit" value="Сохранить" class="right">
     </div>
@@ -198,12 +185,6 @@ use classes\url;
             });
         })
     })
-    /*$("#source_img_control").imageUpload({
-        action: "<?=Url::Action("upload")?>",
-        multiupload: false,
-        onComplete: add_image_to_editor,
-        onDelete: delete_image_from_editor
-    });*/
     $(function () {
 
         tinymce.init({

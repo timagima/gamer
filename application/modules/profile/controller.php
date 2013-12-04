@@ -68,15 +68,7 @@ class Controller extends MainController
         exit();
     }
 
-	public function ActionExit()
-    {
-        session_destroy();
-        unset($_SESSION);
-        setcookie("hash", "", time() -1, "/");
-        setcookie("key", "", time() -1, "/");
-        header("Location: /");
-        exit();
-    }
+
     private function CreateDir()
     {
 
@@ -90,6 +82,15 @@ class Controller extends MainController
         mkdir("storage/user_img/" . $dir, 0775);
         $this->model->SetDir($dir);
         chdir($_SERVER['DOCUMENT_ROOT']);
+    }
+    public function ActionExit()
+    {
+        session_destroy();
+        unset($_SESSION);
+        setcookie("hash", "", time() -1, "/");
+        setcookie("key", "", time() -1, "/");
+        header("Location: /");
+        exit();
     }
     private function Upload()
     {

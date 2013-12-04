@@ -13,7 +13,7 @@ class Controller extends MainController
         parent::__construct();
         $this->model = new Model();
         $this->RunAjax();
-        $this->ExistAuth();
+        $this->AccessPageNotAuth();
     }
 
     public function ActionIndex()

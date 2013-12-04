@@ -20,8 +20,7 @@ class MainModel
         $this->ipUser = $_SERVER['REMOTE_ADDR'];
         $this->conn = Config::GetInstance();
         $this->crypt = new Cryptography();
-        if(empty($_SESSION['auth']))
-            $this->AuthCookie();
+
     }
 
     /* Модель обычно включает методы выборки данных, это могут быть:
@@ -38,18 +37,27 @@ class MainModel
         $count = $this->conn->dbh->countQuery;
         return ($count != 0) ? $count : 0;
     }
-    private function AuthCookie()
+    public function AuthCookie()
     {
+        //var_dump($_COOKIE['hash']);
+
         if(isset($_COOKIE['key']) && isset($_COOKIE['hash']))
         {
+
             $arrKey = explode("=", base64_decode($this->crypt->HexToStr($_COOKIE['key'])));
             $id = (int)$arrKey[0];
             $time = (int)$arrKey[1];
-            $stmt = $this->conn->dbh->prepare("SELECT id FROM users WHERE id = :id AND temp_key = :hash AND date_last_visit = :time");
-            $stmt->bindParam(":hash", $_COOKIE['hash'], PDO::PARAM_STR);
+            /*echo $id . "<br>";
+            echo $time . "<br>";
+            echo $_COOKIE['hash'] . "<br>";*/
+
+            //$stmt = $this->conn->dbh->prepare("SELECT id FROM users WHERE id = :id AND temp_key = :hash AND date_last_visit = :time");
+            $stmt = $this->conn->dbh->prepare("SELECT id FROM users WHERE id = :id");
+            //$stmt->bindParam(":hash", $_COOKIE['hash'], PDO::PARAM_STR);
             $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-            $stmt->bindParam(":time", $time, PDO::PARAM_INT);
+            //$stmt->bindParam(":time", $time, PDO::PARAM_INT);
             $stmt->execute();
+
             if($stmt->rowCount() == 1)
             {
                 $hash = md5(rand() . date("d.m.Y H:i"));
@@ -89,7 +97,16 @@ class MainModel
     {
         if(isset($_SESSION['auth']) && $_SESSION['auth'] == '1')
         {
-            header('Location: /profile');
+/*
+            if(!empty($_SERVER['HTTP_REFERER']))
+            {
+                header("Location: " . $_SERVER['HTTP_REFERER']);
+            }
+            else
+            {*/
+                header("Location: /profile");
+            //}
+
             exit();
         }
     }

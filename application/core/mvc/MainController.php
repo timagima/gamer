@@ -20,12 +20,18 @@ class MainController
         $this->view = new MainView($user);
         $this->model = new MainModel();
         $this->TplAuth();
-        if(isset($_SESSION['auth']))
+
+        if(empty($_SESSION['auth']))
+        {
+            $this->model->AuthCookie();
+        }
+        if(!empty($_SESSION['auth']))
         {
             $this->model->GetRefreshDataUser();
         }
 
     }
+
     public function RedirectMain()
     {
         if (!$_SESSION['admin']['auth']) {
@@ -40,11 +46,19 @@ class MainController
         header('Location: /');
         exit();
     }
-    protected function ExistAuth()
+    protected function AccessPageNotAuth()
     {
-        if(isset($_SESSION['user-data'], $_SESSION['auth']))
+        if(!empty($_SESSION['user-data']) && !empty($_SESSION['auth']))
         {
-            header("Location: /profile");
+            /*if(!empty($_SERVER['HTTP_REFERER']))
+            {
+                header("Location: " . $_SERVER['HTTP_REFERER']);
+            }
+            else
+            {*/
+                header("Location: /profile");
+            //}
+
             exit();
         }
     }

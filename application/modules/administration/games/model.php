@@ -30,6 +30,25 @@ class Model extends MainModel
     {
         return $this->conn->dbh->query("SELECT * FROM games WHERE id=".$id)->fetch(PDO::FETCH_OBJ);
     }
+
+    /* Начало работа со справочниками по играм */
+    public function ListGenre()
+    {
+        $stmt = $this->conn->dbh->prepare("SELECT * FROM genre");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+    public function AddMainGame()
+    {
+        $stmt = $this->conn->dbh->prepare("INSERT INTO games SET name = :name, genre_id = :genre_id, source_img_b = :source_img_b, source_img_s = :source_img_b");
+        $stmt->bindParam(":name", $this->_p['name'], PDO::PARAM_STR);
+        $stmt->bindParam(":genre_id", $this->_p['genre_id'], PDO::PARAM_INT);
+        $stmt->bindParam(":source_img_b", $this->_p['source_img_b'], PDO::PARAM_STR);
+        $stmt->bindParam(":source_img_s", $this->_p['source_img_s'], PDO::PARAM_STR);
+        $stmt->execute();
+    }
+
+    /* Конец работа со справочниками по играм */
     public function GetMainPageGame($id)
     {
         return $this->conn->dbh->query("SELECT * FROM main_page_games WHERE id_game = ".$id)->fetch(PDO::FETCH_OBJ);

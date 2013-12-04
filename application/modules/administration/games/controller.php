@@ -4,6 +4,7 @@ use application\core\mvc\MainController as MainController;
 use application\modules\administration\games\model as Model;
 use classes\SimpleImage;
 use classes\url;
+use classes\upload;
 
 class Controller extends MainController
 {
@@ -26,9 +27,23 @@ class Controller extends MainController
     /* Начало добавление списка игр*/
     public function ActionAddMainListGame()
     {
+        if(!empty($_FILES))
+        {
+            $path = "storage";
+            $objUpload = new Upload();
+            $objUpload->UploadImg($path);
+            exit();
+        }
+
         if(isset($_GET['action']) && $_GET['action'] == 'edit')
         {
-            $data = $this->model->GetGame($_GET['id']);
+            $data['game'] = $this->model->GetGame($_GET['id']);
+            $data['genre'] = $this->model->ListGenre();
+            $tplGames = 'administration/games/edit-games.tpl.php';
+        }
+        else if(isset($_GET['action']) && $_GET['action'] == 'add')
+        {
+            $data['genre'] = $this->model->ListGenre();
             $tplGames = 'administration/games/edit-games.tpl.php';
         }
         else
@@ -38,6 +53,12 @@ class Controller extends MainController
         }
 
         $this->view->Generate('menu/admin-menu.tpl.php', $tplGames, $this->GetTplView(), 'index-admin.tpl.php', $data);
+    }
+    public function ActionEditMainGame()
+    {
+       ($_POST['id'] > 0) ? $this->model->UpdateMainGame() : $this->model->AddMainGame();
+       $this->Redirect("add-main-list-game", "administration.games");
+
     }
     /* Конец добавление списка игр*/
 
