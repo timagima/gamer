@@ -115,7 +115,7 @@ function multiUploader(config){
 	multiUploader.prototype._startUpload = function(){
 		if(this.all.length > 0){
 			for(var k=0; k<this.all.length; k++){
-				var file = this.all[k];//
+				var file = this.all[k];
 				this._uploader(file,0);
 			}
 		}
