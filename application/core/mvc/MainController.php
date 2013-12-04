@@ -1,5 +1,5 @@
 <?php
-namespace application\core\mvc;
+namespace application\core\mvc; //
 use application\core\mvc\MainModel as MainModel;
 use classes\pagination as Pagination;
 use classes\url as Url;
