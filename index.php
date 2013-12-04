@@ -12,6 +12,7 @@ require_once 'application/bootstrap.php';
 $obj = new Sms();
 list($sms_id, $sms_cnt, $cost, $balance) = $obj->SendSms("375293073228", "GS11 проверка связи", 0); sdas
 */
+// Comment 123456
 
 ?>
 
