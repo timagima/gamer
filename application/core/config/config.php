@@ -5,7 +5,7 @@ use PDO;
 
 class Config
 {
-    public $dbh;
+    public $dbh; //В $dbh приходит стандартный класс PDO
     public $_p = array();
     private static $instances;
     private $dsn = 'mysql:host=localhost; dbname=gamer; connection_timeout=15';

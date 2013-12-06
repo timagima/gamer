@@ -108,5 +108,11 @@ class Controller extends MainController
         }
     }
 
+    public function ActionGetIpAdress()
+    {
+        //$this->model->GetGames();
+        //echo $this->model->GetIp();
+    }
+
 
 }

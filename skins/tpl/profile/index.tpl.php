@@ -102,6 +102,7 @@
     // РЕДАКТИРОВАНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЯ
     function editUserOtherData(){
         var nick    = $("#nick").val();
+        var skype    = $("#skype").val();
         var city    = $("#city").val();
         var aboutMe = $("#about-me").val();
 
@@ -109,7 +110,7 @@
             type: 'POST',
             url: document.location.href,
             dataType: 'html',
-            data: {'ajax-query': 'true', 'type-class': 'model', 'method':'MainEditUserOtherData', 'nick': nick, 'city': city, 'about-me': aboutMe},
+            data: {'ajax-query': 'true', 'type-class': 'model', 'method':'MainEditUserOtherData', 'nick': nick, 'skype': skype, 'city': city, 'about-me': aboutMe},
             beforeSend: function(){
                 $('#send').before('<img id="ajax-img-loader" src="/skins/img/ajax/loader-page.gif">');
             },
@@ -296,6 +297,10 @@
                                         <div class="block-profile-info-header left">Немного о себе:</div>
                                         <div class="block-profile-info-txt"><?= $this->user['about_me']; ?></div>
                                     </div>
+                                    <div class="block-profile-info-wrapper">
+                                        <div class="block-profile-info-header left">Скайп:</div>
+                                        <div class="block-profile-info-txt"><?= $this->user['skype']; ?></div>
+                                    </div>
                                 <? } ?>
                             </td>
                         </tr>
@@ -409,6 +414,12 @@
                                         <td class="modal-gamer-data-td">Ник:</td>
                                         <td>
                                             <input  style="width: 280px" type="text" id="nick" class="input-txt-profile" value="<?=$this -> user['nick'];?>" >
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="modal-gamer-data-td">Скайп:</td>
+                                        <td>
+                                            <input  style="width: 280px" type="text" id="skype" class="input-txt-profile" value="<?=$this -> user['skype'];?>" >
                                         </td>
                                     </tr>
                                     <tr>
