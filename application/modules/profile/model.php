@@ -74,6 +74,7 @@ class Model extends MainModel
         }
 
         return json_encode($result);
+        //test method
 
     }
     public function GetGames()
