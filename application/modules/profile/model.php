@@ -61,9 +61,11 @@ class Model extends MainModel
         $city       = $this -> _p['city'];
         $check_city = $this -> conn -> dbh -> query("SELECT name FROM city WHERE name = '". $city ."' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
         if ( !empty($check_city) ) {
-            $stmt = $this -> conn -> dbh -> prepare("UPDATE users SET nick = :nick, skype = :skype, about_me = :about_me, city = :city  WHERE id = :id");
+            $stmt = $this -> conn -> dbh -> prepare("UPDATE users SET nick = :nick, skype = :skype, steam = :steam, icq = :icq, about_me = :about_me, city = :city  WHERE id = :id");
             $stmt -> bindParam(":nick",       $this -> _p['nick'], PDO::PARAM_STR);
             $stmt -> bindParam(":skype",       $this -> _p['skype'], PDO::PARAM_STR);
+            $stmt -> bindParam(":steam",       $this -> _p['steam'], PDO::PARAM_STR);
+            $stmt -> bindParam(":icq",       $this -> _p['icq'], PDO::PARAM_INT);
             $stmt -> bindParam(":about_me",   $this -> _p['about-me'], PDO::PARAM_STR);
             $stmt -> bindParam(":city",       $this -> _p['city'], PDO::PARAM_STR);
             $stmt -> bindParam(":id",         $_SESSION['user-data']['id'], PDO::PARAM_INT);

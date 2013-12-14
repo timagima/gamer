@@ -103,6 +103,8 @@
     function editUserOtherData(){
         var nick    = $("#nick").val();
         var skype    = $("#skype").val();
+        var icq    = $("#icq").val();
+        var steam    = $("#steam").val();
         var city    = $("#city").val();
         var aboutMe = $("#about-me").val();
 
@@ -110,7 +112,7 @@
             type: 'POST',
             url: document.location.href,
             dataType: 'html',
-            data: {'ajax-query': 'true', 'type-class': 'model', 'method':'MainEditUserOtherData', 'nick': nick, 'skype': skype, 'city': city, 'about-me': aboutMe},
+            data: {'ajax-query': 'true', 'type-class': 'model', 'method':'MainEditUserOtherData', 'nick': nick, 'skype': skype, 'icq': icq, 'steam': steam, 'city': city, 'about-me': aboutMe},
             beforeSend: function(){
                 $('#send').before('<img id="ajax-img-loader" src="/skins/img/ajax/loader-page.gif">');
             },
@@ -301,6 +303,14 @@
                                         <div class="block-profile-info-header left">Скайп:</div>
                                         <div class="block-profile-info-txt"><?= $this->user['skype']; ?></div>
                                     </div>
+                                    <div class="block-profile-info-wrapper">
+                                        <div class="block-profile-info-header left">ICQ:</div>
+                                        <div class="block-profile-info-txt"><?= $this->user['icq']; ?></div>
+                                    </div>
+                                    <div class="block-profile-info-wrapper">
+                                        <div class="block-profile-info-header left">Steam:</div>
+                                        <div class="block-profile-info-txt"><?= $this->user['steam']; ?></div>
+                                    </div>
                                 <? } ?>
                             </td>
                         </tr>
@@ -420,6 +430,18 @@
                                         <td class="modal-gamer-data-td">Скайп:</td>
                                         <td>
                                             <input  style="width: 280px" type="text" id="skype" class="input-txt-profile" value="<?=$this -> user['skype'];?>" >
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="modal-gamer-data-td">ICQ:</td>
+                                        <td>
+                                            <input  style="width: 280px" type="text" id="icq" class="input-txt-profile" value="<?=$this -> user['icq'];?>" >
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="modal-gamer-data-td">Steam:</td>
+                                        <td>
+                                            <input  style="width: 280px" type="text" id="steam" class="input-txt-profile" value="<?=$this -> user['steam'];?>" >
                                         </td>
                                     </tr>
                                     <tr>
