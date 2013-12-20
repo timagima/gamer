@@ -38,6 +38,9 @@
                             <li><a href="/guide/games">Игровые обзоры</a></li>
                         </ul>
                     </li>
+                    <li class="<?=(substr($_SERVER['REQUEST_URI'], 0, 5) == '/base') ? 'active' : ''; ?>">
+                        <a class="menu-link" href="/base">Пройденные игры</a>
+                    </li>
 
                 </ul>
             </div>
