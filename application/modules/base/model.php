@@ -21,19 +21,24 @@ class Model extends MainModel
             $game = $this -> _p['game'];
             $gameLevel = $this -> _p['game-level'];
             $gameDescription = $this -> _p['game-description'];
-            $idGame = $this -> conn -> dbh -> query("SELECT id FROM games WHERE name='" . $game . "'");
-            $idLevel = $this -> conn -> dbh -> query("SELECT id FROM level WHERE name='" . $gameLevel . "' AND id_game=".$idGame);
+            $idGame = $this -> conn -> dbh -> query("SELECT id FROM games WHERE name='" . $game . "'")->fetchAll(PDO::FETCH_ASSOC);
+            $idGame = (int)$idGame[0]['id'];
+            $idLevel = $this -> conn -> dbh -> query("SELECT id FROM level WHERE name='" . $gameLevel . "' AND id_game=".$idGame)->fetchAll(PDO::FETCH_ASSOC);
+            $idLevel = (int)$idLevel[0]['id'];
             $idUser = $_SESSION['user-data']['id']*1;
-            $sql = "INSERT INTO user_completed_games(id_user, id_game, id_level, about_game) VALUES($idUser, $idGame[0][0], $idLevel[0][0], '$gameDescription')";
-            $query   = $this -> conn -> dbh -> query($sql);
-            //return json_encode($query);
-
-            //$stmt = $this -> conn -> dbh -> prepare("UPDATE users SET nick = :nick, skype = :skype, steam = :steam, icq = :icq, about_me = :about_me, city = :city  WHERE id = :id");
-            //$stmt -> bindParam(":nick",       $this -> _p['nick'], PDO::PARAM_STR);
-            //$stmt -> bindParam(":skype",       $this -> _p['skype'], PDO::PARAM_STR);
-            //$stmt -> bindParam(":steam",       $this -> _p['steam'], PDO::PARAM_STR);
-            //$stmt -> bindParam(":id",         $_SESSION['user-data']['id'], PDO::PARAM_INT);
-            //$stmt -> execute();
+            $stmt = $this -> conn -> dbh -> prepare("INSERT INTO user_completed_games (id_user, id_game, id_level, about_game) VALUES(:idUser, :idGame, :idLevel, :gameDescription)");
+            $stmt -> bindParam(":idUser",          $idUser, PDO::PARAM_STR);
+            $stmt -> bindParam(":idGame",          $idGame, PDO::PARAM_STR);
+            $stmt -> bindParam(":idLevel",         $idLevel, PDO::PARAM_STR);
+            $stmt -> bindParam(":gameDescription", $gameDescription, PDO::PARAM_INT);
+            $getQuery = $stmt -> execute() or die(false);;
+            if($getQuery){
+                $result['game_success'] = true;
+                return json_encode($result);
+            }else{
+                $result['game_success'] = false;
+                return json_encode($result);
+            }
             //$result['city_success'] = true;
             //$this -> GetRefreshDataUser();
         //} else {
@@ -42,75 +47,6 @@ class Model extends MainModel
         //return json_encode($result);
 
     }
-
-    /*public function MainEditUserData()
-    {
-        if ($this->_p['first-name'] == "" || strlen($this->_p['first-name']) < 2)
-            return "Заполните корректно поле Имя";
-        else if ($this->_p['last-name'] == "" || strlen($this->_p['last-name']) < 2)
-            return "Заполните корректно поле Фамилия";
-        else if ($this->_p['patronymic'] == "" || strlen($this->_p['patronymic']) < 2)
-            return "Заполните корректно поле Отчество";
-        else if ($this->_p['sex'] == "")
-            return "Укажите свой пол";
-        else
-        {
-            $birthday = strtotime($this->_p['birthday']);
-            $stmt = $this->conn->dbh->prepare("UPDATE users SET first_name = :first_name, last_name = :last_name,
-                                        patronymic = :patronymic, birthday = :birthday, sex = :sex, about_me = :about_me  WHERE id = :id");
-            $stmt->bindParam(":first_name", $this->_p['first-name'], PDO::PARAM_STR);
-            $stmt->bindParam(":last_name", $this->_p['last-name'], PDO::PARAM_STR);
-            $stmt->bindParam(":patronymic", $this->_p['patronymic'], PDO::PARAM_STR);
-            $stmt->bindParam(":birthday", $birthday, PDO::PARAM_INT);
-            $stmt->bindParam(":sex", $this->_p['sex'], PDO::PARAM_INT);
-            $stmt->bindParam(":about_me", $this->_p['about-me'], PDO::PARAM_STR);
-            $stmt->bindParam(":id", $_SESSION['user-data']['id'], PDO::PARAM_INT);
-            $stmt->execute();
-            $this->GetRefreshDataUser();
-        }
-    }*/
-
-    /*public function MainEditGamerData()
-    {
-        $stmt = $this->conn->dbh->prepare("UPDATE users SET game_experience = :game_experience, love_genre = :love_genre,
-                                    love_complexity = :love_complexity, love_game = :love_game  WHERE id = :id");
-        $stmt->bindParam(":game_experience", $this->_p['game-experience'], PDO::PARAM_STR);
-        $stmt->bindParam(":love_genre", $this->_p['love-genre'], PDO::PARAM_STR);
-        $stmt->bindParam(":love_complexity", $this->_p['love-complexity'], PDO::PARAM_STR);
-        $stmt->bindParam(":love_game", $this->_p['love-game'], PDO::PARAM_STR);
-        $stmt->bindParam(":id", $_SESSION['user-data']['id'], PDO::PARAM_INT);
-        $stmt->execute();
-        $this->GetRefreshDataUser();
-    }*/
-
-
-     //  ОБЩИЕ ДАННЫЕ
-
-    /*public function MainEditUserOtherData()
-    {
-        $result = [];
-
-        $city       = $this -> _p['city'];
-        $check_city = $this -> conn -> dbh -> query("SELECT name FROM city WHERE name = '". $city ."' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
-        if ( !empty($check_city) ) {
-            $stmt = $this -> conn -> dbh -> prepare("UPDATE users SET nick = :nick, skype = :skype, steam = :steam, icq = :icq, about_me = :about_me, city = :city  WHERE id = :id");
-            $stmt -> bindParam(":nick",       $this -> _p['nick'], PDO::PARAM_STR);
-            $stmt -> bindParam(":skype",       $this -> _p['skype'], PDO::PARAM_STR);
-            $stmt -> bindParam(":steam",       $this -> _p['steam'], PDO::PARAM_STR);
-            $stmt -> bindParam(":icq",       $this -> _p['icq'], PDO::PARAM_INT);
-            $stmt -> bindParam(":about_me",   $this -> _p['about-me'], PDO::PARAM_STR);
-            $stmt -> bindParam(":city",       $this -> _p['city'], PDO::PARAM_STR);
-            $stmt -> bindParam(":id",         $_SESSION['user-data']['id'], PDO::PARAM_INT);
-            $stmt -> execute();
-            $result['city_success'] = true;
-            $this -> GetRefreshDataUser();
-        } else {
-            $result['city_success'] = false;
-        }
-
-        return json_encode($result);
-
-    }*/
 
     public function GetUserCompletedGames()
     {

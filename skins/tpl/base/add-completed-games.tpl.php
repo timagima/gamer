@@ -127,7 +127,14 @@
                 $('#send').before('<img id="ajax-img-loader" src="/skins/img/ajax/loader-page.gif">');
             },
             success: function(data){
-                location.reload();
+                var data = $.parseJSON(data)
+                if ( data.game_success == true ) {
+                    $('.tooltip#game').removeClass('error')
+                    location.reload();
+                } else {
+                    $('.tooltip#game').addClass('error').html('Вы уже добавили данную игру.')
+                    return false;
+                }
             }
         });
     }
