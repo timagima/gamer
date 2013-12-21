@@ -19,6 +19,7 @@
     <script type="text/javascript" src="/skins/js/chat_scripts.js"></script>
     <script type="text/javascript" src="/skins/js/jquery.jplayer.min.js"></script>
     <script type="text/javascript" src="/skins/js/service.js"></script>
+    <?=$arrJs;?>
 
 
 </head>

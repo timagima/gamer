@@ -52,9 +52,9 @@ function confirmMemberTournament(){
                     elseif($_SESSION['auth'] == 1 && !empty($data['my-tournament']))
                     { ?>
                        <div class="right" style="margin-right: 5px;">
-                           <a href="javascript:showModal('box-modal-info-tournament-table')" style="margin-right: 5px; text-decoration: none">
-                               <img title="Турнирная таблица" src="/skins/img/interface/tournament-table.png" />
-                           </a>
+<!--                           <a href="javascript:showModal('box-modal-info-tournament-table')" style="margin-right: 5px; text-decoration: none">-->
+<!--                               <img title="Турнирная таблица" src="/skins/img/interface/tournament-table.png" />-->
+<!--                           </a>-->
                            <a href="/tournament/<?=$this->LinkTournament($data['tournament']->game, $data['tournament']->id);?>&page=external">
                                <img title="Внутренняя страница" src="/skins/img/interface/tournament-back.png" />
                            </a>
@@ -70,7 +70,8 @@ function confirmMemberTournament(){
                             <? if($_GET['id'] == '9'){?>
                                 <a style="position: relative; bottom: 12px;" href="javascript:void(0)" class="btn-login">Запись на участие закрыта</a>
                             <? }else{ ?>
-							<a style="position: relative; bottom: 12px;" href="javascript:showModal('box-modal-tournament')" class="btn-login">Принять участие</a>
+                                <a style="position: relative; bottom: 12px;" href="javascript:showModal('box-modal-tournament')" class="btn-login">Принять участие</a>
+
                             <? } ?>
 						</div>
                     <?
@@ -80,7 +81,7 @@ function confirmMemberTournament(){
             </tr>
             <tr>
                 <td>
-                    <iframe id="prev-frame" style="z-index:0" width="350" height="240" style="z-index:1" src="//www.youtube.com/embed/jgiMzzUeGZ8?wmode=opaque" frameborder="0" allowfullscreen></iframe>
+                    <iframe id="prev-frame" style="z-index:0" width="350" height="240" style="z-index:1" src="<?=$data['tournament']->video_rules;?>?wmode=opaque" frameborder="0" allowfullscreen></iframe>
                 </td>
 
                 <td style="vertical-align: top">

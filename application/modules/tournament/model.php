@@ -31,7 +31,7 @@ class Model extends MainModel
     {
         $result = $this->conn->dbh->query("SELECT  c.*, u.nick, u.img_avatar, u2.nick as nick_answer, u2.img_avatar as img_avatar_answer  FROM comments_tournament c
                                             LEFT JOIN users u ON c.id_user = u.id
-                                            LEFT JOIN users u2 ON c.id_user_answer = u2.id WHERE id_section = ". $_SESSION['id_tournament']." LIMIT 138, 1000")->fetchAll(PDO::FETCH_OBJ);
+                                            LEFT JOIN users u2 ON c.id_user_answer = u2.id WHERE id_section = ". $_SESSION['id_tournament']." LIMIT 0, 1000")->fetchAll(PDO::FETCH_OBJ);
         return json_encode($result);
     }
 

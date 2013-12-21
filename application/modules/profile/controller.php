@@ -25,6 +25,7 @@ class Controller extends MainController
         $this->headerTxt['title'] = $this->view->user['first_name'] . " " . $this->view->user['last_name'] . "  профиль пользователя - GS11";
         $this->view->Generate('menu/auth-menu.tpl.php', 'profile/index.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());
     }
+
     // todo Сделать проверку для пользователей у которых нету телефона
     // todo Сделать проверку для модальных окон для тех кто заполнил нужно возвращать данные в модальном окне те которые были заполнены
     public function ActionDeleteAvatar()
@@ -107,12 +108,5 @@ class Controller extends MainController
             $this->Json(array("result" => "success", "filename" => "/" . $fileName, "filename_b" => "/" . $fileName_b));
         }
     }
-
-    public function ActionGetIpAdress()
-    {
-        //$this->model->GetGames();
-        //echo $this->model->GetIp();
-    }
-
 
 }

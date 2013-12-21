@@ -2,6 +2,7 @@
 namespace application\core\mvc;
 use application\core\config\config;
 use classes\cryptography;
+use classes\Mailer;
 use classes\Plinq;
 
 

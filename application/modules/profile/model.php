@@ -57,7 +57,6 @@ class Model extends MainModel
     public function MainEditUserOtherData()
     {
         $result = [];
-
         $city       = $this -> _p['city'];
         $check_city = $this -> conn -> dbh -> query("SELECT name FROM city WHERE name = '". $city ."' LIMIT 1")->fetch(PDO::FETCH_ASSOC);
         if ( !empty($check_city) ) {

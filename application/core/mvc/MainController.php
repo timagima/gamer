@@ -1,8 +1,8 @@
 <?php
-namespace application\core\mvc; //
-use application\core\mvc\MainModel as MainModel;
-use classes\pagination as Pagination;
-use classes\url as Url;
+namespace application\core\mvc;
+use application\core\mvc\MainModel;
+use classes\pagination;
+use classes\url;
 use PDO;
 
 
@@ -50,15 +50,7 @@ class MainController
     {
         if(!empty($_SESSION['user-data']) && !empty($_SESSION['auth']))
         {
-            /*if(!empty($_SERVER['HTTP_REFERER']))
-            {
-                header("Location: " . $_SERVER['HTTP_REFERER']);
-            }
-            else
-            {*/
-                header("Location: /profile");
-            //}
-
+            header("Location: /profile");
             exit();
         }
     }
@@ -108,12 +100,10 @@ class MainController
         }
         return $arrUrl;
     }
-    public function RunAjax($msg = null, $object = null)
+    public function RunAjax()
     {
         if( isset($this->_p['ajax-query']) )
         {
-            // print_r($this);
-            // exit();
             $method    = $this->_p['method'];
             $typeClass = $this->_p['type-class'];
             $result    = $this->$typeClass->$method();
@@ -126,6 +116,20 @@ class MainController
     {
         $this->arrTpl = (isset($_SESSION['auth'])) ? array('menu/auth-menu.tpl.php', 'index-auth.tpl.php') : array('menu/main-menu.tpl.php', 'index.tpl.php');
         return $this->arrTpl;
+    }
+	public function AddJs($file)
+    {
+        $arrUrl = explode("/", $_SERVER['REDIRECT_URL']);
+        $path = (count($arrUrl) > 3) ? "/".$arrUrl[0]."/".$arrUrl[1]."/".$arrUrl[2] : $_SERVER['REDIRECT_URL'];
+        $name = "/skins/tpl".$path. "/js/". $file.".js";
+        $this->view->RenderJs($name);
+    }
+	public function AddCss($file)
+    {
+        $arrUrl = explode("/", $_SERVER['REDIRECT_URL']);
+        $path = (count($arrUrl) > 3) ? "/".$arrUrl[0]."/".$arrUrl[1]."/".$arrUrl[2] : $_SERVER['REDIRECT_URL'];
+        $name = "/skins/tpl".$path. "/css/". $file.".css";
+        $this->view->RenderCss($name);
     }
 
 }

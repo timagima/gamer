@@ -67,15 +67,17 @@ class Controller extends MainController
             $data['table-members'] = $this->model->TableMembers();
             $resMyTournament = $this->model->ConfirmParticipation();
             $data['my-tournament'] = $resMyTournament;
-            if($_GET['page'] == "external")
+            // здесь необходимо сделать условие для конкурсов
+            if($_GET['page'] == "external" )
             {
                 $data['members'] = $this->model->GetMembers();
                 if(!empty($resMyTournament) && $resMyTournament->game_over == 0)
                 {
-                    $data['my'] = ($resMyTournament->id_opponent == 0) ? $this->model->SearchOpponent($resMyTournament->stage) : $this->model->ConfirmParticipation();
+                    /*$data['my'] = ($resMyTournament->id_opponent == 0) ? $this->model->SearchOpponent($resMyTournament->stage) : $this->model->ConfirmParticipation();
                     $_SESSION['user']['stage'] = $resMyTournament->stage;
                     $data['settings-tournament'] = $this->model->SettingsTournament($resMyTournament->stage);
-                    $data['winner'] = $this->model->GetWinner($resMyTournament->stage);
+                    $data['winner'] = $this->model->GetWinner($resMyTournament->stage);*/
+                    $data['my'] = false;
 
                     if($data['my'])
                     {
@@ -83,7 +85,11 @@ class Controller extends MainController
                         $page = 'tournament/member.tpl.php';
                     }
                     else
+                    {
                         $page = 'tournament/member-not-opponent.tpl.php';
+                        $page = 'tournament/contest.tpl.php';
+                    }
+
                 }
                 else if($resMyTournament->game_over == 1)
                 {
@@ -91,6 +97,7 @@ class Controller extends MainController
                     $page = 'tournament/game-over.tpl.php';
                 }
             }
+
         }
         $this->view->Generate($this->arrTpl[0], $page, $this->arrTpl[1], $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
 

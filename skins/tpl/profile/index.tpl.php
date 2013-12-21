@@ -120,6 +120,7 @@
                 var data = $.parseJSON(data)
                 if ( data.city_success == true ) {
                     $('.tooltip#city').removeClass('error')
+
                      location.reload();
                 } else {
                     $('.tooltip#city').addClass('error').html('В нашей базе нет такого населённого пункта')

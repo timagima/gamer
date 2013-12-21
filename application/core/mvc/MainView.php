@@ -4,6 +4,7 @@ use classes\OftenFunctions;
 
 class MainView
 {
+	private $arrJs, $arrCss = "";
     static $types_complexity = [
         'Люблю пройти на лёгком',
         'Выбираю нечто среднее',
@@ -26,7 +27,8 @@ class MainView
           extract($data);
           }
          */
-
+        $arrCss = $this->RenderCss("render");
+        $arrJs = $this->RenderJs("render");
         include 'skins/tpl/' . $templateView;
         //echo 'Количество запросов: ' . $countQuery . '.<br>';
     }
@@ -119,6 +121,18 @@ class MainView
         $t = str_replace(":", "", $t);
         $t = str_replace(" ", "-", $t);
         return "?t=".$t."&id=".$id;
+    }
+	public function RenderJs($fileName)
+    {
+        if($fileName == "render")
+            return $this->arrJs;
+        $this->arrJs .= '<script type="text/javascript" src="'.$fileName.'"></script>';
+    }
+	public function RenderCss($fileName)
+    {
+        if($fileName == "render")
+            return $this->arrCss;
+        $this->arrCss .= '<link type="text/css" rel="stylesheet" href="'.$fileName.'"/>';
     }
 
 }

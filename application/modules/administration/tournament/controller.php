@@ -20,6 +20,7 @@ class Controller extends MainController
 
     public function ActionIndex()
     {
+
         $data = $this->model->ListTournaments();
         $this->view->Generate('menu/admin-menu.tpl.php', 'administration/tournament/tournaments-list.tpl.php', '', 'index-admin.tpl.php', $data);
     }
