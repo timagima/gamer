@@ -97,9 +97,11 @@
                 var selectHtml = "";
                 for(var i in level){
                     if(i==0){
-                        selectHtml += "<option selected='selected' value='" + level[i] + "'>" + level[i] + "</option>";
+                        var value = level[i].split('$');
+                        selectHtml += "<option selected='selected' value='" + value[1] + "'>" + value[0] + "</option>";
                     }else{
-                        selectHtml += "<option value='" + level[i] + "'>" + level[i] + "</option>";
+                        var value = level[i].split('$');
+                        selectHtml += "<option value='" + value[1] + "'>" + value[0] + "</option>";
                     }
                 }
                 $("#game-level").html(selectHtml);
@@ -278,15 +280,15 @@
                                     <tr>
                                         <td class="modal-gamer-data-td" >Уровень сложности:</td>
                                         <td>
-                                            <select id="game-level" class="styled" style="width: 180px; height: 15px;">
-                                                <!----><option selected='selected' value="">Выбрать уровень</option>
+                                            <select id="game-level" name ="game-level" class="styled" style="width: 180px; height: 15px;">
+                                                <!----><option selected='selected' value="null">Выбрать уровень</option>
                                              </select>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="modal-gamer-data-td" >Отзыв:</td>
                                         <td>
-                                            <textarea style="width: 188px" type="text" id="game-description" class="input-txt-profile" data-type="validation" ><?= $this -> user['about_me']; ?></textarea>
+                                            <textarea style="width: 188px" type="text" id="game-description" class="input-txt-profile" data-type="validation" >Опишите свои впечатления об игре.</textarea>
                                         </td>
                                     </tr>
                                 </table><br>
