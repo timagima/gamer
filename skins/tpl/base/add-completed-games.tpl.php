@@ -83,7 +83,7 @@
             deferRequestBy: 200,
         });
 
-    //
+    //Получение уровня сложности выбранной игры
     function GetGameLevel(){
        var game = document.getElementById("game").value;
 
@@ -142,56 +142,6 @@
         })
 
     });
-
-    function editGamerData(){
-        var gameExperience = $("#game-experience").val();
-        var loveGenre      = $("#love-genre").val();
-        var loveComplexity = $("#love-complexity").val();
-        var loveGame       = $("#love-game").val();
-
-        $.ajax({
-            type: 'POST',
-            url: document.location.href,
-            dataType: 'html',
-            data: {'ajax-query': 'true', 'type-class': 'model', 'method':'MainEditGamerData', 'game-experience': gameExperience, 'love-genre': loveGenre, 'love-complexity': loveComplexity, 'love-game': loveGame},
-            beforeSend: function(){
-                $('#send').before('<img id="ajax-img-loader" src="/skins/img/ajax/loader-page.gif">');
-            },
-            success: function(data){
-                location.reload();
-            }
-        });
-    }
-
-    // РЕДАКТИРОВАНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЯ
-    function editUserOtherData(){
-        var nick    = $("#nick").val();
-        var skype    = $("#skype").val();
-        var icq    = $("#icq").val();
-        var steam    = $("#steam").val();
-        var city    = $("#city").val();
-        var aboutMe = $("#about-me").val();
-
-        $.ajax({
-            type: 'POST',
-            url: document.location.href,
-            dataType: 'html',
-            data: {'ajax-query': 'true', 'type-class': 'model', 'method':'MainEditUserOtherData', 'nick': nick, 'skype': skype, 'icq': icq, 'steam': steam, 'city': city, 'about-me': aboutMe},
-            beforeSend: function(){
-                $('#send').before('<img id="ajax-img-loader" src="/skins/img/ajax/loader-page.gif">');
-            },
-            success: function(data){
-                var data = $.parseJSON(data)
-                if ( data.city_success == true ) {
-                    $('.tooltip#city').removeClass('error')
-                     location.reload();
-                } else {
-                    $('.tooltip#city').addClass('error').html('В нашей базе нет такого населённого пункта')
-                    return false;
-                }
-            }
-        });
-    }
 
 
     function editUserData(){
@@ -441,115 +391,7 @@
         </div>
     </div>
 </td>
-<td>
-    <div style="position: relative; bottom: 55px;">
-    <h3 id="nick-txt"><?=$this->user['nick'];?></h3>
-    <?php if (empty($this->user['img_avatar'])) { ?>
-        <div class="none-avatar">
-            <img src="/skins/img/m.jpg"/><br />
-            <div class="container upload">
-                <span class="btn" style="width: 200px;">Загрузить фотографию</span>
-                <input id="file" type="file" value="/profile/upload" name="file[]" style="width: 200px;" />
-                <input type="hidden" id="url" value="/profile/upload-avatar">
-            </div>
-            <div id="info"></div>
-        </div>
-    <?php } else { ?>
-        <div class="avatar-profile">
-            <?php if(strlen($this->user['img_avatar']) > 20){?>
-                <img style="width: 282px;" src="<?= $this->user['img_avatar']; ?>"/><br />
-            <?}else{ ?>
-                <img style="width: 282px;" src="/storage<?= $this->user['img_avatar']; ?>.jpg"/><br />
-            <?}?>
-            <div class="hide action-photo-profile">
-               <a href="javascript:showModal('box-modal-delete-img-profile')" ><img src="/skins/img/interface/delete-img.png" />Удалить фотографию</a><br>
-                <a id="reload-avatar"><img src="/skins/img/interface/upload-img.png" />Загрузить новую фотографию</a>
-                <input id="file" type="file" name="file[]" class="hide" />
-                <input type="hidden" id="url" value="/profile/reload-avatar">
-            </div>
-        </div>
-        <div class="hide">
-            <div class="box-modal" id="box-modal-delete-img-profile" style="width: 360px">
-                <div class="header-modal">
-                    <b>Удаление фотографии профиля</b>
-                    <div  class="box-modal_close arcticmodal-close" onclick="closeModalAll()">
-                        <img src="/skins/img/interface/close-modal.png"></div>
-                </div>
-                <div style="padding:15px; padding-bottom: 45px;">
-                    <div>
-                        <span>Вы действительно хотите удалить фотографию?</span>
-                    </div><br>
-                    <div id="ajax-modal-result" style="position: absolute; bottom: 25px; left: 25px;"></div>
-                    <div style="float: right"><a href="javascript:deleteImgAvatar()" class="btn-login">Продолжить</a>
-                        <a style="margin-left: 10px; background: #b4b4b4 !important;" href="javascript:closeModalAll()" class="btn-login">Отмена</a></div>
-                </div>
-            </div>
-        </div>
-    <?}?>
 
-    <table style="width: 282px; margin-top: 20px; border-collapse: collapse">
-        <tbody>
-        <tr>
-            <td class="oneShoTmy4">Пройденных игр:</td>
-            <td class="oneShoTmy5"><?=$this->user['complete_games']; ?></td>
-        </tr>
-        <tr>
-            <td class="oneShoTmy4">Количество сообщений:</td>
-            <td class="oneShoTmy5"><?=$this->user['count_message']; ?></td>
-        </tr>
-        <tr>
-            <td class="oneShoTmy4">Участие в турнирах:</td>
-            <td class="oneShoTmy5"><?=$this->user['count_tournament']; ?></td>
-        </tr>
-        <tr>
-            <td class="oneShoTmy4">Наград:</td>
-            <td class="oneShoTmy5"><?=$this->user['count_award']; ?></td>
-        </tr>
-        </tbody>
-    </table><br>
-
-    <table style="border-collapse: collapse; width: 282px; ">
-        <tbody>
-        <tr>
-            <td class="menu_proff">
-                <img src="/skins/img/interface/menu-profile.png"  style="position: relative; top:2px;" width="16px" border="0">
-            </td>
-            <td class="menu_proff1">
-                <a href="/profile" class="menu_link_prof"  style="text-decoration:none;">Мой профиль</a>
-            </td>
-        </tr>
-<!--        <tr>-->
-<!--            <td class="menu_proff">-->
-<!--                <img src="/skins/img/interface/menu-settings.png"  style="position: relative; top:2px;" width="16px" border="0">-->
-<!--            </td>-->
-<!--            <td class="menu_proff1">-->
-<!--                <a href="/profile/setting" class="menu_link_prof"   style="text-decoration:none;">Мои настройки</a>-->
-<!--            </td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td class="menu_proff">-->
-<!--                <img src="/skins/img/interface/menu-tournament.png"  style="position: relative; top:3px;" width="16px" border="0">-->
-<!--            </td>-->
-<!--            <td class="menu_proff1"><a href="/profile/tournament"  class="menu_link_prof" style="text-decoration:none;">Мои турниры</a></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td class="menu_proff">-->
-<!--                <img src="/skins/img/interface/menu-statistics.png" style="position: relative; top:2px;" width="16px" border="0">-->
-<!--            </td>-->
-<!--            <td class="menu_proff1"><a href="/profile/statistic" class="menu_link_prof" style="text-decoration:none;">Моя статистика</a></td>-->
-<!--        </tr>-->
-        <tr>
-            <td class="menu_proff">
-                <img src="/skins/img/interface/menu-billing.png"  style="position: relative; top:2px;" width="16px" border="0">
-            </td>
-            <td class="menu_proff1">
-                <a href="/billing" class="menu_link_prof"   style="text-decoration:none;">Управление платежами</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-        </div>
-</td>
 </tr>
 </table>
 
