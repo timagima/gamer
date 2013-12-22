@@ -86,10 +86,10 @@
                                     </tr>
                                     <tr>
                                         <td class="modal-gamer-data-td" >Уровень сложности:</td>
-                                        <td>
+                                        <td id="game-level-parent">
                                             <select id="game-level" name ="game-level" class="styled" style="width: 180px; height: 15px;">
                                                 <!----><option selected='selected' value="null">Выбрать уровень</option>
-                                             </select>
+                                            </select>
                                         </td>
                                     </tr>
                                     <tr>
