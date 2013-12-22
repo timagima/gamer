@@ -1,9 +1,3 @@
-$(document).ready(function(){
-    birthday();
-    $("#edit-age-month").change(function(){birthdayActualDate();});
-    $("#edit-age-year").change(function(){birthdayActualDate();});
-})
-
 $(function(){
 
     $('.hints').poshytip({
@@ -47,7 +41,7 @@ $(function(){
     });
 
     //Получение уровня сложности выбранной игры
-    function GetGameLevel(){
+    function getGameLevel(){
         var game = document.getElementById("game").value;
         $.ajax({
             type: 'POST',
@@ -72,7 +66,7 @@ $(function(){
 
     }
 
-    document.getElementById("game").onblur = GetGameLevel;
+    document.getElementById("game").onblur = getGameLevel;
 
 
 
@@ -104,6 +98,7 @@ $(function(){
             }
         });
     }
+
     document.getElementById("send-completed-game").onclick = addCompletedGames;
 
     // ВАЛИДАЦИЯ
@@ -115,74 +110,3 @@ $(function(){
     })
 
 });
-
-
-function editUserData(){
-    var firstName  = $("#edit-first-name").val();
-    var lastName   = $("#edit-last-name").val();
-    var patronymic = $("#edit-patronymic").val();
-    var sex        = $("input[name=edit-sex]:checked").val();
-    var aboutMe    = $("#edit-about-me").val();
-    var day        = $("#edit-age-day").val();
-    var month      = $("#edit-age-month").val();
-    var year       = $("#edit-age-year").val();
-    day   = day.length == 1 ? "0"+  day : day;
-    month = month.length == 1 ? "0"+  month : month;
-    var birthday = day + "." + month + "."+ year;
-
-    $.ajax({
-        type: 'POST',
-        url: document.location.href,
-        dataType: 'html',
-        data: {'ajax-query': 'true', 'type-class': 'model', 'method':'MainEditUserData', 'first-name': firstName, 'last-name': lastName, 'patronymic': patronymic, 'sex': sex, 'about-me': aboutMe, 'birthday': birthday},
-        beforeSend: function(){
-            $('#send').before('<img id="ajax-img-loader" src="/skins/img/ajax/loader-page.gif">');
-        },
-        success: function(data){
-            $("#ajax-img-loader").remove();
-            $('#info-ajax-modal').arcticmodal();
-            setTimeout(closeModalAll, 1000);
-            location.reload();
-        }
-    });
-}
-
-
-function birthdayActualDate(){
-    var month              = parseInt($("#edit-age-month").val());
-    var year               = parseInt($("#edit-age-year").val());
-    var day                = parseInt($("#edit-age-day").val());
-    var dataDay            = '';
-    var integerDayForYear  = (year - 1948) / 4;
-    var integerDayForMonth = month / 2;
-    if(month >= 8)
-        var resDay = ((integerDayForMonth + "").indexOf(".") > 0) ? 30 : 31;
-    else if(month == 2)
-        var resDay = ((integerDayForYear + "").indexOf(".") > 0) ? 28 : 29;
-    else
-        var resDay = ((integerDayForMonth + "").indexOf(".") > 0) ? 31 : 30;
-
-    for(i = 1; i <= resDay; i++){
-        var selected = (day == i) ? 'selected' : '';
-        dataDay += '<option value="'+ i +'" '+ selected +' >' + i + '</option>';
-    }
-    $("#edit-age-day").html('').append(dataDay);
-}
-
-function birthday(){
-    var dataYear = '';
-    var dataDay = '';
-    for(i = 2005; i >= 1948; i--){
-        dataYear += '<option value="'+ i +'">' + i + '</option>';
-    }
-
-    for(i = 1; i <= 31; i++){
-        dataDay += '<option value="'+ i +'">' + i + '</option>';
-    }
-    $("#edit-age-year").append(dataYear);
-    $("#edit-age-day").append(dataDay);
-}
-
-function confirmSaveInfo(){
-    $("#box-modal-main-save").arcticmodal();
-}
