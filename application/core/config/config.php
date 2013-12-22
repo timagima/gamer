@@ -3,9 +3,9 @@ namespace application\core\config;
 use application\core\db\MyPDO as DB;
 use PDO;
 
-class Config
+class Config //
 {
-    public $dbh; //В $dbh приходит стандартный класс PDO
+    public $dbh;
     public $_p = array();
     private static $instances;
     private $dsn = 'mysql:host=localhost; dbname=gamer; connection_timeout=15';
