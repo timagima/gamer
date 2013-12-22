@@ -15,25 +15,24 @@ class Model extends MainModel
     //Добавление пройденной игры в БД
     public function AddCompletedGame()
     {
-            $game = $this -> _p['game'];
-            $idGame = $this -> conn -> dbh -> query("SELECT id FROM games WHERE name='" . $game . "'")->fetchAll(PDO::FETCH_ASSOC);
-            $idGame = (int)$idGame[0]['id'];
-            $idLevel = $this -> _p['game-level']*1;
-            $idUser = $_SESSION['user-data']['id']*1;
-            $gameDescription = $this -> _p['game-description'];
+        $game = $this -> _p['game'];
+        $idLevelGame = explode("\$", $this -> _p['game-level']);
+        $idGame = (int)$idLevelGame[1];
+        $idLevel = (int)$idLevelGame[0];
+        $idUser = (int)$_SESSION['user-data']['id'];
+        $gameDescription = $this -> _p['game-description'];
+        $checkGame = $this -> conn -> dbh -> query("SELECT id_game FROM user_completed_games WHERE id_game=".$idGame." AND id_user=".$idUser) -> fetch(PDO::FETCH_ASSOC);
+        if($checkGame===false){
             $stmt = $this -> conn -> dbh -> prepare("INSERT INTO user_completed_games (id_user, id_game, id_level, about_game) VALUES(:idUser, :idGame, :idLevel, :gameDescription)");
-            $stmt -> bindParam(":idUser",          $idUser, PDO::PARAM_STR);
-            $stmt -> bindParam(":idGame",          $idGame, PDO::PARAM_STR);
-            $stmt -> bindParam(":idLevel",         $idLevel, PDO::PARAM_STR);
-            $stmt -> bindParam(":gameDescription", $gameDescription, PDO::PARAM_INT);
-            $getQuery = $stmt -> execute() or die(false);;
-            if($getQuery){
-                $result['game_success'] = true;
-                return json_encode($result);
-            }else{
-                $result['game_success'] = false;
-                return json_encode($result);
-            }
+            $stmt -> bindParam(":idUser",          $idUser, PDO::PARAM_INT);
+            $stmt -> bindParam(":idGame",          $idGame, PDO::PARAM_INT);
+            $stmt -> bindParam(":idLevel",         $idLevel, PDO::PARAM_INT);
+            $stmt -> bindParam(":gameDescription", $gameDescription, PDO::PARAM_STR);
+            $getQuery = $stmt -> execute();
+            return ("addGame");
+        }else{
+            return ("isGame");
+        }
     }
 
     //Получение пройденных игр из БД
@@ -52,44 +51,20 @@ class Model extends MainModel
          return $this->conn->dbh->query("SELECT * FROM games")->fetchAll(PDO::FETCH_OBJ);
      }
 
-      public function DeleteAvatar()
-      {
-          $this->conn->dbh->exec("UPDATE users SET img_avatar = '', img_avatar_b = '' WHERE id = ".(int)$_SESSION['user-data']['id']);
-          $this->GetRefreshDataUser();
-      }
-
-      public function SetAvatar($fileSmall, $fileBig)
-      {
-          $stmt = $this->conn->dbh->prepare("UPDATE users SET img_avatar = ?, img_avatar_b = ? WHERE id = ".(int)$_SESSION['user-data']['id']);
-          $stmt->execute(array($fileSmall, $fileBig));
-          $this->GetRefreshDataUser();
-      }
-
-      public function SetDir($dir)
-      {
-          $stmt = $this->conn->dbh->prepare("UPDATE users SET path = ? WHERE id = ?");
-          $stmt->execute(array($dir, $_SESSION['user-data']['id']));
-          $this->GetRefreshDataUser();
-      }
-
     //Автокомплит названия игры при наборе в модальной форме
     public function GetGame() {
         $result = [];
-
-        $query =  $this -> _p['query'];
-        $limit = !empty($this -> _p['limit']) ? $this -> _p['limit'] : '10';
-
+        $query =  "%{$this->_p['query']}%";
+        $limit = !empty($this -> _p['limit']) ? (int)$this -> _p['limit'] : 10;
         if ( !empty($query) ) {
-            //$query = OftenFunctions::getCorrectText($query);
-            $query = ' games.name like "%'. $query.'%"';
-
-            $sql   = "SELECT DISTINCT games.name FROM games WHERE ". $query ." LIMIT ". $limit;
-            $sql   = $this -> conn -> dbh -> query($sql);
+            $sql = $this->conn->dbh->prepare('SELECT DISTINCT games.name FROM games WHERE games.name like :game LIMIT :limit');
+            $sql->bindParam(":game", $query, PDO::PARAM_STR);
+            $sql->bindParam(":limit", $limit, PDO::PARAM_INT);
+            $sql->execute();
             foreach ( $sql as $value ) {
                 $result['suggestions'][] = $value[0];
             }
         }
-
         return json_encode($result);
     }
 
@@ -97,12 +72,12 @@ class Model extends MainModel
     public function GetGameLevel() {
         $result = array();
         $game =  $this -> _p['game'];
-        //$game = "half - life";
         if ( !empty($game) ) {
-            $sql   = "SELECT level.name, level.id FROM level, games WHERE level.id_game=games.id AND games.name='".$game."'";
-            $sql   = $this -> conn -> dbh -> query($sql);
+            $sql = $this -> conn -> dbh -> prepare("SELECT l.name, l.id as id_level, g.id as id_game FROM `level` l LEFT JOIN `games` g ON g.id=l.id_game WHERE g.name=:game");
+            $sql->bindParam(":game", $game, PDO::PARAM_STR);
+            $sql->execute();
             foreach($sql as $level){
-                $result[] = $level['name']."$".$level['id'];
+                $result[] = $level['name']."$".$level['id_level']."$".$level['id_game'];
             }
         }
         return json_encode($result);
