@@ -50,17 +50,18 @@ $(function(){
             data: {'ajax-query': 'true', 'type-class': 'model', 'method':'GetGameLevel', 'game': game},
             success: function(data){
                 var level = $.parseJSON(data);
-                var selectHtml = "";
+                var selectHtml = '<select id="game-level" name ="game-level" class="styled" style="width: 180px; height: 15px;">';
                 for(var i in level){
                     if(i==0){
                         var value = level[i].split('$');
-                        selectHtml += "<option selected='selected' value='" + value[1] + "'>" + value[0] + "</option>";
+                        selectHtml += "<option selected='selected' value='" + value[1] + "$"+ value[2] +"'>" + value[0] + "</option>";
                     }else{
                         var value = level[i].split('$');
-                        selectHtml += "<option value='" + value[1] + "'>" + value[0] + "</option>";
+                        selectHtml += "<option value='" + value[1] + "$"+ value[2] +"'>" + value[0] + "</option>";
                     }
                 }
-                $("#game-level").html(selectHtml);
+                selectHtml += '</select>';
+                $("#game-level-parent").html(selectHtml);
             }
         });
 
@@ -75,7 +76,6 @@ $(function(){
         var game            = $("#game").val();
         var gameLevel       = $("#game-level").val();
         var gameDescription = $("#game-description").val();
-        alert(game+" "+gameLevel+" "+gameDescription);
 
         $.ajax({
             type: 'POST',
@@ -86,13 +86,16 @@ $(function(){
                 $('#send').before('<img id="ajax-img-loader" src="/skins/img/ajax/loader-page.gif">');
             },
             success: function(data){
-                debugger;
-                var data = $.parseJSON(data)
-                if ( data.game_success == true ) {
+                var data = data;
+                if ( data == "addGame" ) {
                     $('.tooltip#game').removeClass('error')
                     location.reload();
-                } else {
+                }
+                if ( data == "isGame" ){
                     $('.tooltip#game').addClass('error').html('Вы уже добавили данную игру.')
+                    return false;
+                }else{
+                    $('.tooltip#game').addClass('error').html('Заполните все поля.')
                     return false;
                 }
             }
