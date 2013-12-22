@@ -62,6 +62,7 @@ $(function(){
                 }
                 selectHtml += '</select>';
                 $("#game-level-parent").html(selectHtml);
+                $('select.styled').customSelect();
             }
         });
 
