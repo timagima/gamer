@@ -3,7 +3,7 @@ namespace application\core\config;
 use application\core\db\MyPDO as DB;
 use PDO;
 
-class Config //
+class Config
 {
     public $dbh;
     public $_p = array();
