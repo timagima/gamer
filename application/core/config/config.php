@@ -10,7 +10,7 @@ class Config
     private static $instances;
     private $dsn = 'mysql:host=localhost; dbname=gamer; connection_timeout=15';
     private $user = 'root';
-    private $password = '111111';
+    private $password = '111111';//
 
     private function __construct()
     {

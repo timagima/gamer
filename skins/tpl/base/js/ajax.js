@@ -40,6 +40,7 @@ $(function(){
         deferRequestBy: 200
     });
 
+
     //Получение уровня сложности выбранной игры
     function getGameLevel(){
         var game = document.getElementById("game").value;
@@ -88,11 +89,12 @@ $(function(){
             },
             success: function(data){
                 var data = data;
+                debugger;
                 if ( data == "addGame" ) {
                     $('.tooltip#game').removeClass('error')
                     location.reload();
                 }
-                if ( data == "isGame" ){
+                else if ( data == "isGame" ){
                     $('.tooltip#game').addClass('error').html('Вы уже добавили данную игру.')
                     return false;
                 }else{
@@ -114,3 +116,12 @@ $(function(){
     })
 
 });
+
+
+var ClassInterface = {
+    alerts: function(){
+
+        alert(1);
+    }
+}
+ClassInterface.alerts();

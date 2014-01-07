@@ -37,7 +37,6 @@
 
 
 <h2>Пройденные игры</h2>
-
 <div id="featured-section" style="position: relative; z-index: 10;" class="FL">
 <table>
 <tr>
