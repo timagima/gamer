@@ -255,13 +255,11 @@ var _Calendar=function(){
         EvtObj:function(e){if(!e)e=window.event;return e;},
 
         cs_over:function(e){
-            _Calendar.evtTgt(_Calendar.EvtObj(e)).style.background='#1abc9c';
-            _Calendar.evtTgt(_Calendar.EvtObj(e)).style.color='#FFFFFF';
+            _Calendar.evtTgt(_Calendar.EvtObj(e)).style.background='#FFEBCC';
         },
 
         cs_out:function(e){
             _Calendar.evtTgt(_Calendar.EvtObj(e)).style.background='#FFFFFF';
-            _Calendar.evtTgt(_Calendar.EvtObj(e)).style.color='#000000';
         },
 
         cs_click:function(e){
@@ -272,7 +270,7 @@ var _Calendar=function(){
         f_cps:function(obj){
             obj.style.background='#FFFFFF';
             obj.style.font='10px Arial';
-            obj.style.color='#000000';
+            obj.style.color='#333333';
             obj.style.textAlign='center';
             obj.style.textDecoration='none';
             obj.style.border='1px solid #606060';
@@ -311,11 +309,12 @@ var _Calendar=function(){
                     vd.onclick=_Calendar.cs_click;
 
                     if (_Calendar.sccm == cm && _Calendar.sccd == (d-cd) && _Calendar.sccy == cy)
-                        vd.style.color='#000000'; // сегодня
+                        vd.style.color='#FF9900'; // сегодня
                     /*else if(dd.getDay()==6||dd.getDay()==0)
                      vd.style.color='#FF0000'; // выходной*/
 
                     vd.innerHTML=d-cd;
+
                     _Calendar.calvalarr[d]=_Calendar.addnull(d-cd,cm-(-1),cy);
                 }
                 else
@@ -352,6 +351,11 @@ var _Calendar=function(){
             _Calendar.prepcalendar('',_Calendar.ccm,_Calendar.ccy);
         },
 
+        cmonth:function(t){
+            _Calendar.ccm=t.options[t.selectedIndex].value;
+            _Calendar.prepcalendar('',_Calendar.ccm,_Calendar.ccy);
+        },
+
         cyear:function(t){
             _Calendar.ccy=t.options[t.selectedIndex].value;
             _Calendar.prepcalendar('',_Calendar.ccm,_Calendar.ccy);
@@ -378,6 +382,7 @@ var _Calendar=function(){
     _Calendar.sccy=n.getFullYear();
     _Calendar.ccm=n.getMonth();
     _Calendar.ccy=n.getFullYear();
+
 
     var table;
     var userAgent = window.navigator.userAgent;
