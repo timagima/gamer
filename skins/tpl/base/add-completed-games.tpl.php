@@ -77,7 +77,7 @@
                                         <td>
                                             <input style="width: 188px" type="text" id="game" class="input-txt-profile" data-type="validation" placeholder="Пройденная игра" >
                                             <div style="float: right; margin: -45px -235px 0px 0px;" class="b-validation">
-                                                <div class="tooltip " id="game" style="margin-left: 28px;">
+                                                <div class="tooltip" id="game" style="margin-left: 28px;">
                                                 </div>
                                             </div>
                                             <div id="selction-ajax"></div>
@@ -89,6 +89,22 @@
                                             <select id="game-level" name ="game-level" class="styled" style="width: 180px; height: 15px;">
                                                 <!----><option selected='selected' value="null">Выбрать уровень</option>
                                             </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="modal-gamer-data-td" >Начал играть:</td>
+                                        <td>
+                                            <input id="game-start-date" type="text" value="дд-мм-гггг" onfocus="this.select();_Calendar.lcs(this)"
+                                                   onclick="event.cancelBubble=true;this.select();_Calendar.lcs(this)" style="width: 90px" readonly="readonly" />
+                                            <input type="checkbox" id="game-not-start-date"/>Не помню
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="modal-gamer-data-td" >Закончил играть:</td>
+                                        <td>
+                                            <input id="game-end-date" type="text" value="дд-мм-гггг" onfocus="this.select();_Calendar.lcs(this)"
+                                                   onclick="event.cancelBubble=true;this.select();_Calendar.lcs(this)" style="width: 90px" readonly="readonly" />
+                                            <input type="checkbox" id="game-not-end-date" />Не помню
                                         </td>
                                     </tr>
                                     <tr>

@@ -12,21 +12,46 @@ class Model extends MainModel
         parent::__construct();
     }
 
+    //Функия принимает массив(из 3-х ячеек) и возвращает Юникс метку времени
+    public function MakeUnixTime($date){
+        if(is_array($date)){
+            $date[0] = intval($date[0]);
+            $date[1] = intval($date[1]);
+            $date[2] = intval($date[2]);
+            $date[0] = ( ($date[0]<0) || ($date[0]>31) ) ? 1 : $date[0];
+            $date[1] = ( ($date[1]<0) || ($date[1]>12) ) ? 1 : $date[1];
+            $date[2] = ( ($date[2]<1974) || ($date[2]>2014) ) ? 2014 : $date[2];
+            return mktime(12, 0, 0, $date[1], $date[0], $date[2]);
+        }else{
+            return $date;
+        }
+    }
     //Добавление пройденной игры в БД
     public function AddCompletedGame()
     {
-        $game = $this -> _p['game'];
+        $gameStartDate = $this -> _p['game-start-date'];
+        $gameEndDate = $this -> _p['game-end-date'];
+        $notGameStartDate = $this -> _p['not-game-start'];
+        $notGameEndDate = $this -> _p['not-game-end'];
+        $gameStartDate = ($notGameStartDate === "true" ) ? "" : explode("-", $gameStartDate, 3);
+        $gameStartDate = $this -> MakeUnixTime($gameStartDate);
+        $gameEndDate = ($notGameEndDate === "true" ) ? "" : explode("-", $gameEndDate, 3);
+        $gameEndDate = $this -> MakeUnixTime($gameEndDate);
         $idLevelGame = explode("\$", $this -> _p['game-level']);
         $idGame = (int)$idLevelGame[1];
         $idLevel = (int)$idLevelGame[0];
         $idUser = (int)$_SESSION['user-data']['id'];
         $gameDescription = $this -> _p['game-description'];
+        $postDate = time();
         $checkGame = $this -> conn -> dbh -> query("SELECT id_game FROM user_completed_games WHERE id_game=".$idGame." AND id_user=".$idUser) -> fetch(PDO::FETCH_ASSOC);
         if($checkGame===false){
-            $stmt = $this -> conn -> dbh -> prepare("INSERT INTO user_completed_games (id_user, id_game, id_level, about_game) VALUES(:idUser, :idGame, :idLevel, :gameDescription)");
+            $stmt = $this -> conn -> dbh -> prepare("INSERT INTO user_completed_games (id_user, id_game, id_level, about_game, start_date, end_date, post_date) VALUES(:idUser, :idGame, :idLevel, :gameDescription, :startDate, :endDate, :postDate)");
             $stmt -> bindParam(":idUser",          $idUser, PDO::PARAM_INT);
             $stmt -> bindParam(":idGame",          $idGame, PDO::PARAM_INT);
             $stmt -> bindParam(":idLevel",         $idLevel, PDO::PARAM_INT);
+            $stmt -> bindParam(":startDate",       $gameStartDate, PDO::PARAM_INT);
+            $stmt -> bindParam(":endDate",         $gameEndDate, PDO::PARAM_INT);
+            $stmt -> bindParam(":postDate",        $postDate, PDO::PARAM_INT);
             $stmt -> bindParam(":gameDescription", $gameDescription, PDO::PARAM_STR);
             $getQuery = $stmt -> execute();
             return ("addGame");
