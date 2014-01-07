@@ -96,7 +96,7 @@
                                         <td>
                                             <input id="game-start-date" type="text" value="дд-мм-гггг" onfocus="this.select();_Calendar.lcs(this)"
                                                    onclick="event.cancelBubble=true;this.select();_Calendar.lcs(this)" style="width: 90px" readonly="readonly" />
-                                            <input type="checkbox" id="game-not-start-date"/>Не помню
+                                            <input type="checkbox" id="game-not-start-date" value="start-date" class="disable-date"/>Не помню
                                         </td>
                                     </tr>
                                     <tr>
@@ -104,7 +104,7 @@
                                         <td>
                                             <input id="game-end-date" type="text" value="дд-мм-гггг" onfocus="this.select();_Calendar.lcs(this)"
                                                    onclick="event.cancelBubble=true;this.select();_Calendar.lcs(this)" style="width: 90px" readonly="readonly" />
-                                            <input type="checkbox" id="game-not-end-date" />Не помню
+                                            <input type="checkbox" id="game-not-end-date" class="disable-date" value="end-date" />Не помню
                                         </td>
                                     </tr>
                                     <tr>

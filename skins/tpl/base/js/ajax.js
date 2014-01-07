@@ -119,34 +119,13 @@ $(function(){
     })
 
     //Функция установки метки об отсутствии даты начала прохождения игры
-    var notGameStart = false;
-    function disableInputGameStartDate(){
-        notGameStart = (notGameStart == false) ? true : false;
-        var input = document.getElementById("game-start-date");
-        if(input.getAttribute("disabled") === "disabled"){
-            input.removeAttribute("disabled");
-            input.setAttribute("value", "дд-мм-гггг");
-        }else{
-            input.setAttribute("disabled", "disabled");
-            input.setAttribute("value", "Не помню");
-        }
-    }
-    document.getElementById("game-not-start-date").onclick = disableInputGameStartDate;
 
-    //Функция установки метки об отсутствии даты конца прохождения игры
-    var notGameEnd = false;
-    function disableInputGameEndDate(){
-        notGameEnd = (notGameEnd == false) ? true : false;
-        var input = document.getElementById("game-end-date");
-        if(input.getAttribute("disabled") === "disabled"){
-            input.removeAttribute("disabled");
-            input.setAttribute("value", "дд-мм-гггг");
-        }else{
-            input.setAttribute("disabled", "disabled");
-            input.setAttribute("value", "Не помню");
-        }
-    }
-    document.getElementById("game-not-end-date").onclick = disableInputGameEndDate;
+    $(".disable-date").click(function(){
+        var idName = "#game-" + $(this).val();
+        var input = $(idName).val();
+        (input == "Не помню") ? $(idName).val("дд-мм-гггг").removeAttr("disabled") : $(idName).val("Не помню").attr("disabled", "disabled");
+    })
+
 
 });
 
