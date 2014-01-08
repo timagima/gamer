@@ -120,7 +120,7 @@ class MainController
 	public function AddJs($file)
     {
         $arrUrl = explode("/", $_SERVER['REDIRECT_URL']);
-        $path = (count($arrUrl) > 3) ? "/".$arrUrl[0]."/".$arrUrl[1]."/".$arrUrl[2] : $_SERVER['REDIRECT_URL'];
+        $path = (count($arrUrl) > 3) ? "/".$arrUrl[0]."/".$arrUrl[1]."/".$arrUrl[2] : "/".$arrUrl[1];
         $name = "/skins/tpl".$path. "/js/". $file.".js";
         $this->view->RenderJs($name);
     }
