@@ -10,7 +10,7 @@ class Config
     private static $instances;
     private $dsn = 'mysql:host=localhost; dbname=gamer; connection_timeout=15';
     private $user = 'root';
-    private $password = '111111';//
+    private $password = 'root'; //
 
     private function __construct()
     {
@@ -21,14 +21,16 @@ class Config
 
     public static function GetInstance()
     {
-        if (empty(self::$instances))
-        {
+        if (empty(self::$instances)) {
             $object = __CLASS__;
             self::$instances = new $object;
         }
         return self::$instances;
     }
-    public function GlobalVar(){}
+
+    public function GlobalVar()
+    {
+    }
     //Comment
 }
 ?>
