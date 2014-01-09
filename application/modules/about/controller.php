@@ -51,4 +51,10 @@ class Controller extends MainController
         $data['error'] = '';
         $this->view->Generate($this->arrTpl[0], 'about/offer.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
     }
+    public function ActionPromo()
+    {
+        $this->headerTxt['title'] = 'Оферта — GS11';
+        $data['error'] = '';
+        $this->view->Generate($this->arrTpl[0], 'about/promo.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
+    }
 }
