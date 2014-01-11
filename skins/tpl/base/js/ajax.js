@@ -26,6 +26,7 @@ $(function () {
         deferRequestBy: 200
     });
 
+    //var gameAdded = "notAdd";
     //Получение уровня сложности выбранной игры
     function getGameLevel() {
         var game = document.getElementById("game").value;
@@ -36,6 +37,14 @@ $(function () {
             data: {'ajax-query': 'true', 'type-class': 'model', 'method': 'GetGameLevel', 'game': game},
             success: function (data) {
                 var level = $.parseJSON(data);
+                //var checkGame = level.pop();
+                //if(checkGame === "true"){
+                  //  var gameAdded = "add";
+                    //$('.tooltip#game').addClass('error').html('Вы уже добавили эту игру.');
+                    //notFormSend = true;
+                //}//else{
+                   // $('.tooltip#game').removeClass('error');
+                //}
                 if (level.length == 0) {
                     var selectHtml = '<select id="game-level" name ="game-level" class="styled" style="width: 180px; height: 15px;">';
                     selectHtml += "<option selected='selected' value='false'>Сначала выберите игру</option>";
@@ -62,13 +71,12 @@ $(function () {
 
     }
 
-    document.getElementById("game").onblur = getGameLevel;
-    //document.getElementById("game").onkeydown = getGameLevel;
+    //document.getElementById("game").onblur = getGameLevel;
+    document.getElementById("game").onkeydown = getGameLevel;
     $(".autocomplete-suggestions").bind("click.namespace", function () {
         getGameLevel();
     });
     $(".autocomplete-suggestions").trigger('click.namespace');
-
 
     // Добавление пройденной игры в БД
     function addCompletedGames() {
@@ -77,32 +85,47 @@ $(function () {
         var gameDescription = $("#game-description").val();
         var gameStart = $("#game-start-date").val();
         var gameEnd = $("#game-end-date").val();
-        var notFormSend = false;
-        if (game == "") {
-            $('.tooltip#game').addClass('error').html('Заполните поле');
-            notFormSend = true;
-        } else {
-            $('.tooltip#game').removeClass('error');
-        }
+        var notFormSendGameStart;
+        var notFormSendGameEnd;
+        var notFormSendGameDescription;
+
+        //if (gameAdded === "add") {
+          //  $('.tooltip#game').addClass('error').html('Вы уже добавили эту игру.');
+        //} //else if(gameAdded === "notAdd"){
+            //$('.tooltip#game').removeClass('error');
+        //}
+        //if (game == "") {
+          //  $('.tooltip#game').addClass('error').html('Заполните поле');
+          //  notFormSend = true;
+        //} //else{
+           // $('.tooltip#game').removeClass('error');
+        //}
+
         if (gameDescription == "") {
             $('#description').addClass('error').html('Заполните поле');
-            notFormSend = true;
+            notFormSendGameDescription = true;
         } else {
-            $('#description').removeClass('error')
+            $('#description').removeClass('error');
+            notFormSendGameDescription = false;
         }
+
         if (gameStart === "дд-мм-гггг") {
             $('#game-start').addClass('error').html('Заполните поле');
-            notFormSend = true;
+            notFormSendGameStart = true;
         } else {
-            $('#game-start').removeClass('error')
+            $('#game-start').removeClass('error');
+            notFormSendGameStart = false;
         }
+
         if (gameEnd === "дд-мм-гггг") {
             $('#game-end').addClass('error').html('Заполните поле');
-            notFormSend = true;
+            notFormSendGameEnd = true;
         } else {
-            $('#game-end').removeClass('error')
+            $('#game-end').removeClass('error');
+            notFormSendGameEnd = false;
         }
-        if (notFormSend == true)
+
+        if (notFormSendGameDescription == true || notFormSendGameStart==true || notFormSendGameEnd)
             return false;
         $.ajax({
             type: 'POST',
@@ -117,7 +140,10 @@ $(function () {
                     $('.tooltip#game').removeClass('error')
                     location.reload();
                 } else if (data == "isGame") {
-                    $('.tooltip#game').addClass('error').html('Вы уже добавили данную игру.')
+                    $('.tooltip#game').addClass('error').html('Вы уже добавили эту игру!')
+                    return false;
+                } else if (data == "notGame") {
+                    $('.tooltip#game').addClass('error').html('Такой игры нет в БД.')
                     return false;
                 }
             }
