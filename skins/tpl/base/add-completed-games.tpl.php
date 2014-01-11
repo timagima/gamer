@@ -4,7 +4,7 @@
         display: none;
         z-index: 10;
         padding: 5px;
-        line-height: 16px;
+        line-height: 25px;
 
         position: absolute;
         color: #111;
@@ -20,7 +20,7 @@
         width: 200px;
         z-index: 99;
         color: #FFFFFF;
-        min-height: 32px;
+        min-height: 25px;
         min-width: 200px;
     }
 
@@ -133,12 +133,11 @@
                                                            onfocus="this.select();_Calendar.lcs(this)"
                                                            onclick="event.cancelBubble=true;this.select();_Calendar.lcs(this)"
                                                            style="width: 90px" readonly="readonly"/>
-                                                    <input type="checkbox" id="game-not-start-date" value="start-date"
-                                                           class="disable-date"/>Не помню
-                                                    <div style="float: right; margin: -59px -235px 0px 0px;"
-                                                         class="b-validation">
-                                                        <div class="tooltip" id="game-start"
-                                                             style="margin-left: 28px;"></div>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" id="game-not-start-date" value="start-date" class="disable-date"/>Не помню
+                                                    </label>
+                                                    <div style="float: right; margin: -59px -235px 0px 0px;" class="b-validation">
+                                                        <div class="tooltip" id="game-start" style="margin-left: 28px;"></div>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -149,26 +148,20 @@
                                                            onfocus="this.select();_Calendar.lcs(this)"
                                                            onclick="event.cancelBubble=true;this.select();_Calendar.lcs(this)"
                                                            style="width: 90px" readonly="readonly"/>
-                                                    <input type="checkbox" id="game-not-end-date" class="disable-date"
-                                                           value="end-date"/>Не помню
-                                                    <div style="float: right; margin: -59px -235px 0px 0px;"
-                                                         class="b-validation">
-                                                        <div class="tooltip" id="game-end"
-                                                             style="margin-left: 28px;"></div>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" id="game-not-end-date" class="disable-date" value="end-date"/>Не помню
+                                                    </label>
+                                                    <div style="float: right; margin: -59px -235px 0px 0px;" class="b-validation">
+                                                        <div class="tooltip" id="game-end" style="margin-left: 28px;"></div>
                                                     </div>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="modal-gamer-data-td">Отзыв:</td>
                                                 <td>
-                                                    <textarea style="width: 188px" type="text" id="game-description"
-                                                              class="input-txt-profile" data-type="validation">Опишите
-                                                        свои впечатления об игре.</textarea>
-
-                                                    <div style="float: right; margin: -59px -235px 0px 0px;"
-                                                         class="b-validation">
-                                                        <div class="tooltip" id="description"
-                                                             style="margin-left: 28px;"></div>
+                                                    <textarea style="width: 188px" type="text" id="game-description" class="input-txt-profile" data-type="validation">Опишите свои впечатления об игре.</textarea>
+                                                    <div style="float: right; margin: -59px -235px 0px 0px;" class="b-validation">
+                                                        <div class="tooltip" id="description" style="margin-left: 28px;"></div>
                                                     </div>
                                                 </td>
                                             </tr>

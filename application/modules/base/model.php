@@ -36,13 +36,14 @@ class Model extends MainModel
         $gameStartDate = (((int)$gameStartDate) > 0) ? $this->MakeUnixTime(explode("-", $gameStartDate, 3)) : 0;
         $gameEndDate = (((int)$gameEndDate) > 0) ? $this->MakeUnixTime(explode("-", $gameEndDate, 3)) : 0;
         $idLevelGame = explode("\$", $this->_p['game-level']);
-        $idGame = (int)$idLevelGame[1];
+        $idGame = (isset($idLevelGame[1]))?(int)$idLevelGame[1]:0;
         $idLevel = (int)$idLevelGame[0];
         $idUser = (int)$_SESSION['user-data']['id'];
         $gameDescription = $this->_p['game-description'];
         $postDate = time();
-        $checkGame = $this->conn->dbh->query("SELECT id_game FROM user_completed_games WHERE id_game=" . $idGame . " AND id_user=" . $idUser)->fetch(PDO::FETCH_ASSOC);
-        if ($checkGame === false) {
+        $checkAddedGame = $this->conn->dbh->query("SELECT id_game FROM user_completed_games WHERE id_game=" . $idGame . " AND id_user=" . $idUser)->fetch(PDO::FETCH_ASSOC);
+        $checkGame = $this->conn->dbh->query("SELECT name FROM games WHERE id = ".$idGame)->fetch(PDO::FETCH_ASSOC);
+        if ($checkAddedGame === false && $checkGame !== false) {
             $stmt = $this->conn->dbh->prepare("INSERT INTO user_completed_games (id_user, id_game, id_level, about_game, start_date, end_date, post_date) VALUES(:idUser, :idGame, :idLevel, :gameDescription, :startDate, :endDate, :postDate)");
             $stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
             $stmt->bindParam(":idGame", $idGame, PDO::PARAM_INT);
@@ -53,8 +54,10 @@ class Model extends MainModel
             $stmt->bindParam(":gameDescription", $gameDescription, PDO::PARAM_STR);
             $getQuery = $stmt->execute();
             return ("addGame");
-        } else {
+        } elseif ($checkAddedGame !== false) {
             return ("isGame");
+        } elseif ($checkGame === false) {
+            return ("notGame");
         }
     }
 
@@ -104,13 +107,23 @@ class Model extends MainModel
             foreach ($sql as $level) {
                 $result[] = $level['name'] . "$" . $level['id_level'] . "$" . $level['id_game'];
             }
+            //$test = $this->CheckAddedGames($level[2]);
+            //$result[] = $this->CheckAddedGames($level[2]);
+
         }
         return json_encode($result);
     }
 
-    public function GetIpAdress()
+    //Метод проверки наличия игры в таблеце "Пройденных игр"
+    public function CheckAddedGames($idGame)
     {
-
+        $idGame = (int)$idGame;
+        $idUser = (int)$_SESSION['user-data']['id'];
+        $stmt = $this->conn->dbh->prepare("SELECT id_game FROM user_completed_games WHERE id_game = :idGame AND id_user= :idUser");
+        $stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
+        $stmt->bindParam(":idGame", $idGame, PDO::PARAM_INT);
+        $stmt->execute();
+        return (count($stmt->fetchAll())>0) ? "true" : "false";
     }
 }
 
