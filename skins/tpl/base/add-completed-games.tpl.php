@@ -82,11 +82,28 @@
 
                             <!-- таблица с пройденными играми пользователя здесь таблица с пройденными играми пользователя<br>-->
                             <?php
-                            foreach ($data['user-completed-games'] as $arrayGame) {
+                            /*foreach ($data['user-completed-games'] as $arrayGame) {
                                 echo "<img src='storage" . $arrayGame['source_img_s'] . "'/>";
                             }
-                            ?>
+                            var_dump($data['user-completed-games']);*/
 
+                            foreach ($data['user-completed-games'] as $arrayGame) {?>
+                                <div class="game-wrap" style="border: 1px solid #1abc9c; margin: 10px; padding: 10px">
+                                    <div class="game-head">
+                                        <h4><img src="storage<?= $arrayGame['source_img_s'] ?>"><?= $arrayGame['game'] ?> жанр: Undefined posted: <?= date("d.m.Y", $arrayGame['post_date']) ?><h4>
+                                    </div>
+                                    <div class="game-desc">
+                                        <p>
+                                            <?= $arrayGame['about_game'] ?>
+                                        </p>
+                                    </div>
+                                    <div class="game-v-ch" style="font: italic bold small serif">
+                                        <a href="">Читать подробнее</a>
+                                        <a href="" style="float: right">Редактировать</a>
+                                    </div>
+                                </div>
+                            <?php }
+                            ?>
 
                             <!-- Модальная форма добавления пройденной игры -->
                             <div class="hide">
@@ -103,14 +120,9 @@
                                             <tr>
                                                 <td class="modal-gamer-data-td">Игра:</td>
                                                 <td>
-                                                    <input style="width: 188px" type="text" id="game"
-                                                           class="input-txt-profile" data-type="validation"
-                                                           placeholder="Пройденная игра">
-
-                                                    <div style="float: right; margin: -45px -235px 0px 0px;"
-                                                         class="b-validation">
-                                                        <div class="tooltip" id="game" style="margin-left: 28px;">
-                                                        </div>
+                                                    <input style="width: 188px" type="text" id="game" class="input-txt-profile" data-type="validation" placeholder="Пройденная игра">
+                                                    <div style="float: right; margin: -2px -235px 0px 0px;" class="b-validation">
+                                                        <div class="tooltip" id="game" style="margin-left: 28px;"></div>
                                                     </div>
                                                     <div id="selction-ajax"></div>
                                                 </td>
@@ -118,25 +130,42 @@
                                             <tr>
                                                 <td class="modal-gamer-data-td">Уровень сложности:</td>
                                                 <td id="game-level-parent">
-                                                    <select id="game-level" name="game-level" class="styled"
-                                                            style="width: 180px; height: 15px;">
-                                                        <!---->
-                                                        <option selected='selected' value="null">Выбрать уровень
-                                                        </option>
+                                                    <select id="game-level" name="game-level" class="styled" style="width: 200px; height: 15px;">
+                                                        <option selected='selected' value="null">Выбрать уровень</option>
                                                     </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="modal-gamer-data-td">Качество прохождения:</td>
+                                                <td>
+                                                    <select style="width: 200px; height: 15px;">
+                                                        <?php
+                                                        foreach($data["type-complete-game"] as $type){
+                                                            echo "<option value='$type[id]'>$type[name]</option>";
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="modal-gamer-data-td">Количество квестов:</td>
+                                                <td>
+                                                    <input id="quest-count" type="text" style="width:50px; margin-right: 40px"/>
+                                                    <label class="checkbox"><input type="checkbox" id="not-quest-count"/> Не помню </label>
+                                                    <div style="float: right; margin: 0px -235px 0px 0px;" class="b-validation">
+                                                        <div class="tooltip" id="game-quest" style="margin-left: 28px;"></div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="modal-gamer-data-td">Начал играть:</td>
                                                 <td>
-                                                    <input id="game-start-date" type="text" value="дд-мм-гггг"
-                                                           onfocus="this.select();_Calendar.lcs(this)"
-                                                           onclick="event.cancelBubble=true;this.select();_Calendar.lcs(this)"
-                                                           style="width: 90px" readonly="readonly"/>
+                                                    <input id="game-start-date" type="text" value="дд-мм-гггг" onfocus="this.select();_Calendar.lcs(this)"
+                                                           onclick="event.cancelBubble=true;this.select();_Calendar.lcs(this)" style="width: 90px" readonly="readonly"/>
                                                     <label class="checkbox">
                                                         <input type="checkbox" id="game-not-start-date" value="start-date" class="disable-date"/>Не помню
                                                     </label>
-                                                    <div style="float: right; margin: -59px -235px 0px 0px;" class="b-validation">
+                                                    <div style="float: right; margin: 0px -235px 0px 0px;" class="b-validation">
                                                         <div class="tooltip" id="game-start" style="margin-left: 28px;"></div>
                                                     </div>
                                                 </td>
@@ -144,14 +173,12 @@
                                             <tr>
                                                 <td class="modal-gamer-data-td">Закончил играть:</td>
                                                 <td>
-                                                    <input id="game-end-date" type="text" value="дд-мм-гггг"
-                                                           onfocus="this.select();_Calendar.lcs(this)"
-                                                           onclick="event.cancelBubble=true;this.select();_Calendar.lcs(this)"
-                                                           style="width: 90px" readonly="readonly"/>
+                                                    <input id="game-end-date" type="text" value="дд-мм-гггг" onfocus="this.select();_Calendar.lcs(this)"
+                                                           onclick="event.cancelBubble=true;this.select();_Calendar.lcs(this)" style="width: 90px" readonly="readonly"/>
                                                     <label class="checkbox">
                                                         <input type="checkbox" id="game-not-end-date" class="disable-date" value="end-date"/>Не помню
                                                     </label>
-                                                    <div style="float: right; margin: -59px -235px 0px 0px;" class="b-validation">
+                                                    <div style="float: right; margin: 0px -235px 0px 0px;" class="b-validation">
                                                         <div class="tooltip" id="game-end" style="margin-left: 28px;"></div>
                                                     </div>
                                                 </td>
@@ -160,7 +187,7 @@
                                                 <td class="modal-gamer-data-td">Отзыв:</td>
                                                 <td>
                                                     <textarea style="width: 188px" type="text" id="game-description" class="input-txt-profile" data-type="validation">Опишите свои впечатления об игре.</textarea>
-                                                    <div style="float: right; margin: -59px -235px 0px 0px;" class="b-validation">
+                                                    <div style="float: right; margin: 5px -235px 0px 0px;" class="b-validation">
                                                         <div class="tooltip" id="description" style="margin-left: 28px;"></div>
                                                     </div>
                                                 </td>
