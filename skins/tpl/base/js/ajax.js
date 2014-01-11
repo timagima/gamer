@@ -1,5 +1,11 @@
 $(function () {
 
+    var divElement = $("#my-div").html();
+    debugger;
+
+    var divElement = document.getElementById("my-div");
+
+
     $('.hints').poshytip({
         className: 'tip-black',
         showOn: 'focus',
