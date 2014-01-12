@@ -53,8 +53,23 @@ class Controller extends MainController
     }
     public function ActionPromo()
     {
-        $this->headerTxt['title'] = 'Оферта — GS11';
+        $this->headerTxt['title'] = 'Легендарные Off-line турниры';
         $data['error'] = '';
-        $this->view->Generate($this->arrTpl[0], 'about/promo.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
+        $this->view->Generate($this->arrTpl[0], 'about/legend-tournament-promo.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
+
+    }
+    public function ActionWinnerPromo()
+    {
+        $this->headerTxt['title'] = 'Победители Off-line турниров';
+        $data['error'] = '';
+        $this->view->Generate($this->arrTpl[0], 'about/winner-promo.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
+
+    }
+    public function ActionNextTournamentPromo()
+    {
+        $this->headerTxt['title'] = 'Ближайшие Off-line турниры';
+        $data['error'] = '';
+        $this->view->Generate($this->arrTpl[0], 'about/next-tournament-promo.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
+
     }
 }
