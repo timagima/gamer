@@ -21,8 +21,19 @@ class Controller extends MainController
         $this->AddJs("ajax");
         $data['games'] = $this->model->GetGames();
         $data['user-completed-games'] = $this->model->GetUserCompletedGames();
+        $data['type-complete-game'] = $this->model->GetTypeCompleteGame();
         $this->headerTxt['title'] = "Пройденные игры - GS11";
         $this->view->Generate('menu/auth-menu.tpl.php', 'base/add-completed-games.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());
+    }
+
+    public function ActionView()
+    {
+        echo"test view!";
+    }
+
+    public function ActionEdit()
+    {
+        echo"test edit!";
     }
 
 

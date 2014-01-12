@@ -72,9 +72,16 @@ class Model extends MainModel
                                         AND users.id=" . $_SESSION['user-data']['id'] . " ORDER BY game")->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //Получение игр из БД
     public function GetGames()
     {
         return $this->conn->dbh->query("SELECT * FROM games")->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    //Получение массива типов прохождения игр
+    public function GetTypeCompleteGame()
+    {
+        return $this->conn->dbh->query("SELECT * FROM type_complete_game")->fetchAll(PDO::FETCH_ASSOC);
     }
 
     //Автокомплит названия игры при наборе в модальной форме

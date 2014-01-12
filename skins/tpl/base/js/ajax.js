@@ -43,22 +43,22 @@ $(function () {
             data: {'ajax-query': 'true', 'type-class': 'model', 'method': 'GetGameLevel', 'game': game},
             success: function (data) {
                 var level = $.parseJSON(data);
-                //var checkGame = level.pop();
-                //if(checkGame === "true"){
-                  //  var gameAdded = "add";
-                    //$('.tooltip#game').addClass('error').html('Вы уже добавили эту игру.');
-                    //notFormSend = true;
-                //}//else{
-                   // $('.tooltip#game').removeClass('error');
-                //}
+                /*var checkGame = level.pop();
+                if(checkGame === "true"){
+                    var gameAdded = "add";
+                    $('.tooltip#game').addClass('error').html('Вы уже добавили эту игру.');
+                    notFormSend = true;
+                }else{
+                    $('.tooltip#game').removeClass('error');
+                }*/
                 if (level.length == 0) {
-                    var selectHtml = '<select id="game-level" name ="game-level" class="styled" style="width: 180px; height: 15px;">';
+                    var selectHtml = '<select id="game-level" name ="game-level" class="styled" style="width: 200px; height: 15px;">';
                     selectHtml += "<option selected='selected' value='false'>Сначала выберите игру</option>";
                     selectHtml += '</select>';
                     $("#game-level-parent").html(selectHtml);
                     $('select.styled').customSelect();
                 } else {
-                    var selectHtml = '<select id="game-level" name ="game-level" class="styled" style="width: 180px; height: 15px;">';
+                    var selectHtml = '<select id="game-level" name ="game-level" class="styled" style="width: 200px; height: 15px;">';
                     for (var i in level) {
                         if (i == 0) {
                             var value = level[i].split('$');
@@ -88,12 +88,16 @@ $(function () {
     function addCompletedGames() {
         var game = $("#game").val();
         var gameLevel = $("#game-level").val();
-        var gameDescription = $("#game-description").val();
+        var gameDescription = $.trim($("#game-description").val());
         var gameStart = $("#game-start-date").val();
         var gameEnd = $("#game-end-date").val();
+        var gameQuest = parseInt($.trim($("#quest-count").val()));
+        var visibleQuestQount = $("#quest-count").css("visibility");
         var notFormSendGameStart;
         var notFormSendGameEnd;
         var notFormSendGameDescription;
+        var notFormGameQuest;
+        //debugger;
 
         //if (gameAdded === "add") {
           //  $('.tooltip#game').addClass('error').html('Вы уже добавили эту игру.');
@@ -130,8 +134,15 @@ $(function () {
             $('#game-end').removeClass('error');
             notFormSendGameEnd = false;
         }
+        if (isNaN(gameQuest) && visibleQuestQount == "visible") {
+            $('#game-quest').addClass('error').html('Заполните поле');
+            notFormGameQuest = true;
+        } else {
+            $('#game-quest').removeClass('error');
+            notFormGameQuest = false;
+        }
 
-        if (notFormSendGameDescription == true || notFormSendGameStart==true || notFormSendGameEnd)
+        if (notFormSendGameDescription == true || notFormSendGameStart==true || notFormSendGameEnd==true || notFormGameQuest == true)
             return false;
         $.ajax({
             type: 'POST',
@@ -167,13 +178,17 @@ $(function () {
     })
 
     //Функция установки метки об отсутствии даты начала прохождения игры
-
     $(".disable-date").click(function () {
         var idName = "#game-" + $(this).val();
         var input = $(idName).val();
         (input == "Не помню") ? $(idName).val("дд-мм-гггг").removeAttr("disabled") : $(idName).val("Не помню").attr("disabled", "disabled");
     })
 
+    //Функция скрывает и показывает инпут с для ввода количества пройденный квестов
+    $("#not-quest-count").click(function () {
+        var visibleQuestQount = $("#quest-count").css("visibility");
+        ( visibleQuestQount == "visible" ) ? $("#quest-count").css("visibility", "hidden") : $("#quest-count").css("visibility", "visible");
+    })
 
 });
 
