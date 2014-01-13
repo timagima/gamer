@@ -78,6 +78,10 @@
                                    data-animation="fade" style="cursor: pointer; text-decoration: none;  color:#507fb6">Добавить
                                     пройденную игру</a>
                             </div>
+                            <select class="styled">
+                                <option>Пункт 1</option>
+                                <option>Пункт 2</option>
+                            </select>
 
 
                             <!-- таблица с пройденными играми пользователя здесь таблица с пройденными играми пользователя<br>-->
