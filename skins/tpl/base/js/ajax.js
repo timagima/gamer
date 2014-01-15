@@ -1,11 +1,4 @@
 $(function () {
-
-    var divElement = $("#my-div").html();
-    debugger;
-
-    var divElement = document.getElementById("my-div");
-
-
     $('.hints').poshytip({
         className: 'tip-black',
         showOn: 'focus',
@@ -36,45 +29,47 @@ $(function () {
     //Получение уровня сложности выбранной игры
     function getGameLevel() {
         var game = document.getElementById("game").value;
-        $.ajax({
-            type: 'POST',
-            url: document.location.href,
-            dataType: 'html',
-            data: {'ajax-query': 'true', 'type-class': 'model', 'method': 'GetGameLevel', 'game': game},
-            success: function (data) {
-                var level = $.parseJSON(data);
-                /*var checkGame = level.pop();
-                if(checkGame === "true"){
-                    var gameAdded = "add";
-                    $('.tooltip#game').addClass('error').html('Вы уже добавили эту игру.');
-                    notFormSend = true;
-                }else{
-                    $('.tooltip#game').removeClass('error');
-                }*/
-                if (level.length == 0) {
-                    var selectHtml = '<select id="game-level" name ="game-level" class="styled" style="width: 200px; height: 15px;">';
-                    selectHtml += "<option selected='selected' value='false'>Сначала выберите игру</option>";
-                    selectHtml += '</select>';
-                    $("#game-level-parent").html(selectHtml);
-                    $('select.styled').customSelect();
-                } else {
-                    var selectHtml = '<select id="game-level" name ="game-level" class="styled" style="width: 200px; height: 15px;">';
-                    for (var i in level) {
-                        if (i == 0) {
-                            var value = level[i].split('$');
-                            selectHtml += "<option selected='selected' value='" + value[1] + "$" + value[2] + "'>" + value[0] + "</option>";
-                        } else {
-                            var value = level[i].split('$');
-                            selectHtml += "<option value='" + value[1] + "$" + value[2] + "'>" + value[0] + "</option>";
+        if(game!=""){
+            $.ajax({
+                type: 'POST',
+                url: document.location.href,
+                dataType: 'html',
+                data: {'ajax-query': 'true', 'type-class': 'model', 'method': 'GetGameLevel', 'game': game},
+                success: function (data) {
+                    var level = $.parseJSON(data);
+                    /*var checkGame = level.pop();
+                    if(checkGame === "true"){
+                        var gameAdded = "add";
+                        $('.tooltip#game').addClass('error').html('Вы уже добавили эту игру.');
+                        notFormSend = true;
+                    }else{
+                        $('.tooltip#game').removeClass('error');
+                    }*/
+                    if (level.length == 0) {
+                        var selectHtml = '<select id="game-level" name ="game-level" class="styled" style="width: 200px; height: 15px;">';
+                        selectHtml += "<option selected='selected' value='false'>Сначала выберите игру</option>";
+                        selectHtml += '</select>';
+                        $("#game-level-parent").html(selectHtml);
+                        //$('select.styled').customSelect();
+                    } else {
+                        var selectHtml = '<select id="game-level" name ="game-level" class="styled" style="width: 200px; height: 15px;">';
+                        for (var i in level) {
+                            if (i == 0) {
+                                var value = level[i].split('$');
+                                selectHtml += "<option selected='selected' value='" + value[1] + "$" + value[2] + "'>" + value[0] + "</option>";
+                            } else {
+                                var value = level[i].split('$');
+                                selectHtml += "<option value='" + value[1] + "$" + value[2] + "'>" + value[0] + "</option>";
+                            }
+                            //$('select.styled').customSelect();
                         }
+                        selectHtml += '</select>';
+                        $("#game-level-parent").html(selectHtml);
+                        //$('select.styled').customSelect();
                     }
-                    selectHtml += '</select>';
-                    $("#game-level-parent").html(selectHtml);
-                    $('select.styled').customSelect();
                 }
-            }
-        });
-
+            });
+        }
     }
 
     //document.getElementById("game").onblur = getGameLevel;
@@ -91,8 +86,9 @@ $(function () {
         var gameDescription = $.trim($("#game-description").val());
         var gameStart = $("#game-start-date").val();
         var gameEnd = $("#game-end-date").val();
-        var gameQuest = parseInt($.trim($("#quest-count").val()));
+        var questQount = parseInt($.trim($("#quest-count").val()));
         var visibleQuestQount = $("#quest-count").css("visibility");
+        var idGamePassing = parseInt($("#game-passing").val());
         var notFormSendGameStart;
         var notFormSendGameEnd;
         var notFormSendGameDescription;
@@ -134,7 +130,7 @@ $(function () {
             $('#game-end').removeClass('error');
             notFormSendGameEnd = false;
         }
-        if (isNaN(gameQuest) && visibleQuestQount == "visible") {
+        if (isNaN(questQount) && visibleQuestQount == "visible") {
             $('#game-quest').addClass('error').html('Заполните поле');
             notFormGameQuest = true;
         } else {
@@ -142,13 +138,13 @@ $(function () {
             notFormGameQuest = false;
         }
 
-        if (notFormSendGameDescription == true || notFormSendGameStart==true || notFormSendGameEnd==true || notFormGameQuest == true)
+        if (notFormSendGameDescription  || notFormSendGameStart || notFormSendGameEnd || notFormGameQuest)
             return false;
         $.ajax({
             type: 'POST',
             url: document.location.href,
             dataType: 'html',
-            data: {'ajax-query': 'true', 'type-class': 'model', 'method': 'AddCompletedGame', 'game': game, 'game-level': gameLevel, 'game-description': gameDescription, 'game-start-date': gameStart, 'game-end-date': gameEnd},
+            data: {'ajax-query': 'true', 'type-class': 'model', 'method': 'AddCompletedGame', 'game': game, 'game-level': gameLevel, 'game-description': gameDescription, 'game-start-date': gameStart, 'game-end-date': gameEnd, 'quest-qount': questQount, 'game-passing': idGamePassing},
             beforeSend: function () {
                 $('#send').before('<img id="ajax-img-loader" src="/skins/img/ajax/loader-page.gif">');
             },

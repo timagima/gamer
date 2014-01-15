@@ -78,11 +78,6 @@
                                    data-animation="fade" style="cursor: pointer; text-decoration: none;  color:#507fb6">Добавить
                                     пройденную игру</a>
                             </div>
-                            <select class="styled">
-                                <option>Пункт 1</option>
-                                <option>Пункт 2</option>
-                            </select>
-
 
                             <!-- таблица с пройденными играми пользователя здесь таблица с пройденными играми пользователя<br>-->
                             <?php
@@ -94,7 +89,7 @@
                             foreach ($data['user-completed-games'] as $arrayGame) {?>
                                 <div class="game-wrap" style="border: 1px solid #1abc9c; margin: 10px; padding: 10px">
                                     <div class="game-head">
-                                        <h4><img src="storage<?= $arrayGame['source_img_s'] ?>"><?= $arrayGame['game'] ?> жанр: Undefined posted: <?= date("d.m.Y", $arrayGame['post_date']) ?><h4>
+                                        <h4><img src="/storage<?= $arrayGame['source_img_s'] ?>"><?= $arrayGame['game'] ?> жанр: <?= $arrayGame['genre'] ?> posted: <?= date("d.m.Y", $arrayGame['post_date']) ?><h4>
                                     </div>
                                     <div class="game-desc">
                                         <p>
@@ -102,8 +97,9 @@
                                         </p>
                                     </div>
                                     <div class="game-v-ch" style="font: italic bold small serif">
-                                        <a href="">Читать подробнее</a>
-                                        <a href="" style="float: right">Редактировать</a>
+                                        <?= $_SERVER["HTTP_HOST"].$_SERVER["REDIRECT_URL"]."/view/$arrayGame[id]" ?><br>
+                                        <a href='http://<?= $_SERVER["HTTP_HOST"].$_SERVER["REDIRECT_URL"]."/view/$arrayGame[id]" ?>'>Читать подробнее</a>
+                                        <a href='http://<?= $_SERVER["HTTP_HOST"].$_SERVER["REDIRECT_URL"]."/edit/$arrayGame[id]" ?>' style="float: right">Редактировать</a>
                                     </div>
                                 </div>
                             <?php }
@@ -111,7 +107,7 @@
 
                             <!-- Модальная форма добавления пройденной игры -->
                             <div class="hide">
-                                <div class="box-modal" id="box-modal-data-gamer" style="width: 390px">
+                                <div class="box-modal" id="box-modal-data-gamer" style="width: 450px">
                                     <div class="header-modal">
                                         <b>Добавление пройденной игры</b>
 
@@ -142,7 +138,7 @@
                                             <tr>
                                                 <td class="modal-gamer-data-td">Качество прохождения:</td>
                                                 <td>
-                                                    <select style="width: 200px; height: 15px;">
+                                                    <select style="width: 200px; height: 15px;" id="game-passing">
                                                         <?php
                                                         foreach($data["type-complete-game"] as $type){
                                                             echo "<option value='$type[id]'>$type[name]</option>";
@@ -199,10 +195,9 @@
                                         </table>
                                         <br>
 
-                                        <div style="float: right"><a href="javascript: void(0)" class="btn-login"
-                                                                     id="send-completed-game">Продолжить</a>
-                                            <a style="margin-left: 10px; background: #b4b4b4 !important;"
-                                               href="javascript:closeModalAll()" class="btn-login">Отмена</a></div>
+                                        <div style="float: right"><a href="javascript: void(0)" class="btn-login" id="send-completed-game">Продолжить</a>
+                                            <a style="margin-left: 10px; background: #b4b4b4 !important;" href="javascript:closeModalAll()" class="btn-login">Отмена</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
