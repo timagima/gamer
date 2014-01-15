@@ -40,12 +40,50 @@ class Model extends MainModel
     }
     public function AddMainGame()
     {
-        $stmt = $this->conn->dbh->prepare("INSERT INTO games SET name = :name, genre_id = :genre_id, source_img_b = :source_img_b, source_img_s = :source_img_b");
+        $sourceImgB = $this->PrepareImg($this->_p['source_img_b']);
+        $sourceImgS = $this->PrepareImg($this->_p['source_img_s']);
+        $stmt = $this->conn->dbh->prepare("INSERT INTO games SET name = :name, genre_id = :genre_id, source_img_b = :source_img_b, source_img_s = :source_img_s");
         $stmt->bindParam(":name", $this->_p['name'], PDO::PARAM_STR);
         $stmt->bindParam(":genre_id", $this->_p['genre_id'], PDO::PARAM_INT);
-        $stmt->bindParam(":source_img_b", $this->_p['source_img_b'], PDO::PARAM_STR);
-        $stmt->bindParam(":source_img_s", $this->_p['source_img_s'], PDO::PARAM_STR);
+        $stmt->bindParam(":source_img_b", $sourceImgB, PDO::PARAM_STR);
+        $stmt->bindParam(":source_img_s", $sourceImgS, PDO::PARAM_STR);
         $stmt->execute();
+    }
+
+    private function PrepareImg($file)
+    {
+        if(!empty($file))
+        {
+            $searchCharName = array(" ", "’", "-", "'", ":");
+            $searchCharFile = array(" ", "’");
+            $pathGenre = str_replace($searchCharFile, "", mb_strtolower($this->GetGenre()));
+            $fileName = str_replace($searchCharName, "_", mb_strtolower($this->_p['name']));
+            $arrFileName = explode("_", $fileName);
+            $name = "";
+            foreach($arrFileName as $r)
+            {
+                if($r != "")
+                {
+                    $name .= trim($r."_");
+                }
+            }
+            $fileName = preg_replace('%[^A-Za-zА-Яа-я0-9_]%', '', substr($name, 0, -1));
+            $extArr = explode(".", $file);
+            $typeImg = ($extArr[1] == "png") ? "_s" : "_b";
+            $fullPath = "/source_img_base_game/".$pathGenre. "/".$fileName. $typeImg .  ".". $extArr[1];
+            copy( $_SERVER["DOCUMENT_ROOT"] . $file, "storage".$fullPath);
+            unlink($file);
+            return $fullPath;
+        }
+    }
+
+    private function GetGenre()
+    {
+        $stmt = $this->conn->dbh->prepare("SELECT name FROM genre WHERE id = :id");
+        $stmt->bindParam(":id", $this->_p['genre_id'], PDO::PARAM_INT);
+        $stmt->execute();
+        $arr = $stmt->fetch(PDO::FETCH_OBJ);
+        return $arr->name;
     }
 
     /* Конец работа со справочниками по играм */

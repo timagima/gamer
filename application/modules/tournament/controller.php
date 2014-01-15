@@ -51,55 +51,57 @@ class Controller extends MainController
         // todo переписать текущий метод
         // todo сделать проверку на существование страницы если нету, редикрект
 
-        if($_SERVER['REQUEST_URI'] == '/tournament/?t=dota-2')
-        {
-            header("Location: /tournament/?t=dota-2&id=9&page=internal");
-            exit();
-        }
-        $data['tournament'] = $this->model->GetTournament();
-        $this->headerTxt['title'] = $data['tournament']->title;
-        $this->headerTxt['keywords'] = $data['tournament']->keywords;
-        $this->headerTxt['description'] = $data['tournament']->description;
-        $page = 'tournament/index.tpl.php';
-        $_SESSION['id_tournament'] = (int)$this->_g['id'];
-        if(isset($_SESSION['auth']))
-        {
-            $data['table-members'] = $this->model->TableMembers();
-            $resMyTournament = $this->model->ConfirmParticipation();
-            $data['my-tournament'] = $resMyTournament;
-            // здесь необходимо сделать условие для конкурсов
-            if($_GET['page'] == "external" )
-            {
-                $data['members'] = $this->model->GetMembers();
-                if(!empty($resMyTournament) && $resMyTournament->game_over == 0)
-                {
-                    /*$data['my'] = ($resMyTournament->id_opponent == 0) ? $this->model->SearchOpponent($resMyTournament->stage) : $this->model->ConfirmParticipation();
-                    $_SESSION['user']['stage'] = $resMyTournament->stage;
-                    $data['settings-tournament'] = $this->model->SettingsTournament($resMyTournament->stage);
-                    $data['winner'] = $this->model->GetWinner($resMyTournament->stage);*/
-                    $data['my'] = false;
-
-                    if($data['my'])
-                    {
-                        $data['settings-tournament'] = $this->model->SettingsTournament($data['my']->stage);
-                        $page = 'tournament/member.tpl.php';
-                    }
-                    else
-                    {
-                        $page = 'tournament/member-not-opponent.tpl.php';
-                        $page = 'tournament/contest.tpl.php';
-                    }
-
-                }
-                else if($resMyTournament->game_over == 1)
-                {
-                    $data['settings-tournament'] = $this->model->SettingsTournament($resMyTournament->stage);
-                    $page = 'tournament/game-over.tpl.php';
-                }
-            }
-
-        }
-        $this->view->Generate($this->arrTpl[0], $page, $this->arrTpl[1], $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
+//        if($_SERVER['REQUEST_URI'] == '/tournament/?t=dota-2')
+//        {
+//            header("Location: /tournament/?t=dota-2&id=9&page=internal");
+//            exit();
+//        }
+//        $data['tournament'] = $this->model->GetTournament();
+//        $this->headerTxt['title'] = $data['tournament']->title;
+//        $this->headerTxt['keywords'] = $data['tournament']->keywords;
+//        $this->headerTxt['description'] = $data['tournament']->description;
+//        $page = 'tournament/index.tpl.php';
+//        $_SESSION['id_tournament'] = (int)$this->_g['id'];
+//        if(isset($_SESSION['auth']))
+//        {
+//            $data['table-members'] = $this->model->TableMembers();
+//            $resMyTournament = $this->model->ConfirmParticipation();
+//            $data['my-tournament'] = $resMyTournament;
+//            // здесь необходимо сделать условие для конкурсов
+//            if($_GET['page'] == "external" )
+//            {
+//                $data['members'] = $this->model->GetMembers();
+//                if(!empty($resMyTournament) && $resMyTournament->game_over == 0)
+//                {
+//                    /*$data['my'] = ($resMyTournament->id_opponent == 0) ? $this->model->SearchOpponent($resMyTournament->stage) : $this->model->ConfirmParticipation();
+//                    $_SESSION['user']['stage'] = $resMyTournament->stage;
+//                    $data['settings-tournament'] = $this->model->SettingsTournament($resMyTournament->stage);
+//                    $data['winner'] = $this->model->GetWinner($resMyTournament->stage);*/
+//                    $data['my'] = false;
+//
+//                    if($data['my'])
+//                    {
+//                        $data['settings-tournament'] = $this->model->SettingsTournament($data['my']->stage);
+//                        $page = 'tournament/member.tpl.php';
+//                    }
+//                    else
+//                    {
+//                        $page = 'tournament/member-not-opponent.tpl.php';
+//                        $page = 'tournament/contest.tpl.php';
+//                    }
+//
+//                }
+//                else if($resMyTournament->game_over == 1)
+//                {
+//                    $data['settings-tournament'] = $this->model->SettingsTournament($resMyTournament->stage);
+//                    $page = 'tournament/game-over.tpl.php';
+//                }
+//            }
+//
+//        }
+//        $this->view->Generate($this->arrTpl[0], $page, $this->arrTpl[1], $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
+        header("Location: http://gs11.ru/tournament/winner?id=13");
+        exit();
 
     }
     public function ActionUpload()

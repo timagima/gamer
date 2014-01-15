@@ -1,8 +1,7 @@
 <?php
 namespace application\modules\administration\games;
 use application\core\mvc\MainController as MainController;
-use application\modules\administration\games\model as Model;
-use classes\SimpleImage;
+use application\modules\administration\games\model;
 use classes\url;
 use classes\upload;
 
@@ -27,33 +26,24 @@ class Controller extends MainController
     /* Начало добавление списка игр*/
     public function ActionAddMainListGame()
     {
-        if(!empty($_FILES))
-        {
-            $path = "storage";
-            $objUpload = new Upload();
-            $objUpload->UploadImg($path);
-            exit();
-        }
-
-        if(isset($_GET['action']) && $_GET['action'] == 'edit')
-        {
-            $data['game'] = $this->model->GetGame($_GET['id']);
-            $data['genre'] = $this->model->ListGenre();
-            $tplGames = 'administration/games/edit-games.tpl.php';
-        }
-        else if(isset($_GET['action']) && $_GET['action'] == 'add')
-        {
-            $data['genre'] = $this->model->ListGenre();
-            $tplGames = 'administration/games/edit-games.tpl.php';
-        }
-        else
+        // todo: написать функцию для  переноса файлов при добавлении игры
+        $this->PrepareFiles("storage/temp");
+        if(empty($_GET['action']))
         {
             $tplGames = 'administration/games/list-games.tpl.php';
             $data = $this->model->ListGames();
         }
-
+        else
+        {
+            if($_GET['action'] == "edit")
+                $data['game'] = $this->model->GetGame($_GET['id']);
+            $data['genre'] = $this->model->ListGenre();
+            $tplGames = 'administration/games/edit-games.tpl.php';
+        }
         $this->view->Generate('menu/admin-menu.tpl.php', $tplGames, $this->GetTplView(), 'index-admin.tpl.php', $data);
     }
+
+
     public function ActionEditMainGame()
     {
        ($_POST['id'] > 0) ? $this->model->UpdateMainGame() : $this->model->AddMainGame();

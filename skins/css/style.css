@@ -18,7 +18,7 @@ img{border: none;}
 .valid-false{margin-left: 10px; background: url(/skins/img/interface/valid-false.png) center left no-repeat; height: 16px; width: 16px; display: inline-block; position: relative; top:2px;}
 .br-points{height: 4px; margin-top: 10px; background:url(/skins/img/interface/point.png)}
 .br-points-s{height: 4px; margin-top: 10px; background:url(/skins/img/interface/point-s.png)}
-
+.error{font-weight: bold; color: red}
 /* конец все основные стили */
 
 /* начало автокомплит для поиска */

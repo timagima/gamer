@@ -14,9 +14,9 @@
                         <ul>
                             <li>
                                 <a href="#">On-line турниры</a>
-                                <ul>
-                                    <li><a href="/tournament/?t=diablo-iii&id=455&page=internal">Diablo 3</a></li>
-                                </ul>
+<!--                                <ul>-->
+<!--                                    <li><a href="/tournament/?t=diablo-iii&id=455&page=internal">Diablo 3</a></li>-->
+<!--                                </ul>-->
                             </li>
 <!--                            <li>-->
 <!--                                <a href="#">Of-line конкурсы</a>-->
