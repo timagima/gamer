@@ -6,6 +6,7 @@ use PDO;
 
 class Model extends MainModel
 {
+    private $game, $sourceImgType;
     public function __construct()
     {
         parent::__construct();
@@ -40,14 +41,75 @@ class Model extends MainModel
     }
     public function AddMainGame()
     {
-        $sourceImgB = $this->PrepareImg($this->_p['source_img_b']);
-        $sourceImgS = $this->PrepareImg($this->_p['source_img_s']);
+        $sourceImgB = $this->MoveImg($this->_p['source_img_b'], true);
+        $sourceImgS = $this->MoveImg($this->_p['source_img_s'], true);
         $stmt = $this->conn->dbh->prepare("INSERT INTO games SET name = :name, genre_id = :genre_id, source_img_b = :source_img_b, source_img_s = :source_img_s");
         $stmt->bindParam(":name", $this->_p['name'], PDO::PARAM_STR);
         $stmt->bindParam(":genre_id", $this->_p['genre_id'], PDO::PARAM_INT);
         $stmt->bindParam(":source_img_b", $sourceImgB, PDO::PARAM_STR);
         $stmt->bindParam(":source_img_s", $sourceImgS, PDO::PARAM_STR);
         $stmt->execute();
+    }
+    public function UpdateMainGame()
+    {
+        $this->game = $this->GetGame($this->_p['id']);
+        $sourceImgB = $this->WorkImg($this->game->source_img_b, $this->_p['source_img_b']);
+        $sourceImgS = $this->WorkImg($this->game->source_img_s,  $this->_p['source_img_s']);
+        $stmt = $this->conn->dbh->prepare("UPDATE games SET name = :name, genre_id = :genre_id, source_img_b = :source_img_b, source_img_s = :source_img_s WHERE id = :id");
+        $stmt->bindParam(":name", $this->_p['name'], PDO::PARAM_STR);
+        $stmt->bindParam(":genre_id", $this->_p['genre_id'], PDO::PARAM_INT);
+        $stmt->bindParam(":source_img_b", $sourceImgB, PDO::PARAM_STR);
+        $stmt->bindParam(":source_img_s", $sourceImgS, PDO::PARAM_STR);
+        $stmt->bindParam(":id", $this->_p['id'], PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    private function WorkImg($SourceImgType,  $file)
+    {
+        $this->sourceImgType = $SourceImgType;
+        if($SourceImgType != $file)
+        {
+            $sourceImg = $this->MoveImg($file, true);
+        }
+        else
+        {
+            if($this->game->name != $this->_p['name'])
+            {
+                $sourceImg = $this->RenameImg($file);
+            }
+            if($this->game->genre_id != $this->_p['genre_id'])
+            {
+                $sourceImg = $this->MoveImg($file);
+            }
+            if($this->game->name == $this->_p['name'] && $this->game->genre_id == $this->_p['genre_id'])
+            {
+                $sourceImg = $file;
+            }
+        }
+        return $sourceImg;
+    }
+
+    private function RenameImg($file)
+    {
+        $fullPath = $this->PrepareImg($file);
+        rename($_SERVER["DOCUMENT_ROOT"] . "storage".$file, $_SERVER["DOCUMENT_ROOT"] . "storage".$fullPath);
+        return $fullPath;
+    }
+    private function MoveImg($file, $param = false)
+    {
+        if(empty($file))
+        {
+            unlink($_SERVER["DOCUMENT_ROOT"] . "storage".$this->sourceImgType);
+        }
+        else
+        {
+            $file = (!$param) ? "storage".$file : $file;
+            $fullPath = $this->PrepareImg($file);
+            copy( $_SERVER["DOCUMENT_ROOT"] . $file, "storage".$fullPath);
+            unlink($_SERVER["DOCUMENT_ROOT"] . $file);
+            return $fullPath;
+        }
+
     }
 
     private function PrepareImg($file)
@@ -71,8 +133,6 @@ class Model extends MainModel
             $extArr = explode(".", $file);
             $typeImg = ($extArr[1] == "png") ? "_s" : "_b";
             $fullPath = "/source_img_base_game/".$pathGenre. "/".$fileName. $typeImg .  ".". $extArr[1];
-            copy( $_SERVER["DOCUMENT_ROOT"] . $file, "storage".$fullPath);
-            unlink($file);
             return $fullPath;
         }
     }
@@ -85,8 +145,10 @@ class Model extends MainModel
         $arr = $stmt->fetch(PDO::FETCH_OBJ);
         return $arr->name;
     }
-
     /* Конец работа со справочниками по играм */
+
+
+
     public function GetMainPageGame($id)
     {
         return $this->conn->dbh->query("SELECT * FROM main_page_games WHERE id_game = ".$id)->fetch(PDO::FETCH_OBJ);

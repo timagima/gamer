@@ -26,6 +26,7 @@ function multiUploader(config){
             console.log("Failed file reading");
     }
 
+
     multiUploader.prototype._validate = function(format){
         var arr = this.config.support.split(",");
         return arr.indexOf(format);
@@ -72,9 +73,9 @@ function multiUploader(config){
                     // todo: подумать над загружать несколько файлов т.к. сейчас поле загрузки будет удаляться
                     //var storage = 0;
                     $("#stroage").remove();
-                    $("#"+ self.idDivParent).after('<div class="edit-image"><img src="/'+arrFile[0]+'" /></div></div>');
+                    $("#"+ self.idDivParent).after("<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' name='"+arrFile[1]+"' id='"+arrFile[1]+"' value='"+arrFile[0]+"' /></div></div>");
                     $("#"+self.idDivParent).remove();
-                    $("#" + self.config.form).append("<input type='hidden' name='"+arrFile[1]+"' id='"+arrFile[1]+"' value='"+arrFile[0]+"' />");
+
 
                     /*var obj = $(".dfiles").get();
                      $.each(obj,function(k,fle){
@@ -94,7 +95,7 @@ function multiUploader(config){
             if($("#delete-images").length == 0){
                 var obj = $(this);
                 var $delButton = $('<div/>', {id: "delete-images"}).click(function() {
-                    deleteImages(obj);
+                    self.deleteImg(obj);
                 });
                 var widthIconDel = $(this).find('img').width()-15;
                 $('.edit-image').css({"width":$(this).find('img').width()+"px"});
@@ -105,26 +106,26 @@ function multiUploader(config){
                 $('#delete-images').stop().animate({opacity: 1}, 200);
             }).mouseleave(function(){
                     $('#delete-images').stop().animate({opacity: 0.6}, 200);
-
                 })
-
         }).mouseleave(function(){
-                /*var def = $.Deferred()
-                 $(this).find("#delete-images").fadeOut(200, def.resolve); comments_tournament
-                 def.done(function () {*/
                 $("#delete-images").remove();
-                //});
-
-
             })
-        function deleteImages(link){
-
-            // todo: здесь реализовать ajax запрос для удаление фотографии из каталога и базы, но только при сохранении.
-            // Т.е. необходимо будет собирать данные в JSON в каком то скрытом поле
-
-            $(link).remove();
-        }
+        self.all = [];
     }
+
+    multiUploader.prototype.deleteImg = function(link){
+        var val = $(link).find("input[type=hidden]").attr("name");
+        if(val == "source_img_s"){
+            var name = Array("Иконка", "icon-upload-btn");
+        } else {
+            var name = Array("Изображение", "img-upload-btn");
+        }
+        $("#"+self.idDivParent).show();
+        $(link).after('<div id="'+name[1]+'" class="container upload"><span class="btn">'+name[0]+'</span><input type="file" name="'+val+'" id="'+val+'" /></div>');
+        $(link).remove();
+        this.init();
+    }
+
     multiUploader.prototype.xhr = function(){
         if(self.config.visualProgress == "modal"){
             showModal('upload-process-ajax-modal');
@@ -170,3 +171,4 @@ function multiUploader(config){
 function initMultiUploader(){
     new multiUploader(config);
 }
+

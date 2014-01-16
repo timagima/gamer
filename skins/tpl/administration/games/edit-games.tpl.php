@@ -52,13 +52,14 @@ use classes\url;
                         ?>
                         <div id="icon-upload-btn" class="container upload">
                             <span class="btn">Иконка</span>
-                            <input id="source_img_s" type="file" name="source_img_s"/>
+                            <input id="source_img_s" type="file" name="source_img_s" multiple />
 
                         </div>
                     <?}else{?>
                         <div style="padding: 10px">
                             <div class="edit-image">
                                 <img src="/storage<?=$data['game']->source_img_s;?>">
+                                <input type="hidden" name="source_img_s" value="<?=$data['game']->source_img_s;?>">
                             </div>
                         </div>
                     <?}?>
@@ -74,6 +75,7 @@ use classes\url;
                         <div style="padding: 10px">
                             <div class="edit-image">
                                 <img src="/storage<?=$data['game']->source_img_b;?>">
+                                <input type="hidden" name="source_img_b" value="<?=$data['game']->source_img_b;?>">
                             </div></div>
 
                     <?}?>
