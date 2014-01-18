@@ -43,11 +43,12 @@ class Model extends MainModel
         $idGamePassing = (int)$this->_p['game-passing'];
         $idUser = (int)$_SESSION['user-data']['id'];
         $gameDescription = $this->_p['game-description'];
+        $userRating = (int)$this->_p['game-rating'];
         $postDate = time();
         $checkAddedGame = $this->conn->dbh->query("SELECT id_game FROM user_completed_games WHERE id_game=" . $idGame . " AND id_user=" . $idUser)->fetch(PDO::FETCH_ASSOC);
         $checkGame = $this->conn->dbh->query("SELECT name FROM games WHERE id = ".$idGame)->fetch(PDO::FETCH_ASSOC);
         if ($checkAddedGame === false && $checkGame !== false) {
-            $stmt = $this->conn->dbh->prepare("INSERT INTO user_completed_games (id_user, id_game, id_level, about_game, start_date, end_date, post_date, num_quest, id_type_completed_game) VALUES(:idUser, :idGame, :idLevel, :gameDescription, :startDate, :endDate, :postDate, :questQount, :idGamePassing)");
+            $stmt = $this->conn->dbh->prepare("INSERT INTO user_completed_games (id_user, id_game, id_level, about_game, start_date, end_date, post_date, num_quest, id_type_completed_game, user_rating) VALUES(:idUser, :idGame, :idLevel, :gameDescription, :startDate, :endDate, :postDate, :questQount, :idGamePassing, :userRating)");
             $stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
             $stmt->bindParam(":idGame", $idGame, PDO::PARAM_INT);
             $stmt->bindParam(":idLevel", $idLevel, PDO::PARAM_INT);
@@ -56,8 +57,16 @@ class Model extends MainModel
             $stmt->bindParam(":postDate", $postDate, PDO::PARAM_INT);
             $stmt->bindParam(":questQount", $questQount, PDO::PARAM_INT);
             $stmt->bindParam(":idGamePassing", $idGamePassing, PDO::PARAM_INT);
+            $stmt->bindParam(":userRating", $userRating, PDO::PARAM_INT);
             $stmt->bindParam(":gameDescription", $gameDescription, PDO::PARAM_STR);
             $getQuery = $stmt->execute();
+
+            $updateRating = $this->conn->dbh->prepare("UPDATE games_rating SET rating = rating + :rating, suffrage_count=suffrage_count+1
+                                                        WHERE id_game=:idGame");
+            $updateRating->bindParam(":rating", $userRating, PDO::PARAM_INT);
+            $updateRating->bindParam(":idGame", $idGame, PDO::PARAM_INT);
+            $getUpdate= $updateRating->execute();
+            //todo добавить проверку занесения данных в БД
             return ("addGame");
         } elseif ($checkAddedGame !== false) {
             return ("isGame");
@@ -173,13 +182,20 @@ class Model extends MainModel
         $result = array();
         $game = $this->_p['game'];
         if (!empty($game)) {
-            $sql = $this->conn->dbh->prepare("SELECT l.name, l.id as id_level, g.id as id_game FROM `level` l LEFT JOIN `games` g ON g.id=l.id_game WHERE g.name=:game");
+            $sql = $this->conn->dbh->prepare("SELECT l.name, l.id as id_level, g.id as id_game, gr.rating, gr.suffrage_count FROM `level` l
+            LEFT JOIN `games` g ON g.id=l.id_game
+            LEFT JOIN `games_rating` gr ON gr.id_game = l.id_game
+            WHERE g.name=:game");
             $sql->bindParam(":game", $game, PDO::PARAM_STR);
             $sql->execute();
             foreach ($sql as $level) {
-                $result[] = $level['name'] . "$" . $level['id_level'] . "$" . $level['id_game'];
+                $result[0][] = $level['name'] . "$" . $level['id_level'] . "$" . $level['id_game'];
             }
+            $result[1]['rating'] = $level['rating'];
+            $result[1]['suffrage_count'] = $level['suffrage_count'];
+            $result[1]['user_rating'] = $this->GetUserGameRating($level[2]);
             //$test = $this->CheckAddedGames($level[2]);
+            //$result[] = $this->GetRatingInfoByGame($level[2]);
             //$result[] = $this->CheckAddedGames($level[2]);
 
         }
@@ -196,6 +212,20 @@ class Model extends MainModel
         $stmt->bindParam(":idGame", $idGame, PDO::PARAM_INT);
         $stmt->execute();
         return (count($stmt->fetchAll())>0) ? "true" : "false";
+    }
+
+    //Возвращает инфо о голосе юзера, о рейтинге игры
+    public function GetUserGameRating($idGame)
+    {
+        $idGame = (int)$idGame;
+        $idUser = (int)$_SESSION['user-data']['id'];
+        $stmt = $this->conn->dbh->prepare("SELECT user_rating FROM user_completed_games
+                                            WHERE id_game = :idGame AND id_user= :idUser");
+        $stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
+        $stmt->bindParam(":idGame", $idGame, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return ($result == false) ? false : $result['user_rating'];
     }
 }
 
