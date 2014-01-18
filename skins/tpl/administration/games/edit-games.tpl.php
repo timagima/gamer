@@ -20,7 +20,7 @@ use classes\url;
     <?=Render::Hidden($data['game']->id, "id")?>
     <?=Render::Hidden($_GET['id'], "game_id")?>
 
-    <table>
+    <table class="game-manage">
         <tr>
 
             <td>
@@ -83,7 +83,41 @@ use classes\url;
                 </div>
             </td>
         </tr>
+        <? if(empty($data['difficulty'])){?>
+            <tr class="add-difficulty">
+                <td>
+                    <div class="field" style="float: left; padding: 10px">
+                        <?=Render::LabelEdit("Отсутствует", "name-difficulty[]", "Уровень сложности", false); ?>
+                    </div>
+                    <div class="field" style="float: left; padding: 10px">
+                        <?=Render::LabelEdit("Отсутствует", "description-difficulty[]", "Описание уровня сложности", false, array("style"=>"width:600px;")); ?>
+                    </div>
+                </td>
+            </tr>
+        <? } ?>
+        <? $i=0; foreach($data['difficulty'] as $r){ ?>
+            <tr class="add-difficulty">
+                <td>
+                    <div class="field" style="float: left; padding: 10px">
+                        <?=Render::Hidden($r->id, "id-delete")?>
+                        <?=Render::LabelEdit($r->name, "name-difficulty[]", "Уровень сложности", false); ?>
+                    </div>
+                    <div class="field" style="float: left; padding: 10px">
+                        <?=Render::LabelEdit($r->description, "description-difficulty[]", "Описание уровня сложности", false, array("style"=>"width:600px;")); ?>
+                    </div>
+                    <? if($i > 0){ ?>
+                    <div class="field" style="float: left; position: relative; top: 40px;">
+                        <a href="javascript:void(0)" class="remove-difficulty">Удалить</a>
+                    </div>
+                    <? } ?>
+                </td>
+            </tr>
+        <? ++$i; } ?>
+
     </table>
+    <div class="field" style="padding: 10px">
+        <input type="button" id="add-difficulty" value="Добавить ещё уровень сложности">
+    </div>
     <div style="height: 50px; width: 100%">
         <input type="submit" value="Сохранить" class="right">
     </div>
@@ -95,8 +129,23 @@ use classes\url;
         dragArea: "dragAndDropFiles",
         visualProgress: "modal",
         img: true,
-        uploadUrl: document.location.href,
+        uploadUrl: document.location.href
     }
+
+    $(document).ready(function(){
+        $("body").on("click", ".remove-difficulty", function(){
+            debugger;
+            var id = $(this).closest("tr").find("input[type=hidden]").val();
+            $('form').append("<input type='hidden' name='delete-field[]' value='"+id+"'>");
+            $(this).closest("tr").remove();
+        });
+        $("#add-difficulty").click(function(){
+            var element = $(".add-difficulty")[1];
+            var html = '<tr class="add-difficulty"><td><div class="field" style="float: left; padding: 10px"><label>Уровень сложности</label><br><input type="text" value="" name="name-difficulty[]"></div><div class="field" style="float: left; padding: 10px"><label>Описание уровеня сложности</label><br><input style="width:600px;" type="text" value="" name="description-difficulty[]"></div><div class="field" style="float: left; position: relative; top: 40px;"><a href="javascript:void(0)" class="remove-difficulty">Удалить</a></div></td></tr>';
+            $(".game-manage tbody").append(html);
+            //$(cloneEl).find("input[type=text]").val("");
+        });
+    })
 
     $(document).ready(function(){
         initMultiUploader(config);

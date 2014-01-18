@@ -4,7 +4,7 @@
             <div class="nav-container">
                 <ul class="nav">
                     <li class="active">
-                        <a href="/administration">Основные разделы</a>
+                        <a href="/administration/main">Начало</a>
                     </li>
 <!--                    <li>-->
 <!--                        <a href="/forum">Общение</a>-->
@@ -23,6 +23,17 @@
                             </li>
                             <li>
                                 <a href="/administration/tournament/winners-tournaments">Победители турниров</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">Работа с играми</a>
+                        <ul>
+                            <li>
+                                <a href="/administration/games/search-guide-game">Поиск игры по обзорам</a>
+                            </li>
+                            <li>
+                                <a href="/administration/games/add-main-list-game">Справочник игр</a>
                             </li>
                         </ul>
                     </li>
