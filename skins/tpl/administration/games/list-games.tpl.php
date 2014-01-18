@@ -13,13 +13,11 @@ use classes\url;
 </div>
 
 <div id="list">
-    <table class="list-table">
+    <table class="list-table" style="width: 100%;">
         <thead>
         <tr>
-
             <th>Заголовок</th>
-            <th></th>
-            <th></th>
+            <th style="text-align: right">Действие</th>
         </tr>
         </thead>
         <tbody>
@@ -28,10 +26,9 @@ use classes\url;
             <tr>
 
                 <td class="text-left"><?=$row->name; ?></td>
-                <td><a href='<?= Url::Action("add-main-list-game", "administration.games") ?>?action=edit&id=<?= $row->id ?>'>Редактироавть</a>
+                <td style="text-align: right">
+                    <a href='<?= Url::Action("add-main-list-game", "administration.games") ?>?action=edit&id=<?= $row->id ?>'>Редактироавть</a>
                 </td>
-                <td><a data-action="delete"
-                       href='<?= Url::Action("add-main-list-game", "administration.games") ?>?action=delete&id=<?= $row->id ?>'>Удалить</a></td>
             </tr>
         <? }?>
         </tbody>

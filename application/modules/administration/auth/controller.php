@@ -37,7 +37,7 @@ class Controller extends MainController
     {
         if(isset($_SESSION['admin']['auth']) && $_SESSION['admin']['auth'] == '1')
         {
-            header("Location: /administration/games");
+            header("Location: /administration/main");
             exit();
         }
     }

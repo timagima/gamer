@@ -31,6 +31,10 @@ class Model extends MainModel
     {
         return $this->conn->dbh->query("SELECT * FROM games WHERE id=".$id)->fetch(PDO::FETCH_OBJ);
     }
+    public function GetDifficulty($id)
+    {
+        return $this->conn->dbh->query("SELECT * FROM level WHERE id_game=".$id. " ORDER BY id ASC")->fetchAll(PDO::FETCH_OBJ);
+    }
 
     /* Начало работа со справочниками по играм */
     public function ListGenre()
@@ -49,9 +53,14 @@ class Model extends MainModel
         $stmt->bindParam(":source_img_b", $sourceImgB, PDO::PARAM_STR);
         $stmt->bindParam(":source_img_s", $sourceImgS, PDO::PARAM_STR);
         $stmt->execute();
+        $id = $this->conn->dbh->lastInsertId();
+        $this->AddDifficulty($id);
     }
     public function UpdateMainGame()
     {
+        // проверять каждое поле не поменялось ли, а дальше если поменялось обновлять его если такого поля и вовсе нету, то добавить
+        $this->DeleteDifficulty();
+        $this->UpdateDifficulty();
         $this->game = $this->GetGame($this->_p['id']);
         $sourceImgB = $this->WorkImg($this->game->source_img_b, $this->_p['source_img_b']);
         $sourceImgS = $this->WorkImg($this->game->source_img_s,  $this->_p['source_img_s']);
@@ -62,6 +71,82 @@ class Model extends MainModel
         $stmt->bindParam(":source_img_s", $sourceImgS, PDO::PARAM_STR);
         $stmt->bindParam(":id", $this->_p['id'], PDO::PARAM_INT);
         $stmt->execute();
+    }
+
+
+    private function UpdateDifficulty()
+    {
+        if(count($this->_p['name-difficulty']) == count($this->_p['description-difficulty']))
+        {
+            $arrLevel = $this->GetDifficulty($this->_p['id']);
+            for($i = -1; $i < count($this->_p['name-difficulty']); ++$i)
+            {
+                $name = ($arrLevel[$i]->name == $this->_p['name-difficulty'][$i]) ? $arrLevel[$i]->name : $this->_p['name-difficulty'][$i];
+                $description = ($arrLevel[$i]->description == $this->_p['description-difficulty'][$i]) ? $arrLevel[$i]->description : $this->_p['description-difficulty'][$i];
+                if($name != "" || $description != "")
+                {
+                    $stmt = $this->conn->dbh->prepare("UPDATE level SET `name` = :name, description = :description WHERE id_game = :id_game AND id = :id");
+                    $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+                    $stmt->bindParam(":description", $description, PDO::PARAM_STR);
+                    $stmt->bindParam(":id_game", $this->_p['id'], PDO::PARAM_INT);
+                    $stmt->bindParam(":id", $arrLevel[$i]->id, PDO::PARAM_INT);
+                    $stmt->execute();
+                }
+                if($i == count($arrLevel)-1)
+                    break;
+            }
+            if(count($this->_p['name-difficulty']) > count($arrLevel))
+            {
+                $this->AddDifficulty($this->_p["id"], ++$i);
+            }
+        }
+    }
+
+    private function DeleteDifficulty()
+    {
+        if(!empty($this->_p['delete-field']))
+        {
+            $strId = "";
+            foreach($this->_p['delete-field'] as $r)
+            {
+                $strId .= $r.",";
+            }
+            $arrId = substr($strId, 0, strlen($strId) - 1);
+            $stmt = $this->conn->dbh->prepare("DELETE FROM level WHERE FIND_IN_SET(id, :id)");
+            $stmt->bindParam(":id", $arrId, PDO::PARAM_STR);
+            $stmt->execute();
+        }
+    }
+    private function AddDifficulty($id, $i = 0)
+    {
+        if(count($this->_p['name-difficulty']) == count($this->_p['description-difficulty']))
+        {
+
+            for($i; $i < count($this->_p['name-difficulty']); $i++)
+            {
+                if($this->_p['name-difficulty'][$i] != "" || $this->_p['name-difficulty'][$i] != "")
+                {
+                    $stmt = $this->conn->dbh->prepare("INSERT INTO level SET id_game = :id_game, name = :name, description = :description");
+                    $stmt->bindParam(":id_game", $id, PDO::PARAM_INT);
+                    $stmt->bindParam(":name", $this->_p['name-difficulty'][$i], PDO::PARAM_STR);
+                    $stmt->bindParam(":description", $this->_p['description-difficulty'][$i], PDO::PARAM_STR);
+                    $stmt->execute();
+                }
+            }
+        }
+    }
+
+    private function PrepareDifficulty()
+    {
+        /*foreach($this->_p['name-difficulty'] as $name)
+        {
+            foreach($this->_p['description-difficulty'] as $description)
+            {
+                 $param = $name . "#" .  $description;
+            }
+            $arr[] = $param;
+        }
+        return $arr;*/
     }
 
     private function WorkImg($SourceImgType,  $file)
@@ -116,7 +201,7 @@ class Model extends MainModel
     {
         if(!empty($file))
         {
-            $searchCharName = array(" ", "’", "-", "'", ":");
+            $searchCharName = array(" ", "’", "-", "'", ":", "&");
             $searchCharFile = array(" ", "’");
             $pathGenre = str_replace($searchCharFile, "", mb_strtolower($this->GetGenre()));
             $fileName = str_replace($searchCharName, "_", mb_strtolower($this->_p['name']));

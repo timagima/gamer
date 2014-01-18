@@ -80,21 +80,17 @@ class Route
         if($actionCheck > 0)
         {
             $action = ucfirst($this->methodExist[1]);
+            $actionPrepare = $this->ExplodeRoutePath($this->methodExist[1]);
         }
         else
         {
-            $routePath = explode("-", $this->methodExist[0]);
-            if(count($routePath) > 1)
-            {
-                $action = "";
-                foreach($routePath as $r)
-                {
-                    $action .= ucfirst($r);
-                }
-            }
+            $actionPrepare = $this->ExplodeRoutePath($this->methodExist[0]);
         }
+        if(!empty($actionPrepare))
+            $action = $actionPrepare;
         return $action;
     }
+
     private function GetParam()
     {
         $this->methodExist = array_reverse($this->arrRoutePath);
@@ -103,5 +99,19 @@ class Route
         if($actionCheck > 0)
             $param = $actionCheck;
         return $param;
+    }
+
+    private function ExplodeRoutePath($method)
+    {
+        $routePath = explode("-", $method);
+        if(count($routePath) > 1)
+        {
+            $action = "";
+            foreach($routePath as $r)
+            {
+                $action .= ucfirst($r);
+            }
+        }
+        return $action;
     }
 }

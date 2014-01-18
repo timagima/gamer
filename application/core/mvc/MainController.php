@@ -11,6 +11,7 @@ class MainController
 {
     public $_p, $_g, $headerTxt, $arrTpl = array();
     public $mainModel, $view, $pagination, $model;
+    public static $storageTemp = "storage/temp";
     public function __construct()
     {
         $this->_p = $_POST;
