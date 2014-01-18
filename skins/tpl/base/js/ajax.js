@@ -45,28 +45,79 @@ $(function () {
                     }else{
                         $('.tooltip#game').removeClass('error');
                     }*/
-                    if (level.length == 0) {
-                        var selectHtml = '<select id="game-level" name ="game-level" class="styled" style="width: 200px; height: 15px;">';
-                        selectHtml += "<option selected='selected' value='false'>Сначала выберите игру</option>";
-                        selectHtml += '</select>';
-                        $("#game-level-parent").html(selectHtml);
-                        //$('select.styled').customSelect();
+                    if(level[1].user_rating == false){
+
+                        //$(".val").val(level[1].rating / level[1].suffrage_count);
+                        //$(".votes").val(level[1].suffrage_count);
+                        var rating = parseInt(level[1].rating) / parseInt(level[1].suffrage_count);
+                        var votes = parseInt(level[1].suffrage_count);
+                        $("#game-rating-parent").html(
+                            '<div class="rating">' +
+                                '<input type="hidden" class="val" value="'+ rating +'"/>' +
+                                '<input type="hidden" class="votes" value="'+ votes +'"/>' +
+                            '</div>' +
+                            '<div style="float: right; margin: -52px -235px 0px 0px;" class="b-validation">' +
+                                '<div class="tooltip" id="game-rating" style="margin-left: 28px;"></div>' +
+                            '</div>'
+                        );
+                        gameRatingView = false;
+                        ratingValue = $('div.rating').rating({
+                            fx: 'full',
+                            image: '/skins/img/stars-rating.png',
+                            loader: '/skins/img/ajax-loader-rating.gif',
+                            width: 32,
+                            stars: 10
+                        });
+
+
                     } else {
-                        var selectHtml = '<select id="game-level" name ="game-level" class="styled" style="width: 200px; height: 15px;">';
-                        for (var i in level) {
-                            if (i == 0) {
-                                var value = level[i].split('$');
-                                selectHtml += "<option selected='selected' value='" + value[1] + "$" + value[2] + "'>" + value[0] + "</option>";
-                            } else {
-                                var value = level[i].split('$');
-                                selectHtml += "<option value='" + value[1] + "$" + value[2] + "'>" + value[0] + "</option>";
+                        var rating = parseInt(level[1].rating) / parseInt(level[1].suffrage_count);
+                        var votes = parseInt(level[1].suffrage_count);
+                        gameRatingView = true;
+                        $("#game-rating-parent").html(
+                            '<div class="rating">' +
+                                '<input type="hidden" class="val" value="'+ rating +'"/>' +
+                                '<input type="hidden" class="votes" value="'+ votes +'"/>' +
+                            '</div>' +
+                                '<div style="float: right; margin: -52px -235px 0px 0px;" class="b-validation">' +
+                                '<div class="tooltip" id="game-rating" style="margin-left: 28px;"></div>' +
+                            '</div>'
+                        );
+
+                        ratingValue = $('div.rating').rating({
+                            fx: 'full',
+                            image: '/skins/img/stars-rating.png',
+                            loader: '/skins/img/ajax-loader-rating.gif',
+                            width: 32,
+                            stars: 10,
+                            readOnly: true
+                        })
+                    }
+
+                    if(level[0]!==false) {
+                        if (level[0].length == 0) {
+                            var selectHtml = '<select id="game-level" name ="game-level" class="styled" style="width: 200px; height: 15px;">';
+                            selectHtml += "<option selected='selected' value='false'>Сначала выберите игру</option>";
+                            selectHtml += '</select>';
+                            $("#game-level-parent").html(selectHtml);
+                            //$('select.styled').customSelect();
+                        } else {
+                            var selectHtml = '<select id="game-level" name ="game-level" class="styled" style="width: 200px; height: 15px;">';
+                            for (var i in level[0]) {
+                                if (i == 0) {
+                                    var value = level[0][i].split('$');
+                                    selectHtml += "<option selected='selected' value='" + value[1] + "$" + value[2] + "'>" + value[0] + "</option>";
+                                } else {
+                                    var value = level[0][i].split('$');
+                                    selectHtml += "<option value='" + value[1] + "$" + value[2] + "'>" + value[0] + "</option>";
+                                }
+                                //$('select.styled').customSelect();
                             }
+                            selectHtml += '</select>';
+                            $("#game-level-parent").html(selectHtml);
                             //$('select.styled').customSelect();
                         }
-                        selectHtml += '</select>';
-                        $("#game-level-parent").html(selectHtml);
-                        //$('select.styled').customSelect();
-                    }
+                     }
                 }
             });
         }
@@ -80,7 +131,9 @@ $(function () {
     $(".autocomplete-suggestions").trigger('click.namespace');
 
     // Добавление пройденной игры в БД
+    var gameRatingView = false;
     function addCompletedGames() {
+        var gameRating = (ratingValue[0].textContent.match(/[0-9]{1,2}$/) === null) ? false : parseInt(ratingValue[0].textContent.match(/[0-9]{1,2}$/)[0]);
         var game = $("#game").val();
         var gameLevel = $("#game-level").val();
         var gameDescription = $.trim($("#game-description").val());
@@ -93,6 +146,7 @@ $(function () {
         var notFormSendGameEnd;
         var notFormSendGameDescription;
         var notFormGameQuest;
+        var notFormGameRating;
         //debugger;
 
         //if (gameAdded === "add") {
@@ -137,14 +191,23 @@ $(function () {
             $('#game-quest').removeClass('error');
             notFormGameQuest = false;
         }
+        if (gameRatingView === false) {
+            if(gameRating === false){
+                $('#game-rating').addClass('error').html('Проголосуйте');
+                notFormGameRating = true;
+            }
+        } else {
+            $('#game-rating').removeClass('error');
+            notFormGameRating = false;
+        }
 
-        if (notFormSendGameDescription  || notFormSendGameStart || notFormSendGameEnd || notFormGameQuest)
+        if (notFormSendGameDescription  || notFormSendGameStart || notFormSendGameEnd || notFormGameQuest || notFormGameRating)
             return false;
         $.ajax({
             type: 'POST',
             url: document.location.href,
             dataType: 'html',
-            data: {'ajax-query': 'true', 'type-class': 'model', 'method': 'AddCompletedGame', 'game': game, 'game-level': gameLevel, 'game-description': gameDescription, 'game-start-date': gameStart, 'game-end-date': gameEnd, 'quest-qount': questQount, 'game-passing': idGamePassing},
+            data: {'ajax-query': 'true', 'type-class': 'model', 'method': 'AddCompletedGame', 'game': game, 'game-level': gameLevel, 'game-description': gameDescription, 'game-start-date': gameStart, 'game-end-date': gameEnd, 'quest-qount': questQount, 'game-passing': idGamePassing, 'game-rating': gameRating},
             beforeSend: function () {
                 $('#send').before('<img id="ajax-img-loader" src="/skins/img/ajax/loader-page.gif">');
             },
@@ -184,6 +247,16 @@ $(function () {
     $("#not-quest-count").click(function () {
         var visibleQuestQount = $("#quest-count").css("visibility");
         ( visibleQuestQount == "visible" ) ? $("#quest-count").css("visibility", "hidden") : $("#quest-count").css("visibility", "visible");
+    })
+
+    var ratingValue;
+    ratingValue = $('div.rating').rating({
+        fx: 'full',
+        image: '/skins/img/stars-rating.png',
+        loader: '/skins/img/ajax-loader-rating.gif',
+        width: 32,
+        stars: 10,
+        readOnly: true
     })
 
 });

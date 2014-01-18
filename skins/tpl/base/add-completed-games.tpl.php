@@ -1,7 +1,8 @@
 <script type="text/javascript" src="/skins/js/validation.js"></script>
 <style type="text/css">
     .b-validation .tooltip {
-        display: none;
+        display: block;
+        visibility: hidden;
         z-index: 10;
         padding: 5px;
         line-height: 25px;
@@ -25,7 +26,7 @@
     }
 
     .b-validation .error {
-        display: block;
+        visibility: visible;
     }
 
     .b-validation .tooltip {
@@ -78,14 +79,8 @@
                                    data-animation="fade" style="cursor: pointer; text-decoration: none;  color:#507fb6">Добавить
                                     пройденную игру</a>
                             </div>
-
                             <!-- таблица с пройденными играми пользователя здесь таблица с пройденными играми пользователя<br>-->
                             <?php
-                            /*foreach ($data['user-completed-games'] as $arrayGame) {
-                                echo "<img src='storage" . $arrayGame['source_img_s'] . "'/>";
-                            }
-                            var_dump($data['user-completed-games']);*/
-
                             foreach ($data['user-completed-games'] as $arrayGame) {?>
                                 <div class="game-wrap" style="border: 1px solid #1abc9c; margin: 10px; padding: 10px">
                                     <div class="game-head">
@@ -97,9 +92,8 @@
                                         </p>
                                     </div>
                                     <div class="game-v-ch" style="font: italic bold small serif">
-                                        <?= $_SERVER["HTTP_HOST"].$_SERVER["REDIRECT_URL"]."/view/$arrayGame[id]" ?><br>
-                                        <a href='http://<?= $_SERVER["HTTP_HOST"].$_SERVER["REDIRECT_URL"]."/view/$arrayGame[id]" ?>'>Читать подробнее</a>
-                                        <a href='http://<?= $_SERVER["HTTP_HOST"].$_SERVER["REDIRECT_URL"]."/edit/$arrayGame[id]" ?>' style="float: right">Редактировать</a>
+                                        <a href='<?= "/base/view/$arrayGame[id]" ?>'>Читать подробнее</a>
+                                        <a href='<?= "/base/edit/$arrayGame[id]" ?>' style="float: right">Редактировать</a>
                                     </div>
                                 </div>
                             <?php }
@@ -107,7 +101,7 @@
 
                             <!-- Модальная форма добавления пройденной игры -->
                             <div class="hide">
-                                <div class="box-modal" id="box-modal-data-gamer" style="width: 450px">
+                                <div class="box-modal" id="box-modal-data-gamer" style="width: 500px">
                                     <div class="header-modal">
                                         <b>Добавление пройденной игры</b>
 
@@ -180,6 +174,18 @@
                                                     </label>
                                                     <div style="float: right; margin: 0px -235px 0px 0px;" class="b-validation">
                                                         <div class="tooltip" id="game-end" style="margin-left: 28px;"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="modal-gamer-data-td">Проголосуйте:</td>
+                                                <td id="game-rating-parent">
+                                                    <div class="rating">
+                                                        <input type="hidden" class="val" value="0"/>
+                                                        <input type="hidden" class="votes" value="0"/>
+                                                    </div>
+                                                    <div style="float: right; margin: -52px -235px 0px 0px;" class="b-validation">
+                                                        <div class="tooltip" id="game-rating" style="margin-left: 28px;"></div>
                                                     </div>
                                                 </td>
                                             </tr>
