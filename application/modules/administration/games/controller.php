@@ -1,10 +1,8 @@
 <?php
 namespace application\modules\administration\games;
-use application\core\mvc\MainController as MainController;
-use application\modules\administration\games\model as Model;
-use classes\SimpleImage;
+use application\core\mvc\MainController;
+use application\modules\administration\games\model;
 use classes\url;
-use classes\upload;
 
 class Controller extends MainController
 {
@@ -22,53 +20,61 @@ class Controller extends MainController
 
     public function ActionIndex()
     {
-        $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/index.tpl.php', '', 'index-admin.tpl.php');
+        $this->Redirect("search-guide-game", "administration/games");
     }
-    /* Начало добавление списка игр*/
+
+    /* Начало добавление списка игр в справочник */
     public function ActionAddMainListGame()
     {
-        if(!empty($_FILES))
-        {
-            $path = "storage";
-            $objUpload = new Upload();
-            $objUpload->UploadImg($path);
-            exit();
-        }
-
-        if(isset($_GET['action']) && $_GET['action'] == 'edit')
-        {
-            $data['game'] = $this->model->GetGame($_GET['id']);
-            $data['genre'] = $this->model->ListGenre();
-            $tplGames = 'administration/games/edit-games.tpl.php';
-        }
-        else if(isset($_GET['action']) && $_GET['action'] == 'add')
-        {
-            $data['genre'] = $this->model->ListGenre();
-            $tplGames = 'administration/games/edit-games.tpl.php';
-        }
-        else
+        $this->PrepareFiles(self::$storageTemp);
+        if(empty($_GET['action']))
         {
             $tplGames = 'administration/games/list-games.tpl.php';
             $data = $this->model->ListGames();
         }
-
+        else
+        {
+            if($_GET['action'] == "edit")
+            {
+                $data['game'] = $this->model->GetGame($_GET['id']);
+                $data['difficulty'] = $this->model->GetDifficulty($_GET['id']);
+            }
+            $data['genre'] = $this->model->ListGenre();
+            $tplGames = 'administration/games/edit-games.tpl.php';
+        }
         $this->view->Generate('menu/admin-menu.tpl.php', $tplGames, $this->GetTplView(), 'index-admin.tpl.php', $data);
     }
+
+
     public function ActionEditMainGame()
     {
-       ($_POST['id'] > 0) ? $this->model->UpdateMainGame() : $this->model->AddMainGame();
-       $this->Redirect("add-main-list-game", "administration.games");
-
+        if(!empty($this->_p['name']))
+        {
+            ($_POST['id'] > 0) ? $this->model->UpdateMainGame() : $this->model->AddMainGame();
+            $this->Redirect("add-main-list-game", "administration.games");
+        }
+        else
+        {
+            echo "Заполните поле имя";
+        }
     }
-    /* Конец добавление списка игр*/
+    /* Конец добавление списка игр в справочник */
 
-    public function ActionGame($id)
+
+
+    /* Начало основные игро-обзоры */
+
+    public function ActionSearchGuideGame()
+    {
+        $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/search-guide-game.tpl.php', '', 'index-admin.tpl.php');
+    }
+
+    public function ActionGuideGame($id)
     {
         if(isset($id) && $id > 0)
         {
             $data = $this->model->GetGame($id);
-
-            $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/game.tpl.php', '', 'index-admin.tpl.php', $data);
+            $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/guide-game.tpl.php', '', 'index-admin.tpl.php', $data);
         }
         else
         {
@@ -77,6 +83,12 @@ class Controller extends MainController
 
     }
 
+    /* Конец основные игро-обзоры */
+
+
+
+
+    // todo всё что ниже нужно разбирать
     public function ActionSearchGames($param)
     {
         $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/search.tpl.php', '', 'index-admin.tpl.php');

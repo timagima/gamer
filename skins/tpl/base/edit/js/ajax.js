@@ -10,132 +10,11 @@ $(function () {
         showTimeout: 100
     });
 
-    //
-    $('#game').autocomplete({
-        serviceUrl: document.location.href,
-        zIndex: 99999, // z-index списка
-        type: 'POST',
-        params: {
-            'ajax-query': 'true',
-            'type-class': 'model',
-            'method': 'GetGame',
-            'limit': '10'
-        },
-        dataType: 'html',
-        deferRequestBy: 200
-    });
-
-    //var gameAdded = "notAdd";
-    //Получение уровня сложности выбранной игры
-    function getGameLevel() {
-        var game = document.getElementById("game").value;
-        if(game!=""){
-            $.ajax({
-                type: 'POST',
-                url: document.location.href,
-                dataType: 'html',
-                data: {'ajax-query': 'true', 'type-class': 'model', 'method': 'GetGameLevel', 'game': game},
-                success: function (data) {
-                    var level = $.parseJSON(data);
-                    /*var checkGame = level.pop();
-                    if(checkGame === "true"){
-                        var gameAdded = "add";
-                        $('.tooltip#game').addClass('error').html('Вы уже добавили эту игру.');
-                        notFormSend = true;
-                    }else{
-                        $('.tooltip#game').removeClass('error');
-                    }*/
-                    if(level[1].user_rating == false){
-
-                        //$(".val").val(level[1].rating / level[1].suffrage_count);
-                        //$(".votes").val(level[1].suffrage_count);
-                        var rating = parseInt(level[1].rating) / parseInt(level[1].suffrage_count);
-                        var votes = parseInt(level[1].suffrage_count);
-                        $("#game-rating-parent").html(
-                            '<div class="rating">' +
-                                '<input type="hidden" class="val" value="'+ rating +'"/>' +
-                                '<input type="hidden" class="votes" value="'+ votes +'"/>' +
-                            '</div>' +
-                            '<div style="float: right; margin: -52px -235px 0px 0px;" class="b-validation">' +
-                                '<div class="tooltip" id="game-rating" style="margin-left: 28px;"></div>' +
-                            '</div>'
-                        );
-                        gameRatingView = false;
-                        ratingValue = $('div.rating').rating({
-                            fx: 'full',
-                            image: '/skins/img/stars-rating.png',
-                            loader: '/skins/img/ajax-loader-rating.gif',
-                            width: 32,
-                            stars: 10
-                        });
-
-
-                    } else {
-                        var rating = parseInt(level[1].rating) / parseInt(level[1].suffrage_count);
-                        var votes = parseInt(level[1].suffrage_count);
-                        gameRatingView = true;
-                        $("#game-rating-parent").html(
-                            '<div class="rating">' +
-                                '<input type="hidden" class="val" value="'+ rating +'"/>' +
-                                '<input type="hidden" class="votes" value="'+ votes +'"/>' +
-                            '</div>' +
-                                '<div style="float: right; margin: -52px -235px 0px 0px;" class="b-validation">' +
-                                '<div class="tooltip" id="game-rating" style="margin-left: 28px;"></div>' +
-                            '</div>'
-                        );
-
-                        ratingValue = $('div.rating').rating({
-                            fx: 'full',
-                            image: '/skins/img/stars-rating.png',
-                            loader: '/skins/img/ajax-loader-rating.gif',
-                            width: 32,
-                            stars: 10,
-                            readOnly: true
-                        })
-                    }
-
-                    if(level[0]!==false) {
-                        if (level[0].length == 0) {
-                            var selectHtml = '<select id="game-level" name ="game-level" class="styled" style="width: 200px; height: 15px;">';
-                            selectHtml += "<option selected='selected' value='false'>Сначала выберите игру</option>";
-                            selectHtml += '</select>';
-                            $("#game-level-parent").html(selectHtml);
-                            //$('select.styled').customSelect();
-                        } else {
-                            var selectHtml = '<select id="game-level" name ="game-level" class="styled" style="width: 200px; height: 15px;">';
-                            for (var i in level[0]) {
-                                if (i == 0) {
-                                    var value = level[0][i].split('$');
-                                    selectHtml += "<option selected='selected' value='" + value[1] + "$" + value[2] + "'>" + value[0] + "</option>";
-                                } else {
-                                    var value = level[0][i].split('$');
-                                    selectHtml += "<option value='" + value[1] + "$" + value[2] + "'>" + value[0] + "</option>";
-                                }
-                                //$('select.styled').customSelect();
-                            }
-                            selectHtml += '</select>';
-                            $("#game-level-parent").html(selectHtml);
-                            //$('select.styled').customSelect();
-                        }
-                     }
-                }
-            });
-        }
-    }
-
-    //document.getElementById("game").onblur = getGameLevel;
-    document.getElementById("game").onkeydown = getGameLevel;
-    $(".autocomplete-suggestions").bind("click.namespace", function () {
-        getGameLevel();
-    });
-    $(".autocomplete-suggestions").trigger('click.namespace');
 
     // Добавление пройденной игры в БД
-    var gameRatingView = false;
-    function addCompletedGames() {
-        var gameRating = (ratingValue[0].textContent.match(/[0-9]{1,2}$/) === null) ? false : parseInt(ratingValue[0].textContent.match(/[0-9]{1,2}$/)[0]);
-        var game = $("#game").val();
-        var gameLevel = $("#game-level").val();
+    function updateAddedGame() {
+        var gameId = $("#game-id").val();
+        var levelId = $("#level-id").val();
         var gameDescription = $.trim($("#game-description").val());
         var gameStart = $("#game-start-date").val();
         var gameEnd = $("#game-end-date").val();
@@ -146,20 +25,6 @@ $(function () {
         var notFormSendGameEnd;
         var notFormSendGameDescription;
         var notFormGameQuest;
-        var notFormGameRating;
-        //debugger;
-
-        //if (gameAdded === "add") {
-          //  $('.tooltip#game').addClass('error').html('Вы уже добавили эту игру.');
-        //} //else if(gameAdded === "notAdd"){
-            //$('.tooltip#game').removeClass('error');
-        //}
-        //if (game == "") {
-          //  $('.tooltip#game').addClass('error').html('Заполните поле');
-          //  notFormSend = true;
-        //} //else{
-           // $('.tooltip#game').removeClass('error');
-        //}
 
         if (gameDescription == "") {
             $('#description').addClass('error').html('Заполните поле');
@@ -191,42 +56,26 @@ $(function () {
             $('#game-quest').removeClass('error');
             notFormGameQuest = false;
         }
-        if (gameRatingView === false) {
-            if(gameRating === false){
-                $('#game-rating').addClass('error').html('Проголосуйте');
-                notFormGameRating = true;
-            }
-        } else {
-            $('#game-rating').removeClass('error');
-            notFormGameRating = false;
-        }
 
-        if (notFormSendGameDescription  || notFormSendGameStart || notFormSendGameEnd || notFormGameQuest || notFormGameRating)
+        if (notFormSendGameDescription  || notFormSendGameStart || notFormSendGameEnd || notFormGameQuest)
             return false;
         $.ajax({
             type: 'POST',
             url: document.location.href,
             dataType: 'html',
-            data: {'ajax-query': 'true', 'type-class': 'model', 'method': 'AddCompletedGame', 'game': game, 'game-level': gameLevel, 'game-description': gameDescription, 'game-start-date': gameStart, 'game-end-date': gameEnd, 'quest-qount': questQount, 'game-passing': idGamePassing, 'game-rating': gameRating},
+            data: {'ajax-query': 'true', 'type-class': 'model', 'method': 'UpdateAddedGame', 'game-id':gameId, 'level-id': levelId, 'game-description': gameDescription, 'game-start-date': gameStart, 'game-end-date': gameEnd, 'quest-qount': questQount, 'game-passing': idGamePassing},
             beforeSend: function () {
                 $('#send').before('<img id="ajax-img-loader" src="/skins/img/ajax/loader-page.gif">');
             },
             success: function (data) {
-                if (data == "addGame") {
-                    $('.tooltip#game').removeClass('error')
-                    location.reload();
-                } else if (data == "isGame") {
-                    $('.tooltip#game').addClass('error').html('Вы уже добавили эту игру!')
-                    return false;
-                } else if (data == "notGame") {
-                    $('.tooltip#game').addClass('error').html('Такой игры нет в БД.')
-                    return false;
+                if (data == "GameUpdated") {
+                    $(".game-edit-form").html("<h2>Данные успешно изменены.</h2>");
                 }
             }
         });
     }
 
-    document.getElementById("send-completed-game").onclick = addCompletedGames;
+    document.getElementById("update-completed-game").onclick = updateAddedGame;
 
     // ВАЛИДАЦИЯ
     // $('.btn-login, input, textarea, div').click(function(){
@@ -247,16 +96,6 @@ $(function () {
     $("#not-quest-count").click(function () {
         var visibleQuestQount = $("#quest-count").css("visibility");
         ( visibleQuestQount == "visible" ) ? $("#quest-count").css("visibility", "hidden") : $("#quest-count").css("visibility", "visible");
-    })
-
-    var ratingValue;
-    ratingValue = $('div.rating').rating({
-        fx: 'full',
-        image: '/skins/img/stars-rating.png',
-        loader: '/skins/img/ajax-loader-rating.gif',
-        width: 32,
-        stars: 10,
-        readOnly: true
     })
 
 });
@@ -504,7 +343,7 @@ var _Calendar = function () {
     var table;
     var userAgent = window.navigator.userAgent;
     if (userAgent.indexOf('Chrome') >= 0) {
-        var table = '<table id="fc" style="position:fixed;top:296px;left:822px; z-index:99999; border-collapse:collapse; background:#FFFFFF; border:  2px solid #1abc9c; display:none; -moz-user-select:none; -khtml-user-select:none; user-select:none;" cellpadding=2>';
+        var table = '<table id="fc" style="position:absolute;top:390px;left:450px; z-index:99999; border-collapse:collapse; background:#FFFFFF; border:  2px solid #1abc9c; display:none; -moz-user-select:none; -khtml-user-select:none; user-select:none;" cellpadding=2>';
     }
     if (userAgent.indexOf('Opera') >= 0) {
         var table = '<table id="fc" style="position:fixed;top:290px;left:800px; z-index:99999; border-collapse:collapse; background:#FFFFFF; border:  2px solid #1abc9c; display:none; -moz-user-select:none; -khtml-user-select:none; user-select:none;" cellpadding=2>';

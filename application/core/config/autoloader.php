@@ -9,7 +9,6 @@ class AutoLoader
     public function AutoLoad($className)
     {
         $controllerPath = $_SERVER['DOCUMENT_ROOT'] . '/' . str_replace('\\', '/', $className) . '.php';
-
         (file_exists($controllerPath)) ? include_once($controllerPath) : Route::ErrorPage404();
         return;
     }

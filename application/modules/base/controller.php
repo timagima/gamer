@@ -26,14 +26,25 @@ class Controller extends MainController
         $this->view->Generate('menu/auth-menu.tpl.php', 'base/add-completed-games.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());
     }
 
-    public function ActionView()
+    public function ActionView($idGame)
     {
-        echo"test view!";
+        if($idGame){
+            $data = $this->model->GetGameView($idGame);
+            $this->headerTxt['title'] = "$data[game] - GS11";
+            $this->view->Generate('menu/auth-menu.tpl.php', 'base/game-view.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());
+        }
     }
 
-    public function ActionEdit()
+    public function ActionEdit($idGame)
     {
-        echo"test edit!";
+        if($idGame){
+            $this->AddJs("ajax");
+            $data = $this->model->GetGameView($idGame);
+            $data['levelsArray'] = $this->model->GetLevels($idGame);
+            $data['typesCompletedGameArray'] = $this->model->GetTypeCompleteGame();
+            $this->headerTxt['title'] = "$data[game] Редактировать - GS11";
+            $this->view->Generate('menu/auth-menu.tpl.php', 'base/game-edit.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());
+        }
     }
 
 

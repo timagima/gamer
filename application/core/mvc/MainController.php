@@ -3,6 +3,7 @@ namespace application\core\mvc;
 use application\core\mvc\MainModel;
 use classes\pagination;
 use classes\url;
+use classes\upload;
 use PDO;
 
 
@@ -10,6 +11,7 @@ class MainController
 {
     public $_p, $_g, $headerTxt, $arrTpl = array();
     public $mainModel, $view, $pagination, $model;
+    public static $storageTemp = "storage/temp";
     public function __construct()
     {
         $this->_p = $_POST;
@@ -108,6 +110,16 @@ class MainController
             $typeClass = $this->_p['type-class'];
             $result    = $this->$typeClass->$method();
             if($result) echo  $result;
+            exit();
+        }
+    }
+
+    public function PrepareFiles($path)
+    {
+        if(!empty($_FILES))
+        {
+            $objUpload = new Upload();
+            $objUpload->UploadImg($path);
             exit();
         }
     }

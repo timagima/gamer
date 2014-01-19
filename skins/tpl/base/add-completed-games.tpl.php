@@ -1,7 +1,8 @@
 <script type="text/javascript" src="/skins/js/validation.js"></script>
 <style type="text/css">
     .b-validation .tooltip {
-        display: none;
+        display: block;
+        visibility: hidden;
         z-index: 10;
         padding: 5px;
         line-height: 25px;
@@ -25,7 +26,7 @@
     }
 
     .b-validation .error {
-        display: block;
+        visibility: visible;
     }
 
     .b-validation .tooltip {
@@ -78,19 +79,12 @@
                                    data-animation="fade" style="cursor: pointer; text-decoration: none;  color:#507fb6">Добавить
                                     пройденную игру</a>
                             </div>
-
-
                             <!-- таблица с пройденными играми пользователя здесь таблица с пройденными играми пользователя<br>-->
                             <?php
-                            /*foreach ($data['user-completed-games'] as $arrayGame) {
-                                echo "<img src='storage" . $arrayGame['source_img_s'] . "'/>";
-                            }
-                            var_dump($data['user-completed-games']);*/
-
                             foreach ($data['user-completed-games'] as $arrayGame) {?>
                                 <div class="game-wrap" style="border: 1px solid #1abc9c; margin: 10px; padding: 10px">
                                     <div class="game-head">
-                                        <h4><img src="storage<?= $arrayGame['source_img_s'] ?>"><?= $arrayGame['game'] ?> жанр: Undefined posted: <?= date("d.m.Y", $arrayGame['post_date']) ?><h4>
+                                        <h4><img src="/storage<?= $arrayGame['source_img_s'] ?>"><?= $arrayGame['game'] ?> жанр: <?= $arrayGame['genre'] ?> posted: <?= date("d.m.Y", $arrayGame['post_date']) ?><h4>
                                     </div>
                                     <div class="game-desc">
                                         <p>
@@ -98,8 +92,8 @@
                                         </p>
                                     </div>
                                     <div class="game-v-ch" style="font: italic bold small serif">
-                                        <a href="">Читать подробнее</a>
-                                        <a href="" style="float: right">Редактировать</a>
+                                        <a href='<?= "/base/view/$arrayGame[id]" ?>'>Читать подробнее</a>
+                                        <a href='<?= "/base/edit/$arrayGame[id]" ?>' style="float: right">Редактировать</a>
                                     </div>
                                 </div>
                             <?php }
@@ -107,7 +101,7 @@
 
                             <!-- Модальная форма добавления пройденной игры -->
                             <div class="hide">
-                                <div class="box-modal" id="box-modal-data-gamer" style="width: 390px">
+                                <div class="box-modal" id="box-modal-data-gamer" style="width: 500px">
                                     <div class="header-modal">
                                         <b>Добавление пройденной игры</b>
 
@@ -138,7 +132,7 @@
                                             <tr>
                                                 <td class="modal-gamer-data-td">Качество прохождения:</td>
                                                 <td>
-                                                    <select style="width: 200px; height: 15px;">
+                                                    <select style="width: 200px; height: 15px;" id="game-passing">
                                                         <?php
                                                         foreach($data["type-complete-game"] as $type){
                                                             echo "<option value='$type[id]'>$type[name]</option>";
@@ -184,6 +178,18 @@
                                                 </td>
                                             </tr>
                                             <tr>
+                                                <td class="modal-gamer-data-td">Проголосуйте:</td>
+                                                <td id="game-rating-parent">
+                                                    <div class="rating">
+                                                        <input type="hidden" class="val" value="0"/>
+                                                        <input type="hidden" class="votes" value="0"/>
+                                                    </div>
+                                                    <div style="float: right; margin: -52px -235px 0px 0px;" class="b-validation">
+                                                        <div class="tooltip" id="game-rating" style="margin-left: 28px;"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
                                                 <td class="modal-gamer-data-td">Отзыв:</td>
                                                 <td>
                                                     <textarea style="width: 188px" type="text" id="game-description" class="input-txt-profile" data-type="validation">Опишите свои впечатления об игре.</textarea>
@@ -195,10 +201,9 @@
                                         </table>
                                         <br>
 
-                                        <div style="float: right"><a href="javascript: void(0)" class="btn-login"
-                                                                     id="send-completed-game">Продолжить</a>
-                                            <a style="margin-left: 10px; background: #b4b4b4 !important;"
-                                               href="javascript:closeModalAll()" class="btn-login">Отмена</a></div>
+                                        <div style="float: right"><a href="javascript: void(0)" class="btn-login" id="send-completed-game">Продолжить</a>
+                                            <a style="margin-left: 10px; background: #b4b4b4 !important;" href="javascript:closeModalAll()" class="btn-login">Отмена</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

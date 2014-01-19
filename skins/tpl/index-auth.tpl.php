@@ -6,6 +6,8 @@
     <meta name="description" content="<?= $headerTxt['description']; ?>"/>
     <link type="text/css" rel="stylesheet" href="/skins/css/style.css"/>
     <link type="text/css" rel="stylesheet" href="/skins/css/nf.lightbox.css"/>
+    <link type="text/css" rel="stylesheet" href="/skins/css/jquery.stars.rating.css"/>
+    <link type="text/css" rel="stylesheet" href="/skins/css/stars.rating.styles.css"/>
 <!--            <link type="text/css" rel="stylesheet" href="/skins/css/ui.css" />-->
 
     <script type="text/javascript" src="/skins/js/jquery.min.js"></script>
@@ -20,6 +22,7 @@
     <script type="text/javascript" src="/skins/js/chat_scripts.js"></script>
     <script type="text/javascript" src="/skins/js/jquery.jplayer.min.js"></script>
     <script type="text/javascript" src="/skins/js/service.js"></script>
+    <script type="text/javascript" src="/skins/js/jquery.rating.js"></script>
     <?=$arrJs;?>
 
 
@@ -102,6 +105,7 @@
     <div class="footer-txt left">
         <span>
             <a href="/about/company">О нас</a> |
+            <a href="/about/promo">Промо</a> |
             <a href="http://vk.com/g_s11">Мы вконтакте</a>
 <!--            <a href="/about/help">Помощь</a> |-->
 <!--            <a href="/about/games-forever">Игры навсегда</a> |-->
