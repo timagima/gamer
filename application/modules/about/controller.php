@@ -72,4 +72,22 @@ class Controller extends MainController
         $this->view->Generate($this->arrTpl[0], 'about/next-tournament-promo.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
 
     }
+    public function ActionTest()
+    {
+        $this->headerTxt['title'] = 'Ближайшие Off-line турниры';
+        $data['error'] = '';
+        $this->view->Generate($this->arrTpl[0], 'about/test.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
+
+    }
+
+
+    public function ActionGamesForever()
+    {
+        $this->headerTxt['title'] = 'Игры навсегда';
+        $data['error'] = '';
+        $this->view->Generate($this->arrTpl[0], 'about/games-forever.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
+
+    }
+
+
 }

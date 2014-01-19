@@ -1,3 +1,4 @@
+
 <style>
     #main{width:960px;margin:0 auto;}
     #slider{margin-top:40px;position:relative;background:url(/skins/img/shadow.png) right 1px top 160px no-repeat;overflow:hidden;}
@@ -68,6 +69,11 @@
             <img src="/skins/img/sticker.jpg" alt="Только лучшее"/>
         </div>
     </div>
+    <form action="foo.php" method="post">
+        <input type="text" name="username" /><br />
+        <input type="text" name="email" /><br />
+        <input type="submit" name="submit" value="Отправить" />
+    </form>
     <div class="middle-content">
         <div class="left-middle">
             <span>Участников</span>
