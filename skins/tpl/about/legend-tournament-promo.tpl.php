@@ -69,11 +69,7 @@
             <img src="/skins/img/sticker.jpg" alt="Только лучшее"/>
         </div>
     </div>
-    <form action="foo.php" method="post">
-        <input type="text" name="username" /><br />
-        <input type="text" name="email" /><br />
-        <input type="submit" name="submit" value="Отправить" />
-    </form>
+
     <div class="middle-content">
         <div class="left-middle">
             <span>Участников</span>
