@@ -65,7 +65,6 @@ class Model extends MainModel
             $updateRating->bindParam(":rating", $userRating, PDO::PARAM_INT);
             $updateRating->bindParam(":idGame", $idGame, PDO::PARAM_INT);
             $getUpdate= $updateRating->execute();
-            //todo добавить проверку занесения данных в БД
             return ("addGame");
         } elseif ($checkAddedGame !== false) {
             return ("isGame");
@@ -200,7 +199,6 @@ class Model extends MainModel
             //$test = $this->CheckAddedGames($level[2]);
             //$result[] = $this->GetRatingInfoByGame($level[2]);
             //$result[] = $this->CheckAddedGames($level[2]);
-            // Test
 
         }
         return json_encode($result);
