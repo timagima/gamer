@@ -12,7 +12,7 @@ class Model extends MainModel
         parent::__construct();
     }
 
-    //Функия принимает массив(из 3-х ячеек) и возвращает Юникс метку времени
+    //Функия принимает массив(из 3-х ячеек) и возвращает Юникс метку времени.
     public function MakeUnixTime($date)
     {
         if (is_array($date)) {
