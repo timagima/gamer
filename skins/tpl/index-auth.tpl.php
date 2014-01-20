@@ -23,6 +23,7 @@
     <script type="text/javascript" src="/skins/js/jquery.jplayer.min.js"></script>
     <script type="text/javascript" src="/skins/js/service.js"></script>
     <script type="text/javascript" src="/skins/js/jquery.rating.js"></script>
+    <script type="text/javascript" src="/skins/js/multiupload.js"></script>
     <?=$arrJs;?>
 
 

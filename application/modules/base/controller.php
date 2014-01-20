@@ -39,6 +39,7 @@ class Controller extends MainController
 
     public function ActionEdit($idGame)
     {
+        $this->PrepareFiles(self::$storageTemp);
         if($idGame){
             $this->AddJs("ajax");
             $data = $this->model->GetGameView($idGame);

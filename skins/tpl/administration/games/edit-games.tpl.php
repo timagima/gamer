@@ -4,7 +4,7 @@ use classes\url;
 ?>
 <script type="text/javascript" src="/skins/js/tinymce/tinymce.min.js"></script>
 <script type="text/javascript" src="/skins/js/tinymce/jquery.tinymce.min.js"></script>
-<script type="text/javascript" src="/skins/js/multiupload.js"></script>
+
 <style>
     #header-games input{width: 774px;}
     #announce-games textarea{width: 774px;}

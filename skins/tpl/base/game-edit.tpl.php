@@ -127,6 +127,12 @@
                                 <div>
                                     <a href="javascript: void(0)" class="btn-login" id="update-completed-game">Сохранить изменения</a>
                                 </div>
+                                <form id="edit-main-game">
+                                    <div id="img-upload-btn" class="container upload">
+                                        <span class="btn">Изображение</span>
+                                        <input id="source_img" type="file" name="source_img" multiple />
+                                    </div>
+                                </form>
 
                             </div>
 
@@ -137,6 +143,21 @@
         </tr>
     </table>
 </div>
+<? include $_SERVER["DOCUMENT_ROOT"]. "/skins/tpl/block/main-modal.block.tpl.php"; ?>
+
+<script type="text/javascript">
+    var config = {
+        form: "edit-main-game",
+        dragArea: "dragAndDropFiles",
+        visualProgress: "modal",
+        img: true,
+        uploadUrl: document.location.href
+    }
+
+    $(document).ready(function(){
+        initMultiUploader(config);
+    });
+</script>
 <style type="text/css">
     #reload-avatar {
         cursor: pointer
@@ -337,4 +358,10 @@
         font-size: 12px;
         text-align: center;
     }
+    #header-games input{width: 774px;}
+    #announce-games textarea{width: 774px;}
+    .search-index input {width: 948px;}
+    .edit-image{position: relative;}
+    #error-img{padding: 20px; float: right}
+    #delete-images{background-image:url(/skins/img/interface/delete-image-hover.png); display: none; opacity: 0.6; width: 15px; height: 15px; position: absolute;  cursor: pointer;}
 </style>
