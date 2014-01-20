@@ -14,6 +14,7 @@ class Controller extends MainController
         $this->model = new Model();
         $this->ExistSessionAuth();
         $this->RunAjax();
+        //test
     }
 
     public function ActionIndex()
