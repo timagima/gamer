@@ -60,13 +60,11 @@ class Model extends MainModel
             $stmt->bindParam(":userRating", $userRating, PDO::PARAM_INT);
             $stmt->bindParam(":gameDescription", $gameDescription, PDO::PARAM_STR);
             $getQuery = $stmt->execute();
-
             $updateRating = $this->conn->dbh->prepare("UPDATE games_rating SET rating = rating + :rating, suffrage_count=suffrage_count+1
                                                         WHERE id_game=:idGame");
             $updateRating->bindParam(":rating", $userRating, PDO::PARAM_INT);
             $updateRating->bindParam(":idGame", $idGame, PDO::PARAM_INT);
             $getUpdate= $updateRating->execute();
-            //todo добавить проверку занесения данных в БД
             return ("addGame");
         } elseif ($checkAddedGame !== false) {
             return ("isGame");
