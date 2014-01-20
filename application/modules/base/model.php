@@ -60,7 +60,6 @@ class Model extends MainModel
             $stmt->bindParam(":userRating", $userRating, PDO::PARAM_INT);
             $stmt->bindParam(":gameDescription", $gameDescription, PDO::PARAM_STR);
             $getQuery = $stmt->execute();
-
             $updateRating = $this->conn->dbh->prepare("UPDATE games_rating SET rating = rating + :rating, suffrage_count=suffrage_count+1
                                                         WHERE id_game=:idGame");
             $updateRating->bindParam(":rating", $userRating, PDO::PARAM_INT);
@@ -201,6 +200,7 @@ class Model extends MainModel
             //$test = $this->CheckAddedGames($level[2]);
             //$result[] = $this->GetRatingInfoByGame($level[2]);
             //$result[] = $this->CheckAddedGames($level[2]);
+            // Test
 
         }
         return json_encode($result);
