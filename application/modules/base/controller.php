@@ -16,6 +16,7 @@ class Controller extends MainController
         $this->RunAjax();
         //test
         //test2
+        //test4
     }
 
     public function ActionIndex()
