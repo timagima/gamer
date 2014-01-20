@@ -62,11 +62,12 @@ $(function () {
                         );
                         gameRatingView = false;
                         ratingValue = $('div.rating').rating({
-                            fx: 'full',
+                            fx: 'float',
                             image: '/skins/img/stars-rating.png',
                             loader: '/skins/img/ajax-loader-rating.gif',
                             width: 32,
-                            stars: 10
+                            stars: 5,
+                            minimal: 0.1
                         });
 
 
@@ -85,12 +86,13 @@ $(function () {
                         );
 
                         ratingValue = $('div.rating').rating({
-                            fx: 'full',
+                            fx: 'float',
                             image: '/skins/img/stars-rating.png',
                             loader: '/skins/img/ajax-loader-rating.gif',
                             width: 32,
-                            stars: 10,
-                            readOnly: true
+                            stars: 5,
+                            readOnly: true,
+                            minimal: 0.1
                         })
                     }
 
@@ -251,12 +253,13 @@ $(function () {
 
     var ratingValue;
     ratingValue = $('div.rating').rating({
-        fx: 'full',
+        fx: 'float',
         image: '/skins/img/stars-rating.png',
         loader: '/skins/img/ajax-loader-rating.gif',
         width: 32,
-        stars: 10,
-        readOnly: true
+        stars: 5,
+        readOnly: true,
+        minimal: 0.1
     })
 
 });
