@@ -43,7 +43,7 @@ class Model extends MainModel
         $idGamePassing = (int)$this->_p['game-passing'];
         $idUser = (int)$_SESSION['user-data']['id'];
         $gameDescription = $this->_p['game-description'];
-        $userRating = (int)$this->_p['game-rating'];
+        $userRating = floatval($this->_p['game-rating']);
         $postDate = time();
         $checkAddedGame = $this->conn->dbh->query("SELECT id_game FROM user_completed_games WHERE id_game=" . $idGame . " AND id_user=" . $idUser)->fetch(PDO::FETCH_ASSOC);
         $checkGame = $this->conn->dbh->query("SELECT name FROM games WHERE id = ".$idGame)->fetch(PDO::FETCH_ASSOC);
@@ -123,6 +123,10 @@ class Model extends MainModel
     //Получение информации о пройденной игре пользователя по ИД игры
     public function GetGameView($idGame)
     {
+        /*for($i=1; $i<=189; $i++){
+            $r = floatval(mt_rand(30, 49).".".mt_rand(3, 8));
+            $checkGame = $this->conn->dbh->query("UPDATE games_rating SET rating = ".$r." , suffrage_count = 10  WHERE id_game= ".$i);
+        }*/
         return $this->conn->dbh->query("SELECT ucg.num_quest, ucg.start_date, ucg.end_date, ucg.post_date, ucg.about_game, ucg.id_game,
                                             games.name as game, games.source_img_b, games.source_img_s,
                                             level.name as level, level.description as level_description,

@@ -24,6 +24,7 @@ class Upload extends SimpleImage
         }
         echo $fileName;
     }
+
     public function UploadImg($path)
     {
 

@@ -127,6 +127,7 @@
                                 <div>
                                     <a href="javascript: void(0)" class="btn-login" id="update-completed-game">Сохранить изменения</a>
                                 </div>
+
                                 <form id="edit-main-game">
                                     <div id="img-upload-btn" class="container upload">
                                         <span class="btn">Изображение</span>
@@ -143,6 +144,7 @@
         </tr>
     </table>
 </div>
+
 <? include $_SERVER["DOCUMENT_ROOT"]. "/skins/tpl/block/main-modal.block.tpl.php"; ?>
 
 <script type="text/javascript">
@@ -158,6 +160,7 @@
         initMultiUploader(config);
     });
 </script>
+
 <style type="text/css">
     #reload-avatar {
         cursor: pointer

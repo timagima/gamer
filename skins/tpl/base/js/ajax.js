@@ -49,7 +49,7 @@ $(function () {
 
                         //$(".val").val(level[1].rating / level[1].suffrage_count);
                         //$(".votes").val(level[1].suffrage_count);
-                        var rating = parseInt(level[1].rating) / parseInt(level[1].suffrage_count);
+                        var rating = parseFloat(level[1].rating) / parseInt(level[1].suffrage_count);
                         var votes = parseInt(level[1].suffrage_count);
                         $("#game-rating-parent").html(
                             '<div class="rating">' +
@@ -135,7 +135,7 @@ $(function () {
     // Добавление пройденной игры в БД
     var gameRatingView = false;
     function addCompletedGames() {
-        var gameRating = (ratingValue[0].textContent.match(/[0-9]{1,2}$/) === null) ? false : parseInt(ratingValue[0].textContent.match(/[0-9]{1,2}$/)[0]);
+        var gameRating = (ratingValue[0].textContent.match(/[0-9]{1,2}$/) === null) ? false : parseFloat(ratingValue[0].textContent.match(/[0-9]\.[0-9]$/)[0]);
         var game = $("#game").val();
         var gameLevel = $("#game-level").val();
         var gameDescription = $.trim($("#game-description").val());
