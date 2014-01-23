@@ -153,7 +153,8 @@
         dragArea: "dragAndDropFiles",
         visualProgress: "modal",
         img: true,
-        uploadUrl: document.location.href
+        uploadUrl: document.location.href,
+        method: "UploadImg",
     }
 
     $(document).ready(function(){

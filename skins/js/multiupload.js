@@ -45,6 +45,7 @@ function multiUploader(config){
         self.number = f;
         data.append(self.idFileInput, file[f]);
         data.append('index',ids);
+        data.append('method', self.config.method);
         $(".dfiles[rel='"+ids+"']").find(".progress").show();
         $.ajax({
             type:"POST",

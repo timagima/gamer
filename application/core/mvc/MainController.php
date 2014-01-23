@@ -119,7 +119,8 @@ class MainController
         if(!empty($_FILES))
         {
             $objUpload = new Upload();
-            $objUpload->UploadImg($path);
+            $method = $this->_p['method'];
+            $objUpload->$method($path);
             exit();
         }
     }
