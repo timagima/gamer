@@ -10,7 +10,7 @@ foreach($data['games'] as $r)
 {
     $i++;
     $class = ($i%2 == 0) ? "list-main-games-right" : "";
-    echo "<a class='left list-main-games ".$class."' href='/guide/games/".$r->id."'><img src='/storage/".$r->source_img."' title='".$r->name."' /></a>";
+    echo "<a class='left list-main-games ".$class."' href='/guide/games/".$r->id."'><img src='/storage/".$r->source_img_b."' title='".$r->name."' /></a>";
 }
 ?>
 </div>

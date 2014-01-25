@@ -2,6 +2,7 @@ function multiUploader(config){
     this.config = config;
     this.items = "";
     this.all = [];
+    this.countImg = 0;
     var self = this;
     multiUploader.prototype.init = function(){
         if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -69,13 +70,22 @@ function multiUploader(config){
                     $("#"+ self.idDivParent).after('<div id="error-img" class="right error">'+arrFile[0]+'</div>');
                 } else {
                     var arrFile = $.parseJSON(data);
-
-                    // todo: подумать над возможностью отправлять в базу hidden с нужным значением
+                    if(self.config.multi){
+                        self.countImg = $("."+arrFile[1]).length;
+                        $("#"+ self.idDivParent).after("<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' class='"+arrFile[1]+"' name='"+arrFile[1]+"[]' value='"+arrFile[0]+"' /></div></div>");
+                        if(self.countImg == self.config.limit-1){
+                            $("#stroage").remove();
+                            $("#"+ self.idDivParent).after("<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' name='"+arrFile[1]+"' id='"+arrFile[1]+"' value='"+arrFile[0]+"' /></div></div>");
+                            $("#"+self.idDivParent).hide();
+                        }
+                    } else {
+                        $("#stroage").remove();
+                        $("#"+ self.idDivParent).after("<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' name='"+arrFile[1]+"' id='"+arrFile[1]+"' value='"+arrFile[0]+"' /></div></div>");
+                        $("#"+self.idDivParent).hide();
+                    }
                     // todo: подумать над загружать несколько файлов т.к. сейчас поле загрузки будет удаляться
                     //var storage = 0;
-                    $("#stroage").remove();
-                    $("#"+ self.idDivParent).after("<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' name='"+arrFile[1]+"' id='"+arrFile[1]+"' value='"+arrFile[0]+"' /></div></div>");
-                    $("#"+self.idDivParent).remove();
+
 
 
                     /*var obj = $(".dfiles").get();
@@ -115,16 +125,28 @@ function multiUploader(config){
     }
 
     multiUploader.prototype.deleteImg = function(link){
+        --self.countImg;
         var val = $(link).find("input[type=hidden]").attr("name");
         if(val == "source_img_s"){
             var name = Array("Иконка", "icon-upload-btn");
         } else {
             var name = Array("Изображение", "img-upload-btn");
         }
-        $("#"+self.idDivParent).show();
-        $(link).after('<div id="'+name[1]+'" class="container upload"><span class="btn">'+name[0]+'</span><input type="file" name="'+val+'" id="'+val+'" /></div>');
         $(link).remove();
-        this.init();
+        if(self.config.multi){
+            debugger;
+            var limit = self.config.limit-1 - self.countImg;
+            if(limit == 1){
+                $("#"+self.idDivParent).show();
+                $(link).after('<div id="'+name[1]+'" class="container upload"><span class="btn">'+name[0]+'</span><input type="file" name="'+val+'" id="'+val+'" /></div>');
+                this.init();
+            }
+        }else{
+            $("#"+self.idDivParent).show();
+            $(link).after('<div id="'+name[1]+'" class="container upload"><span class="btn">'+name[0]+'</span><input type="file" name="'+val+'" id="'+val+'" /></div>');
+            this.init();
+        }
+
     }
 
     multiUploader.prototype.xhr = function(){
@@ -139,11 +161,14 @@ function multiUploader(config){
     }
 
     multiUploader.prototype._startUpload = function(){
-        if(this.all.length > 0){
+        if(this.all.length > 0 && this.all[0].length <= this.config.limit){
             for(var k=0; k<this.all.length; k++){
                 var file = this.all[k];
                 this._uploader(file,0);
+                $(".error").remove();
             }
+        }else{
+            $("#"+this.config.form).append('<b class="error">Максимум можно прикрепить до 6 файлов</b>')
         }
     }
     multiUploader.prototype.progressHandlingFunction = function(e){

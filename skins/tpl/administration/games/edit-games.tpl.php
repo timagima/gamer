@@ -9,9 +9,6 @@ use classes\url;
     #header-games input{width: 774px;}
     #announce-games textarea{width: 774px;}
     .search-index input {width: 948px;}
-    .edit-image{position: relative;}
-    #error-img{padding: 20px; float: right}
-    #delete-images{background-image:url(/skins/img/interface/delete-image-hover.png); display: none; opacity: 0.6; width: 15px; height: 15px; position: absolute;  cursor: pointer;}
 </style>
 
 <h1><a href="<?= Url::Action("index", "administration.games") ?>"><?=$data['game']->name; ?></a>
@@ -129,6 +126,7 @@ use classes\url;
         dragArea: "dragAndDropFiles",
         visualProgress: "modal",
         img: true,
+        method: "UploadImg",
         uploadUrl: document.location.href
     }
 

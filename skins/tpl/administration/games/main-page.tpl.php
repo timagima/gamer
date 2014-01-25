@@ -14,18 +14,11 @@ use classes\url;
 
 <h2><a style="text-decoration: none; color: #507fb6" href="<?= Url::Action("index", "administration.games") ?>"><?=$data['game']->name;?></a>
     -> <?=$data['main-page']->id > 0 ? "Редактирование главной страницы " : "Создание главной страницы" ?></h2>
-<form action="<?= Url::Action("main-page-edit", "administration.games") ?>" method="POST">
+<form action="<?= Url::Action("main-page-edit", "administration.games") ?>" id="main-page-edit" method="POST">
     <?=Render::Hidden($data['main-page']->id, "id")?>
 
     <?=Render::Hidden($data['game']->id, "id-game")?>
     <table>
-        <tr>
-            <td colspan="2">
-                <div class="field fill header-games">
-                    <?=Render::LabelEdit($data['main-page']->name, "name", "Заголовок", true)?>
-                </div>
-            </td>
-        </tr>
         <tr>
             <td colspan="2">
                 <div class="field fill header-games">
@@ -102,7 +95,7 @@ use classes\url;
             </td>
             <td class="input-link">
                 <div class="field fill">
-                    <?=Render::LabelEdit($data['main-page']->genre, "genre", "Жанр", true)?>
+                    <?=Render::LabelEdit($data['main-page']->video_img, "video_img", "Изображение для видео", true)?>
                 </div>
             </td>
         </tr>
@@ -167,35 +160,49 @@ use classes\url;
     <div class="field fill search-index" style="width: 32%">
         <?=Render::LabelEdit($data['main-page']->keywords, "keywords", "Ключевые слова")?>
     </div>
+
+    <div id="img-upload-btn" class="container upload">
+        <span class="btn">Изображение</span>
+        <input id="img-files" type="file" name="img-files[]" multiple />
+    </div>
+
     <div style="height: 50px; width: 100%">
         <input type="submit" value="Сохранить" class="right">
     </div>
 
+
 </form>
+<? include $_SERVER["DOCUMENT_ROOT"]. "/skins/tpl/block/main-modal.block.tpl.php"; ?>
 <style>
-    .img-upload img{width: 100px; height: 100px; float: left}
+    .edit-image{float: left; margin: 10px;}
 </style>
 
 <script type="text/javascript">
     $(document).ready(function(){
-        $('#file').bind('change', function () {
-            debugger;
-            serviceGS11.uploadAvatar({
-                url: "<?=Url::Action("UploadIMgMainPage")?>"
-            });
-        })
+        initMultiUploader(config);
     })
-    $(function () {
+    // todo: сделать порог входящих файлов
+    // todo: сделать мультизагрузку файлов
+    var config = {
+        form: "main-page-edit",
+        visualProgress: "modal",
+        img: true,
+        method: "MainPageGame",
+        multi: true,
+        limit: 6,
+        uploadUrl: document.location.href
+    }
 
+    $(function () {
         tinymce.init({
             selector: "#text",
             language : "ru",
             plugins: [
                 "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker",
-                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking jbimages",
                 "table contextmenu directionality emoticons template textcolor paste textcolor"
             ],
-            toolbar1: "newdocument | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect",
+            toolbar1: "newdocument | bold italic underline strikethrough | jbimages | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect",
             toolbar2: "cut copy paste | searchreplace | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media code | inserttime preview | forecolor backcolor",
             toolbar3: "table | hr removeformat | subscript superscript | charmap emoticons | print fullscreen | ltr rtl | visualchars visualblocks nonbreaking template pagebreak restoredraft",
             menubar: false,

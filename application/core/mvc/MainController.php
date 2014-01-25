@@ -118,7 +118,7 @@ class MainController
     {
         if(!empty($_FILES))
         {
-            $objUpload = new Upload();
+            $objUpload = new Upload($path);
             $method = $this->_p['method'];
             $objUpload->$method($path);
             exit();
@@ -133,14 +133,14 @@ class MainController
 	public function AddJs($file)
     {
         $arrUrl = explode("/", $_SERVER['REDIRECT_URL']);
-        $path = (count($arrUrl) > 3) ? "/".$arrUrl[0]."/".$arrUrl[1]."/".$arrUrl[2] : "/".$arrUrl[1];
+        $path = ($arrUrl[1] == "administration") ? "/".$arrUrl[1]."/".$arrUrl[2] : "/".$arrUrl[1];
         $name = "/skins/tpl".$path. "/js/". $file.".js";
         $this->view->RenderJs($name);
     }
 	public function AddCss($file)
     {
         $arrUrl = explode("/", $_SERVER['REDIRECT_URL']);
-        $path = (count($arrUrl) > 3) ? "/".$arrUrl[0]."/".$arrUrl[1]."/".$arrUrl[2] : $_SERVER['REDIRECT_URL'];
+        $path = ($arrUrl[1] == "administration") ? "/".$arrUrl[1]."/".$arrUrl[2] : "/".$arrUrl[1];
         $name = "/skins/tpl".$path. "/css/". $file.".css";
         $this->view->RenderCss($name);
     }

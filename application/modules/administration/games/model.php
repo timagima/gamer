@@ -256,8 +256,8 @@ class Model extends MainModel
                 official_site = :official_site,
                 official_site_link = :official_site_link,
                 game_engine = :game_engine,
-                genre = :genre,
                 distribution = :distribution,
+                video_img = :video_img,
                 video_link = :video_link,
                 sr_os = :sr_os, sr_cpu = :sr_cpu, sr_ram = :sr_ram, sr_video = :sr_video, sr_hdd = :sr_hdd,
                 source_img = :source_img, source_img_small = :source_img_small");
@@ -279,8 +279,8 @@ class Model extends MainModel
         $query->bindParam(":official_site", $this->_p['official_site'], PDO::PARAM_STR);
         $query->bindParam(":official_site_link", $this->_p['official_site_link'], PDO::PARAM_STR);
         $query->bindParam(":game_engine", $this->_p['game_engine'], PDO::PARAM_STR);
-        $query->bindParam(":genre", $this->_p['genre'], PDO::PARAM_STR);
         $query->bindParam(":distribution", $this->_p['distribution'], PDO::PARAM_STR);
+        $query->bindParam(":video_img", $this->_p['video_img'], PDO::PARAM_STR);
         $query->bindParam(":video_link", $this->_p['video_link'], PDO::PARAM_STR);
         $query->bindParam(":sr_os", $this->_p['sr_os'], PDO::PARAM_STR);
         $query->bindParam(":sr_cpu", $this->_p['sr_cpu'], PDO::PARAM_STR);
@@ -312,8 +312,8 @@ class Model extends MainModel
         official_site = :official_site,
         official_site_link = :official_site_link,
         game_engine = :game_engine,
-        genre = :genre,
         distribution = :distribution,
+        video_img = :video_img,
         video_link = :video_link,
         sr_os = :sr_os, sr_cpu = :sr_cpu, sr_ram = :sr_ram, sr_video = :sr_video, sr_hdd = :sr_hdd,
         source_img = :source_img, source_img_small = :source_img_small WHERE id = :id");
@@ -335,8 +335,8 @@ class Model extends MainModel
         $query->bindParam(":official_site", $this->_p['official_site'], PDO::PARAM_STR);
         $query->bindParam(":official_site_link", $this->_p['official_site_link'], PDO::PARAM_STR);
         $query->bindParam(":game_engine", $this->_p['game_engine'], PDO::PARAM_STR);
-        $query->bindParam(":genre", $this->_p['genre'], PDO::PARAM_STR);
         $query->bindParam(":distribution", $this->_p['distribution'], PDO::PARAM_STR);
+        $query->bindParam(":video_img", $this->_p['video_img'], PDO::PARAM_STR);
         $query->bindParam(":video_link", $this->_p['video_link'], PDO::PARAM_STR);
         $query->bindParam(":sr_os", $this->_p['sr_os'], PDO::PARAM_STR);
         $query->bindParam(":sr_cpu", $this->_p['sr_cpu'], PDO::PARAM_STR);

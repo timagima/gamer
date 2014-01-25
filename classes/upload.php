@@ -6,20 +6,22 @@ use PDO;
 
 class Upload extends SimpleImage
 {
-    private $fileName;
+    private $fileName, $path ,$rootDir;
     public $conn;
 
-    public function __construct()
+    public function __construct($path)
     {
+        $this->path = $path;
+        $this->rootDir = $_SERVER["DOCUMENT_ROOT"];
         $this->conn = Config::GetInstance();
     }
 
-    public function UploadImgTinyMce($path)
+    public function UploadImgTinyMce()
     {
         foreach ($_FILES as $key => $value)
         {
             $ext = "." . pathinfo($value['name'], PATHINFO_EXTENSION);
-            $name = $path . "/" . md5(microtime() + rand(0, 10000));
+            $name = $this->path . "/" . md5(microtime() + rand(0, 10000));
             $fileName = $name . $ext;
             if($_POST['type-file'] == "img")
                 $this->load($value['tmp_name'])->save($fileName);
@@ -27,6 +29,22 @@ class Upload extends SimpleImage
                 $this->UploadFile($value['tmp_name'], $fileName);
         }
         echo $fileName;
+    }
+
+    public function MainPageGame()
+    {
+        foreach ($_FILES as $key => $value)
+        {
+            $this->fileName = $key;
+            $this->path = "storage/temp";
+            $ext = "." . pathinfo($value['name'], PATHINFO_EXTENSION);
+            $name = $this->path . "/" . md5(microtime() + rand(0, 10000));
+            $fileNameSmall = $name . "_s" . $ext;
+            $fileNameBig = $name . "_b" . $ext;
+            $this->load($value['tmp_name'])->square_crop(170)->save($fileNameSmall);
+            $this->load($value['tmp_name'])->save($fileNameBig);
+        }
+        echo json_encode(array($fileNameSmall, $this->fileName));
     }
 
     public function UploadImg($path)
@@ -56,6 +74,8 @@ class Upload extends SimpleImage
         }
         echo json_encode(array($fileName, $this->fileName));
     }
+
+    // todo: нужно написать метод для валидации входящих файлов
 
     // Метод загрузки изображений в папку пользователя
     public function UploadUserGameImg()

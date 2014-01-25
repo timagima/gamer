@@ -10,6 +10,7 @@ var filesDialog = {
             data.append('file-' + i, file);
         });
         data.append('type-file', typeFile);
+        data.append('method', 'UploadImgTinyMce');
         if (error != '') {
             $('#info').html(error);
         } else {

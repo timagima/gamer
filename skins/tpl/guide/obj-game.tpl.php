@@ -5,7 +5,7 @@
 </style>
 <link type="text/css" rel="stylesheet" href="/skins/css/video.css"/>
 <script src="http://vjs.zencdn.net/c/video.js"></script>
-<img class="left" style="padding-right: 25px; " src="/storage<?=$data['obj']->source_img; ?>" alt="<?=$data['obj']->name; ?>" title="<?=$data['obj']->name; ?>" />
+<img class="left" style="padding-right: 25px; " src="/storage<?=$data['obj']->source_img_b; ?>" alt="<?=$data['obj']->name; ?>" title="<?=$data['obj']->name; ?>" />
 <div class="content-guide-games">
     <h3><?=$data['obj']->name; ?></h3>
     Издатель: <a href="<?=$data['obj']->publisher_link; ?>" target="_blank"><?=$data['obj']->publisher; ?></a><br>
@@ -49,7 +49,7 @@
         <td style="padding-right: 5px;">
             <div class="span8 demo-video" style="position: relative; top: 22px;">
                 <video class="video-js" controls
-                       preload="auto" width="420" height="258" poster="/storage/guide-games/1/dark_souls_ptde_poster_video.jpg" data-setup="{}">
+                       preload="auto" width="420" height="258" poster="<?=$data['obj']->video_img; ?>" data-setup="{}">
                     <source src="<?=$data['obj']->video_link; ?>" type='video/webm'/>
                 </video>
             </div>

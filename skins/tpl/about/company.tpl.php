@@ -77,5 +77,29 @@
         Дата основания сайта: ноябрь 2012<br>
         Регистрация: 17 ноября 2012<br>
     </div>
-    <? include "/skins/tpl/block/share-soc.block.tpl.php"; ?>
+    <?// include $_SERVER["DOCUMENT_ROOT"]. "/skins/tpl/block/share-soc.block.tpl.php"; ?>
+
+    <script type="text/javascript" src="//yandex.st/share/share.js" charset="utf-8"></script>
+<!--    <div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="none" data-yashareQuickServices="yaru,vkontakte,facebook,twitter,odnoklassniki,moimir"></div>-->
+    <script>
+       /* new Ya.share({
+            element: 'ya_share',
+            elementStyle: {
+                'type': 'none',
+                'quickServices': ['facebook','twitter','odnoklassniki','vkontakte','moimir']
+            },
+            title: 'Allsoft 8 лет! — Акция с 11 по 31 мая!',
+            description: 'Пройдите праздничный тест и примите участие в розыгрыше',
+            link: 'http://allsoft.ru/promo/allsoft8let/',
+            serviceSpecific: {
+                twitter: {
+                    title: 'Allsoft 8 лет! — Акция с 11 по 31 мая!'
+                }
+            }
+        });*/
+    </script>
+    <span id="ya_share_normal"></span>
+    <span id="ya_share_high"></span>
+    <span id="ya_share_low"></span>
+    <span id="ya_share"></span>
 </div>

@@ -21,6 +21,13 @@ img{border: none;}
 .error{font-weight: bold; color: red}
 /* конец все основные стили */
 
+/* начало иконки удаления изображений */
+.edit-image{position: relative;}
+#error-img{padding: 20px; float: right}
+#delete-images{background-image:url(/skins/img/interface/delete-image-hover.png); display: none; opacity: 0.6; width: 15px; height: 15px; position: absolute;  cursor: pointer;}
+/* конец иконки удаления изображений */
+
+
 /* начало автокомплит для поиска */
 .autocomplete-suggestions { border: 1px solid #999; background: #FFF; cursor: default; overflow: auto; -webkit-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64); -moz-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64); box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64); }
 .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
