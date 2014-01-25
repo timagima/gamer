@@ -104,9 +104,9 @@ class Route
     private function ExplodeRoutePath($method)
     {
         $routePath = explode("-", $method);
+        $action = "";
         if(count($routePath) > 1)
         {
-            $action = "";
             foreach($routePath as $r)
             {
                 $action .= ucfirst($r);

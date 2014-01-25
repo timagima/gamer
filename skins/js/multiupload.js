@@ -15,7 +15,6 @@ function multiUploader(config){
         }
     }
 
-
     multiUploader.prototype.read = function(evt){
         self.idFileInput = $(this).attr("id");
         self.idDivParent = $(this).parent().attr("id");
@@ -40,7 +39,6 @@ function multiUploader(config){
     }
 
     multiUploader.prototype._uploader = function(file,f){
-        // todo: сделать возможность загрузки формы для нескольких инпутов сейчас идет строго по тегу name file и только с одного инпута на странице можно загружат это нужно исправить
         var data = new FormData();
         var ids = file[f].name._unique();
         self.number = f;
@@ -65,42 +63,35 @@ function multiUploader(config){
             processData: false,
             success:function(data){
                 var arrFile = $.parseJSON(data);
-                $("#error-img").remove();
-                if(arrFile.length <= 1){
-                    $("#"+ self.idDivParent).after('<div id="error-img" class="right error">'+arrFile[0]+'</div>');
-                } else {
-                    var arrFile = $.parseJSON(data);
-                    if(self.config.multi){
-                        self.countImg = $("."+arrFile[1]).length;
-                        $("#"+ self.idDivParent).after("<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' class='"+arrFile[1]+"' name='"+arrFile[1]+"[]' value='"+arrFile[0]+"' /></div></div>");
-                        if(self.countImg == self.config.limit-1){
-                            $("#stroage").remove();
-                            $("#"+ self.idDivParent).after("<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' name='"+arrFile[1]+"' id='"+arrFile[1]+"' value='"+arrFile[0]+"' /></div></div>");
-                            $("#"+self.idDivParent).hide();
-                        }
-                    } else {
-                        $("#stroage").remove();
-                        $("#"+ self.idDivParent).after("<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' name='"+arrFile[1]+"' id='"+arrFile[1]+"' value='"+arrFile[0]+"' /></div></div>");
-                        $("#"+self.idDivParent).hide();
-                    }
-                    // todo: подумать над загружать несколько файлов т.к. сейчас поле загрузки будет удаляться
-                    //var storage = 0;
-
-
-
-                    /*var obj = $(".dfiles").get();
-                     $.each(obj,function(k,fle){
-                     if($(fle).attr("rel") == rponse){
-                     $(fle).slideUp("normal", function(){ $(this).remove(); });
-                     }
-                     });*/
-                }
+                self.renderImage(arrFile);
             }
         });
         if (f+1 < file.length) {
             self._uploader(file,f+1);
         }
     }
+    multiUploader.prototype.renderImage = function(arrFile){
+        $("#error-img").remove();
+        var multiHtml = "<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' class='"+arrFile[1]+"' name='"+arrFile[1]+"[]' value='"+arrFile[0]+"' /></div></div>";
+        var singleHtml = "<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' name='"+arrFile[1]+"' id='"+arrFile[1]+"' value='"+arrFile[0]+"' /></div></div>";
+        debugger;
+        if(arrFile.length <= 1){
+            $("#"+ self.idDivParent).after('<div id="error-img" class="right error">'+arrFile[0]+'</div>');
+        } else {
+            if(self.config.multi){
+                self.countImg = $("."+arrFile[1]).length;
+                $("#"+ self.idDivParent).after(multiHtml);
+                if(self.countImg == self.config.limit-1){
+                    $("#"+ self.idDivParent).after(multiHtml);
+                    $("#"+self.idDivParent).hide();
+                }
+            } else {
+                $("#"+ self.idDivParent).after(singleHtml);
+                $("#"+self.idDivParent).hide();
+            }
+        }
+    }
+
     multiUploader.prototype.editImage = function(){
         $('.edit-image').mouseover(function(){
             if($("#delete-images").length == 0){
@@ -133,20 +124,18 @@ function multiUploader(config){
             var name = Array("Изображение", "img-upload-btn");
         }
         $(link).remove();
+        var html = '<div id="'+name[1]+'" class="container upload"><span class="btn">'+name[0]+'</span><input type="file" name="'+val+'" id="'+val+'" /></div>';
+        debugger;
         if(self.config.multi){
-            debugger;
             var limit = self.config.limit-1 - self.countImg;
             if(limit == 1){
                 $("#"+self.idDivParent).show();
-                $(link).after('<div id="'+name[1]+'" class="container upload"><span class="btn">'+name[0]+'</span><input type="file" name="'+val+'" id="'+val+'" /></div>');
-                this.init();
+                $(link).after(html);
             }
         }else{
             $("#"+self.idDivParent).show();
-            $(link).after('<div id="'+name[1]+'" class="container upload"><span class="btn">'+name[0]+'</span><input type="file" name="'+val+'" id="'+val+'" /></div>');
-            this.init();
+            $(link).after(html);
         }
-
     }
 
     multiUploader.prototype.xhr = function(){
@@ -161,14 +150,14 @@ function multiUploader(config){
     }
 
     multiUploader.prototype._startUpload = function(){
-        if(this.all.length > 0 && this.all[0].length <= this.config.limit){
+        if(this.config.limit && this.all[0].length > this.config.limit){
+            $("#"+this.config.form).append('<b class="error">Максимум можно прикрепить до 6 файлов</b>')
+        } else if (this.all.length > 0){
             for(var k=0; k<this.all.length; k++){
                 var file = this.all[k];
                 this._uploader(file,0);
                 $(".error").remove();
             }
-        }else{
-            $("#"+this.config.form).append('<b class="error">Максимум можно прикрепить до 6 файлов</b>')
         }
     }
     multiUploader.prototype.progressHandlingFunction = function(e){

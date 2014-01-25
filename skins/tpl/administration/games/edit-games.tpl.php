@@ -49,7 +49,7 @@ use classes\url;
                         ?>
                         <div id="icon-upload-btn" class="container upload">
                             <span class="btn">Иконка</span>
-                            <input id="source_img_s" type="file" name="source_img_s" multiple />
+                            <input id="source_img_s" type="file" name="source_img_s" />
 
                         </div>
                     <?}else{?>
