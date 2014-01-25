@@ -73,6 +73,7 @@
                                 <h2><?=$data['game']?> Редактирование</h2>
                                 Уровень сложности: <select class="styled" style="width: 200px" id="level-id">
                                     <?php
+                                    $_SESSION['id-game'] = $data['id_game'];
                                     foreach($data['levelsArray'] as $level){
                                         if($level['name']==$data['level']){ ?>
                                             <option value="<?=$level['id']?>" selected="selected"><?=$level['name']?></option>
@@ -154,7 +155,7 @@
         visualProgress: "modal",
         img: true,
         uploadUrl: document.location.href,
-        method: "UploadImg",
+        method: "UploadUserGameImg",
     }
 
     $(document).ready(function(){
