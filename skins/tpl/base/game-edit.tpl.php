@@ -71,73 +71,75 @@
 
                             <div class="game-edit-form">
                                 <h2><?=$data['game']?> Редактирование</h2>
-                                Уровень сложности: <select class="styled" style="width: 200px" id="level-id">
-                                    <?php
-                                    $_SESSION['id-game'] = $data['id_game'];
-                                    foreach($data['levelsArray'] as $level){
-                                        if($level['name']==$data['level']){ ?>
-                                            <option value="<?=$level['id']?>" selected="selected"><?=$level['name']?></option>
-                                        <?php }else{ ?>
-                                            <option value="<?=$level['id']?>"><?=$level['name']?></option>
-                                        <? }
-                                    }
-                                    ?>
-                                </select><br><br>
-                                Качество прохождения: <select class="styled" style="width: 300px" id="game-passing">
-                                    <?php
-                                    foreach($data['typesCompletedGameArray'] as $type){
-                                        if($type['name']==$data['type_complete_game']){ ?>
-                                            <option value="<?=$type['id']?>" selected="selected"><?=$type['name']?></option>
-                                        <?php }else{ ?>
-                                            <option value="<?=$type['id']?>"><?=$type['name']?></option>
-                                        <? }
-                                    }
-                                    ?>
-                                </select><br><br>
-                                Количество квестов: <input id="quest-count" type="text" style="width:50px; margin-right: 40px"
-                                    value="<?=($data['num_quest']==false)?'Null':$data['num_quest']?>"/>
-                                <label class="checkbox"><input type="checkbox" id="not-quest-count"/> Не помню </label>
-                                <div style="float: right; margin: 0px -100px 0px 0px;" class="b-validation">
-                                    <div class="tooltip" id="game-quest"></div>
-                                </div><br><br>
-                                Начал играть: <input id="game-start-date" type="text"
-                                                     value="<?=($data['start_date']==false)?'дд-мм-гггг':date('d-m-Y', $data['start_date'])?>"
-                                                     onfocus="this.select();_Calendar.lcs(this)"
-                                       onclick="event.cancelBubble=true;this.select();_Calendar.lcs(this)" style="width: 90px" readonly="readonly"/>
-                                <label class="checkbox">
-                                    <input type="checkbox" id="game-not-start-date" value="start-date" class="disable-date"/>Не помню
-                                </label>
-                                <div style="float: right; margin: 0px -100px 0px 0px;" class="b-validation">
-                                    <div class="tooltip" id="game-start" style="margin-left: 28px;"></div>
-                                </div><br><br>
-                                Закончил играть: <input id="game-end-date" type="text"
-                                                        value="<?=($data['end_date']==false)?'дд-мм-гггг':date('d-m-Y', $data['end_date'])?>"
-                                                        onfocus="this.select();_Calendar.lcs(this)"
-                                       onclick="event.cancelBubble=true;this.select();_Calendar.lcs(this)" style="width: 90px" readonly="readonly"/>
-                                <label class="checkbox">
-                                    <input type="checkbox" id="game-not-end-date" class="disable-date" value="end-date"/>Не помню
-                                </label>
-                                <div style="float: right; margin: 0px -100px 0px 0px;" class="b-validation">
-                                    <div class="tooltip" id="game-end" style="margin-left: 28px;"></div>
-                                </div><br><br>
-                                Отзыв: <br><textarea style="width: 300px; height: 50px" type="text" id="game-description" class="input-txt-profile" data-type="validation"><?=($data['about_game'])?$data['about_game']:'Опишите свои впечатления об игре.'?></textarea>
-                                <div style="float: right; margin: 5px -100px 0px 0px;" class="b-validation">
-                                    <div class="tooltip" id="description" style="margin-left: 28px;"></div>
-                                </div><br><br>
-                                <input type="hidden" value="<?=$data['id_game']?>" id="game-id"/>
-                                <div>
-                                    <a href="javascript: void(0)" class="btn-login" id="update-completed-game">Сохранить изменения</a>
-                                </div>
 
-                                <form id="edit-main-game">
-                                    <div id="img-upload-btn" class="container upload">
-                                        <span class="btn">Изображение</span>
-                                        <input id="source_img" type="file" name="source_img" multiple />
-                                    </div>
+                                <form action="/base/savechanges" method="post">
+                                    Уровень сложности: <select class="styled" style="width: 200px" id="level-id" name="level-id">
+                                        <?php
+                                        foreach($data['levelsArray'] as $level){
+                                            if($level['name']==$data['level']){ ?>
+                                                <option value="<?=$level['id']?>" selected="selected"><?=$level['name']?></option>
+                                            <?php }else{ ?>
+                                                <option value="<?=$level['id']?>"><?=$level['name']?></option>
+                                            <? }
+                                        }
+                                        ?>
+                                    </select><br><br>
+                                    Качество прохождения: <select class="styled" style="width: 300px" id="game-passing" name="game-passing">
+                                        <?php
+                                        foreach($data['typesCompletedGameArray'] as $type){
+                                            if($type['name']==$data['type_complete_game']){ ?>
+                                                <option value="<?=$type['id']?>" selected="selected"><?=$type['name']?></option>
+                                            <?php }else{ ?>
+                                                <option value="<?=$type['id']?>"><?=$type['name']?></option>
+                                            <? }
+                                        }
+                                        ?>
+                                    </select><br><br>
+                                    Количество квестов: <input id="quest-count" type="text" style="width:50px; margin-right: 40px"
+                                        value="<?=($data['num_quest']==false)?'Null':$data['num_quest']?>" name="quest-qount"/>
+                                    <label class="checkbox"><input type="checkbox" id="not-quest-count"/> Не помню </label>
+                                    <div style="float: right; margin: 0px -100px 0px 0px;" class="b-validation">
+                                        <div class="tooltip" id="game-quest"></div>
+                                    </div><br><br>
+                                    Начал играть: <input id="game-start-date" type="text"
+                                                         value="<?=($data['start_date']==false)?'дд-мм-гггг':date('d-m-Y', $data['start_date'])?>"
+                                                         onfocus="this.select();_Calendar.lcs(this)"
+                                           onclick="event.cancelBubble=true;this.select();_Calendar.lcs(this)" style="width: 90px" readonly="readonly" name="game-start"/>
+                                    <label class="checkbox">
+                                        <input type="checkbox" id="game-not-start-date" value="start-date" class="disable-date"/>Не помню
+                                    </label>
+                                    <div style="float: right; margin: 0px -100px 0px 0px;" class="b-validation">
+                                        <div class="tooltip" id="game-start" style="margin-left: 28px;"></div>
+                                    </div><br><br>
+                                    Закончил играть: <input id="game-end-date" type="text"
+                                                            value="<?=($data['end_date']==false)?'дд-мм-гггг':date('d-m-Y', $data['end_date'])?>"
+                                                            onfocus="this.select();_Calendar.lcs(this)"
+                                           onclick="event.cancelBubble=true;this.select();_Calendar.lcs(this)" style="width: 90px" readonly="readonly" name="game-end"/>
+                                    <label class="checkbox">
+                                        <input type="checkbox" id="game-not-end-date" class="disable-date" value="end-date"/>Не помню
+                                    </label>
+                                    <div style="float: right; margin: 0px -100px 0px 0px;" class="b-validation">
+                                        <div class="tooltip" id="game-end" style="margin-left: 28px;"></div>
+                                    </div><br><br>
+                                    Отзыв: <br><textarea style="width: 300px; height: 50px" type="text" id="game-description" class="input-txt-profile" data-type="validation" name="game-description"><?=($data['about_game'])?$data['about_game']:'Опишите свои впечатления об игре.'?></textarea>
+                                    <div style="float: right; margin: 5px -100px 0px 0px;" class="b-validation">
+                                        <div class="tooltip" id="description" style="margin-left: 28px;"></div>
+                                    </div><br><br>
+                                    <input type="hidden" value="<?=$data['id_game']?>" id="game-id" name="game-id"/>
+                                    <!--<div>
+                                        <a href="javascript: void(0)" class="btn-login" id="update-completed-game">Сохранить изменения</a>
+                                    </div>-->
+
+                                    <div id="edit-main-game">
+                                        <div id="img-upload-btn" class="container upload">
+                                            <span class="btn">Изображение</span>
+                                            <input id="source_img" type="file" name="source_img" multiple />
+                                        </div>
+                                    </div><br><br>
+                                    <input type="image" value="Сохранить изменения" class="btn-login" style=""/>
                                 </form>
 
                             </div>
-
                         </div>
                     </div>
                 </div>

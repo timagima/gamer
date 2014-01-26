@@ -48,6 +48,14 @@ class Controller extends MainController
         }
     }
 
+    public function ActionSaveChanges()
+    {
+        $this->model->UpdateAddedGame();
+        $this->model->UploadUserGameImg();
+        $data = "";
+        $this->view->Generate('menu/auth-menu.tpl.php', 'base/game-chanched.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());
+    }
+
 
 
 }

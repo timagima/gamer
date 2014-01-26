@@ -1,8 +1,6 @@
 <?php
 namespace classes;
 use classes\SimpleImage;
-use application\core\config\config;
-use PDO;
 
 class Upload extends SimpleImage
 {
@@ -13,7 +11,6 @@ class Upload extends SimpleImage
     {
         $this->path = $path;
         $this->rootDir = $_SERVER["DOCUMENT_ROOT"];
-        $this->conn = Config::GetInstance();
     }
 
     public function UploadImgTinyMce()
@@ -78,28 +75,25 @@ class Upload extends SimpleImage
     // todo: нужно написать метод для валидации входящих файлов
 
     // Метод загрузки изображений в папку пользователя
-    public function UploadUserGameImg()
+    public function UploadUserGameImg($path)
     {
         foreach($_FILES as $k=>$v)
         {
-            $path = "storage/user_img/" . $_SESSION["user-data"]["path"];
+            //$path = "storage/user_img/" . $_SESSION["user-data"]["path"];
             $ext = "." . pathinfo($v["name"], PATHINFO_EXTENSION);
             $name = $path . "/" . md5(microtime() + rand(1, 10000));
-            $fileName = $name . $ext;
+            $fileName = $name ."_b" . $ext;
             $smallFileName = $name . "_s" . $ext;
             $imgB = $this->UploadFile($v['tmp_name'], $fileName);
             $imgS = $this->load($fileName)->square_crop(200)->save($smallFileName);
             if($imgB && $imgS){
-                $idUser = (int)$_SESSION['user-data']['id'];
-                $idGame = (int)$_SESSION['id-game'];
                 $gameImgB = "/".$fileName;
                 $gameImgS = "/".$smallFileName;
-                $test = $this->conn->dbh->query("INSERT INTO user_game_img(id_user, id_game, game_img_b, game_img_s) VALUES (".$idUser.", ".$idGame.", '".$gameImgB."', '".$gameImgS."')");
             }
 
 
         }
-        echo json_encode(array($fileName, $k));
+        echo json_encode(array($smallFileName, $k, $fileName));
     }
 
     private function ImgIconGame($value, $fileName, $ext)
@@ -130,6 +124,6 @@ class Upload extends SimpleImage
 
     private function UploadFile($tmpName, $fileName)
     {
-        return move_uploaded_file($tmpName, $fileName);
+        return move_uploaded_file($tmpName, $fileName); //относительный путь без слеша в начале.
     }
 }

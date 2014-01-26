@@ -77,8 +77,8 @@ class Model extends MainModel
     public function UpdateAddedGame()
     {
         //todo сделать проверку начало и конца прохождения игры, согласно логики времени
-        $gameStartDate = $this->_p['game-start-date'];
-        $gameEndDate = $this->_p['game-end-date'];
+        $gameStartDate = $this->_p['game-start'];
+        $gameEndDate = $this->_p['game-end'];
         $gameStartDate = (((int)$gameStartDate) > 0) ? $this->MakeUnixTime(explode("-", $gameStartDate, 3)) : 0;
         $gameEndDate = (((int)$gameEndDate) > 0) ? $this->MakeUnixTime(explode("-", $gameEndDate, 3)) : 0;
         $idGame = (int)$this->_p['game-id'];
@@ -100,7 +100,35 @@ class Model extends MainModel
         $stmt->bindParam(":idGamePassing", $idGamePassing, PDO::PARAM_INT);
         $stmt->bindParam(":gameDescription", $gameDescription, PDO::PARAM_STR);
         $getQuery = $stmt->execute();
-        return ("GameUpdated");
+        return true;
+    }
+
+    public function UploadUserGameImg()
+    {
+        $v=1;
+        if(isset($this->_p['source_img'])){
+            $idUser = (int)$_SESSION['user-data']['id'];
+            $idGame = (int)$this->_p['game-id'];
+            for($i=0; $i < count($this->_p['source_img']['s']);$i++){
+                $imgS = "storage/user_img/" . $_SESSION['user-data']['path'] . "/" . basename($this->_p['source_img']['s'][$i]);
+                $imgB = "storage/user_img/" . $_SESSION['user-data']['path'] . "/" . basename($this->_p['source_img']['b'][$i]);
+                $oldImgS = $this->_p['source_img']['s'][$i];
+                $oldImgB = $this->_p['source_img']['b'][$i];
+                //$renameS = rename($oldImgS, $imgS);
+                //$renameB = rename($oldImgB, $imgB);
+                if(rename($oldImgS, $imgS) && rename($oldImgB, $imgB)){
+                    $imgS = "/".$imgS;
+                    $imgB = "/".$imgB;
+                    $sql = $this->conn->dbh->prepare("INSERT INTO user_game_img SET id_user=:idUser, id_game=:idGame, game_img_s=:imgS, game_img_b=:imgB");
+                    $sql->bindParam(":idUser", $idUser, PDO::PARAM_INT);
+                    $sql->bindParam(":idGame", $idGame, PDO::PARAM_INT);
+                    $sql->bindParam(":imgS", $imgS, PDO::PARAM_STR);
+                    $sql->bindParam(":imgB", $imgB, PDO::PARAM_STR);
+                    $sql->execute();
+                }
+
+            }
+        }
     }
 
     //Получение пройденных игр из БД

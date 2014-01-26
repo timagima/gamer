@@ -240,7 +240,7 @@ $(function () {
     //document.getElementById("send-completed-game").onclick = addCompletedGames;
     $("#send-completed-game").click(function(){addCompletedGames()});
 
-    /*
+        /*
     // Изменение пройденной игры в БД
     function updateAddedGame() {
         var gameId = $("#game-id").val();
@@ -305,8 +305,54 @@ $(function () {
         });
     }
 
-    //document.getElementById("update-completed-game").onclick = updateAddedGame;
-    $("#update-completed-game").onclick(updateAddedGame());*/
+    //document.getElementById("update-completed-game").onclick = updateAddedGame;*/
+    $("form").submit(function() {
+        var gameDescription = $.trim($("#game-description").val());
+        var gameStart = $("#game-start-date").val();
+        var gameEnd = $("#game-end-date").val();
+        var questQount = parseInt($.trim($("#quest-count").val()));
+        var visibleQuestQount = $("#quest-count").css("visibility");
+        var notFormSendGameStart;
+        var notFormSendGameEnd;
+        var notFormSendGameDescription;
+        var notFormGameQuest;
+
+        if (gameDescription == "") {
+            $('#description').addClass('error').html('Заполните поле');
+            notFormSendGameDescription = true;
+        } else {
+            $('#description').removeClass('error');
+            notFormSendGameDescription = false;
+        }
+
+        if (gameStart === "дд-мм-гггг") {
+            $('#game-start').addClass('error').html('Заполните поле');
+            notFormSendGameStart = true;
+        } else {
+            $('#game-start').removeClass('error');
+            notFormSendGameStart = false;
+        }
+
+        if (gameEnd === "дд-мм-гггг") {
+            $('#game-end').addClass('error').html('Заполните поле');
+            notFormSendGameEnd = true;
+        } else {
+            $('#game-end').removeClass('error');
+            notFormSendGameEnd = false;
+        }
+        if (isNaN(questQount) && visibleQuestQount == "visible") {
+            $('#game-quest').addClass('error').html('Заполните поле');
+            notFormGameQuest = true;
+        } else {
+            $('#game-quest').removeClass('error');
+            notFormGameQuest = false;
+        }
+
+        if (notFormSendGameDescription  || notFormSendGameStart || notFormSendGameEnd || notFormGameQuest)
+            return false;
+        else
+            return true;
+    });
 
     // ВАЛИДАЦИЯ
     // $('.btn-login, input, textarea, div').click(function(){
@@ -326,7 +372,7 @@ $(function () {
     //Функция скрывает и показывает инпут с для ввода количества пройденный квестов
     $("#not-quest-count").click(function () {
         var visibleQuestQount = $("#quest-count").css("visibility");
-        ( visibleQuestQount == "visible" ) ? $("#quest-count").css("visibility", "hidden") : $("#quest-count").css("visibility", "visible");
+        ( visibleQuestQount == "visible" ) ? $("#quest-count").css("visibility", "hidden").val(0) : $("#quest-count").css("visibility", "visible").val("");
     })
 
     var ratingValue;
