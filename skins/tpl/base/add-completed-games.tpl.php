@@ -181,7 +181,7 @@
                                                 <td class="modal-gamer-data-td">Проголосуйте:</td>
                                                 <td id="game-rating-parent">
                                                     <div class="rating">
-                                                        <input type="hidden" class="val" value="0"/>
+                                                        <input type="hidden" class="val" value="5"/>
                                                         <input type="hidden" class="votes" value="0"/>
                                                     </div>
                                                     <div style="float: right; margin: -52px -235px 0px 0px;" class="b-validation">
