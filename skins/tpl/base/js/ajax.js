@@ -237,75 +237,9 @@ $(function () {
         });
     }
 
-    //document.getElementById("send-completed-game").onclick = addCompletedGames;
     $("#send-completed-game").click(function(){addCompletedGames()});
 
-        /*
-    // Изменение пройденной игры в БД
-    function updateAddedGame() {
-        var gameId = $("#game-id").val();
-        var levelId = $("#level-id").val();
-        var gameDescription = $.trim($("#game-description").val());
-        var gameStart = $("#game-start-date").val();
-        var gameEnd = $("#game-end-date").val();
-        var questQount = parseInt($.trim($("#quest-count").val()));
-        var visibleQuestQount = $("#quest-count").css("visibility");
-        var idGamePassing = parseInt($("#game-passing").val());
-        var notFormSendGameStart;
-        var notFormSendGameEnd;
-        var notFormSendGameDescription;
-        var notFormGameQuest;
 
-        if (gameDescription == "") {
-            $('#description').addClass('error').html('Заполните поле');
-            notFormSendGameDescription = true;
-        } else {
-            $('#description').removeClass('error');
-            notFormSendGameDescription = false;
-        }
-
-        if (gameStart === "дд-мм-гггг") {
-            $('#game-start').addClass('error').html('Заполните поле');
-            notFormSendGameStart = true;
-        } else {
-            $('#game-start').removeClass('error');
-            notFormSendGameStart = false;
-        }
-
-        if (gameEnd === "дд-мм-гггг") {
-            $('#game-end').addClass('error').html('Заполните поле');
-            notFormSendGameEnd = true;
-        } else {
-            $('#game-end').removeClass('error');
-            notFormSendGameEnd = false;
-        }
-        if (isNaN(questQount) && visibleQuestQount == "visible") {
-            $('#game-quest').addClass('error').html('Заполните поле');
-            notFormGameQuest = true;
-        } else {
-            $('#game-quest').removeClass('error');
-            notFormGameQuest = false;
-        }
-
-        if (notFormSendGameDescription  || notFormSendGameStart || notFormSendGameEnd || notFormGameQuest)
-            return false;
-        $.ajax({
-            type: 'POST',
-            url: document.location.href,
-            dataType: 'html',
-            data: {'ajax-query': 'true', 'type-class': 'model', 'method': 'UpdateAddedGame', 'game-id':gameId, 'level-id': levelId, 'game-description': gameDescription, 'game-start-date': gameStart, 'game-end-date': gameEnd, 'quest-qount': questQount, 'game-passing': idGamePassing},
-            beforeSend: function () {
-                $('#send').before('<img id="ajax-img-loader" src="/skins/img/ajax/loader-page.gif">');
-            },
-            success: function (data) {
-                if (data == "GameUpdated") {
-                    $(".game-edit-form").html("<h2>Данные успешно изменены.</h2>");
-                }
-            }
-        });
-    }
-
-    //document.getElementById("update-completed-game").onclick = updateAddedGame;*/
     $("form").submit(function() {
         var gameDescription = $.trim($("#game-description").val());
         var gameStart = $("#game-start-date").val();
