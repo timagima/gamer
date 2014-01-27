@@ -74,24 +74,17 @@ class Upload extends SimpleImage
 
     // todo: нужно написать метод для валидации входящих файлов
 
-    // Метод загрузки изображений в папку пользователя
+    // Метод загрузки изображений в временную папку на сервере и создание обрезанного изображения
     public function UploadUserGameImg($path)
     {
         foreach($_FILES as $k=>$v)
         {
-            //$path = "storage/user_img/" . $_SESSION["user-data"]["path"];
             $ext = "." . pathinfo($v["name"], PATHINFO_EXTENSION);
             $name = $path . "/" . md5(microtime() + rand(1, 10000));
             $fileName = $name ."_b" . $ext;
             $smallFileName = $name . "_s" . $ext;
-            $imgB = $this->UploadFile($v['tmp_name'], $fileName);
-            $imgS = $this->load($fileName)->square_crop(200)->save($smallFileName);
-            if($imgB && $imgS){
-                $gameImgB = "/".$fileName;
-                $gameImgS = "/".$smallFileName;
-            }
-
-
+            $this->UploadFile($v['tmp_name'], $fileName);
+            $this->load($fileName)->square_crop(200)->save($smallFileName);
         }
         echo json_encode(array($smallFileName, $k, $fileName));
     }

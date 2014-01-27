@@ -87,7 +87,6 @@ class Model extends MainModel
         $idGamePassing = (int)$this->_p['game-passing'];
         $idUser = (int)$_SESSION['user-data']['id'];
         $gameDescription = $this->_p['game-description'];
-
         $stmt = $this->conn->dbh->prepare("UPDATE user_completed_games
                                             SET id_level=:idLevel, id_type_completed_game=:idGamePassing, num_quest=:questQount, start_date=:startDate, end_date=:endDate, about_game=:gameDescription
                                             WHERE id_user=:idUser AND id_game=:idGame");
@@ -103,9 +102,9 @@ class Model extends MainModel
         return true;
     }
 
+    //Загрузка изображений на сервер в папку пользователя.
     public function UploadUserGameImg()
     {
-        $v=1;
         if(isset($this->_p['source_img'])){
             $idUser = (int)$_SESSION['user-data']['id'];
             $idGame = (int)$this->_p['game-id'];
@@ -114,8 +113,6 @@ class Model extends MainModel
                 $imgB = "storage/user_img/" . $_SESSION['user-data']['path'] . "/" . basename($this->_p['source_img']['b'][$i]);
                 $oldImgS = $this->_p['source_img']['s'][$i];
                 $oldImgB = $this->_p['source_img']['b'][$i];
-                //$renameS = rename($oldImgS, $imgS);
-                //$renameB = rename($oldImgB, $imgB);
                 if(rename($oldImgS, $imgS) && rename($oldImgB, $imgB)){
                     $imgS = "/".$imgS;
                     $imgB = "/".$imgB;
@@ -126,7 +123,6 @@ class Model extends MainModel
                     $sql->bindParam(":imgB", $imgB, PDO::PARAM_STR);
                     $sql->execute();
                 }
-
             }
         }
     }
