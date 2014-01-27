@@ -41,6 +41,7 @@ class Controller extends MainController
         if($idGame){
             $this->AddJs("ajax");
             $data = $this->model->GetGameView($idGame);
+            $data['userGameImg'] = $this->model->GetUserImgGame($idGame);
             $data['levelsArray'] = $this->model->GetLevels($idGame);
             $data['typesCompletedGameArray'] = $this->model->GetTypeCompleteGame();
             $this->headerTxt['title'] = "$data[game] Редактировать - GS11";
@@ -52,6 +53,7 @@ class Controller extends MainController
     {
         $this->model->UpdateAddedGame();
         $this->model->UploadUserGameImg();
+        $this->model->RemoveUserImgGame($this->_p['deletedImg']);
         $data = "";
         $this->view->Generate('menu/auth-menu.tpl.php', 'base/game-chanched.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());
     }

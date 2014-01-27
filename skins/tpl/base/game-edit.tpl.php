@@ -135,7 +135,18 @@
                                             <span class="btn">Изображение</span>
                                             <input id="source_img" type="file" name="source_img" multiple />
                                         </div>
+                                        <?php
+                                        if(count($data['userGameImg']) > 0){
+                                            foreach($data['userGameImg'] as $imgSrc){ ?>
+                                                <div class="edit-image" style="width: 200px;">
+                                                    <img src="<?=$imgSrc['game_img_s']?>">
+                                                    <input type="hidden" name="saved-img[]" value="<?=$imgSrc['game_img_s']?>">
+                                                </div>
+                                            <?php }
+                                        }
+                                        ?>
                                     </div><br><br>
+
                                     <input type="image" value="Сохранить изменения" class="btn-login" style=""/>
                                 </form>
 
@@ -158,6 +169,7 @@
         img: true,
         uploadUrl: document.location.href,
         method: "UploadUserGameImg",
+        limit: 40
     }
 
     $(document).ready(function(){

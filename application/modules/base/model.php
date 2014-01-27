@@ -178,6 +178,30 @@ class Model extends MainModel
         return $this->conn->dbh->query("SELECT * FROM type_complete_game")->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //Получение массива картинок пройденной игры пользователя
+    public function GetUserImgGame($idGame)
+    {
+        $idUser = (int)$_SESSION['user-data']['id'];
+        $idGame = (int)$idGame;
+        return $this->conn->dbh->query("SELECT game_img_b, game_img_s FROM user_game_img WHERE id_user=".$idUser." AND id_game=".$idGame)->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //Удаление картинок пройденной игры, загруженных пользователем
+    public function RemoveUserImgGame($deleteImg)
+    {
+        if(count($deleteImg) > 0){
+            foreach($deleteImg as $image){
+                $imgBInfo = pathinfo($image);
+                $imgB = substr($imgBInfo['dirname'], 1)."/".str_replace("_s", "_b", $imgBInfo['filename']).".".$imgBInfo['extension'];
+                $removeImgB = unlink($imgB);
+                $removeImgS = unlink(substr($image, 1));
+                if($removeImgB && $removeImgS ){
+                    $this->conn->dbh->query("DELETE FROM user_game_img WHERE game_img_s='".$image."'");
+                }
+            }
+        }
+    }
+
     //Получение массива уровней сложности игры по её ИД
     public function GetLevels($idGame)
     {
