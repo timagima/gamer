@@ -130,7 +130,8 @@ class Model extends MainModel
     //Получение пройденных игр из БД
     public function GetUserCompletedGames()
     {
-        return $this->conn->dbh->query("SELECT ucg.num_quest, ucg.start_date, ucg.end_date, ucg.post_date, ucg.about_game,
+        $idUser = (int)$_SESSION['user-data']['id'];
+        $sql = $this->conn->dbh->prepare("SELECT ucg.num_quest, ucg.start_date, ucg.end_date, ucg.post_date, ucg.about_game,
                                             games.name as game, games.source_img_b, games.source_img_s, games.id,
                                             level.name as level, level.description as level_description,
                                             tcg.name as type_complete_game,
@@ -141,7 +142,10 @@ class Model extends MainModel
                                         LEFT JOIN level ON level.id=ucg.id_level
                                         LEFT JOIN type_complete_game tcg ON tcg.id=ucg.id_type_completed_game
                                         LEFT JOIN genre ON genre.id=games.genre_id
-                                        WHERE users.id=" . $_SESSION['user-data']['id'] . " ORDER BY game")->fetchAll(PDO::FETCH_ASSOC);
+                                        WHERE users.id=:idUser ORDER BY game");
+        $sql->bindParam(":idUser", $idUser, PDO::PARAM_INT);
+        $sql->execute();
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
     //Получение информации о пройденной игре пользователя по ИД игры
@@ -151,7 +155,9 @@ class Model extends MainModel
             $r = floatval(mt_rand(30, 49).".".mt_rand(3, 8));
             $checkGame = $this->conn->dbh->query("UPDATE games_rating SET rating = ".$r." , suffrage_count = 10  WHERE id_game= ".$i);
         }*/
-        return $this->conn->dbh->query("SELECT ucg.num_quest, ucg.start_date, ucg.end_date, ucg.post_date, ucg.about_game, ucg.id_game,
+        $idUser = (int)$_SESSION['user-data']['id'];
+        $idGame = (int)$idGame;
+        $sql = $this->conn->dbh->prepare("SELECT ucg.num_quest, ucg.start_date, ucg.end_date, ucg.post_date, ucg.about_game, ucg.id_game,
                                             games.name as game, games.source_img_b, games.source_img_s,
                                             level.name as level, level.description as level_description,
                                             tcg.name as type_complete_game,
@@ -162,11 +168,14 @@ class Model extends MainModel
                                         LEFT JOIN level ON level.id=ucg.id_level
                                         LEFT JOIN type_complete_game tcg ON tcg.id=ucg.id_type_completed_game
                                         LEFT JOIN genre ON genre.id=games.genre_id
-                                        WHERE users.id=" . $_SESSION['user-data']['id'] . " AND ucg.id_game=".$idGame." ORDER BY game ")->fetch(PDO::FETCH_ASSOC);
-
+                                        WHERE users.id=:idUser AND ucg.id_game=:idGame ORDER BY game ");
+        $sql->bindParam(":idUser", $idUser, PDO::PARAM_INT);
+        $sql->bindParam(":idGame", $idGame, PDO::PARAM_INT);
+        $sql->execute();
+        return $sql->fetch(PDO::FETCH_ASSOC);
     }
 
-    //Получение игр из БД
+    //Получение игр из БД похоже это нигде не используется
     public function GetGames()
     {
         return $this->conn->dbh->query("SELECT * FROM games")->fetchAll(PDO::FETCH_OBJ);
@@ -175,7 +184,9 @@ class Model extends MainModel
     //Получение массива типов прохождения игр
     public function GetTypeCompleteGame()
     {
-        return $this->conn->dbh->query("SELECT * FROM type_complete_game")->fetchAll(PDO::FETCH_ASSOC);
+        $sql = $this->conn->dbh->prepare("SELECT * FROM type_complete_game");
+        $sql->execute();
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
     //Получение массива картинок пройденной игры пользователя
@@ -183,22 +194,37 @@ class Model extends MainModel
     {
         $idUser = (int)$_SESSION['user-data']['id'];
         $idGame = (int)$idGame;
-        return $this->conn->dbh->query("SELECT game_img_b, game_img_s FROM user_game_img WHERE id_user=".$idUser." AND id_game=".$idGame)->fetchAll(PDO::FETCH_ASSOC);
+        $sql = $this->conn->dbh->prepare("SELECT id, game_img_b, game_img_s FROM user_game_img WHERE id_user=:idUser AND id_game=:idGame");
+        $sql->bindParam(":idUser", $idUser, PDO::PARAM_INT);
+        $sql->bindParam(":idGame", $idGame, PDO::PARAM_INT);
+        $sql->execute();
+        return  $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
     //Удаление картинок пройденной игры, загруженных пользователем
     public function RemoveUserImgGame($deleteImg)
     {
         if(count($deleteImg) > 0){
-            foreach($deleteImg as $image){
+            $imagesId="";
+            $countImg=0;
+            foreach($deleteImg as $imageId){
+                $countImg++;
+                list($id, $image)=explode("$", $imageId);
                 $imgBInfo = pathinfo($image);
                 $imgB = substr($imgBInfo['dirname'], 1)."/".str_replace("_s", "_b", $imgBInfo['filename']).".".$imgBInfo['extension'];
                 $removeImgB = unlink($imgB);
                 $removeImgS = unlink(substr($image, 1));
                 if($removeImgB && $removeImgS ){
-                    $this->conn->dbh->query("DELETE FROM user_game_img WHERE game_img_s='".$image."'");
+                    if($countImg === 1){
+                        $imagesId .= $id;
+                    }else{
+                        $imagesId .= ",".$id;
+                    }
                 }
             }
+            $sql = $this->conn->dbh->prepare("DELETE FROM user_game_img WHERE FIND_IN_SET(id, :id)");
+            $sql->bindParam(":id", $imagesId, PDO::PARAM_STR);
+            $sql->execute();
         }
     }
 

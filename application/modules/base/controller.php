@@ -19,7 +19,7 @@ class Controller extends MainController
     public function ActionIndex()
     {
         $this->AddJs("ajax");
-        $data['games'] = $this->model->GetGames();
+        //$data['games'] = $this->model->GetGames();
         $data['user-completed-games'] = $this->model->GetUserCompletedGames();
         $data['type-complete-game'] = $this->model->GetTypeCompleteGame();
         $this->headerTxt['title'] = "Пройденные игры - GS11";

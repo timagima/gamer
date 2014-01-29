@@ -140,7 +140,7 @@
                                             foreach($data['userGameImg'] as $imgSrc){ ?>
                                                 <div class="edit-image" style="width: 200px;">
                                                     <img src="<?=$imgSrc['game_img_s']?>">
-                                                    <input type="hidden" name="saved-img[]" value="<?=$imgSrc['game_img_s']?>">
+                                                    <input type="hidden" name="saved-img[]" value="<?=$imgSrc['id']."$".$imgSrc['game_img_s']?>">
                                                 </div>
                                             <?php }
                                         }
