@@ -12,6 +12,7 @@ class Model extends MainModel
         parent::__construct();
     }
 
+    //test revert comment
     //Функия принимает массив(из 3-х ячеек) и возвращает Юникс метку времени.
     public function MakeUnixTime($date)
     {
