@@ -55,7 +55,24 @@ class Controller extends MainController
     {
         $this->headerTxt['title'] = 'Легендарные Off-line турниры';
         $data['error'] = '';
+        $result = $_GET['id'];
+        if($result == 1){
+            //echo $result;
+            include $_SERVER['DOCUMENT_ROOT'] . 'skins/tpl/about/legend-tournament-promo.tpl.php';
+            exit();
+        }
+        else if($result == 2){
+            //echo $result;
+           include $_SERVER['DOCUMENT_ROOT'] . 'skins/tpl/about/next-tournament-promo.tpl.php';
+            exit();
+        }
+        else if($result == 3){
+            //echo $result;
+            include $_SERVER['DOCUMENT_ROOT'] . 'skins/tpl/about/winner-promo.tpl.php';
+            exit();
+        }
         $this->view->Generate($this->arrTpl[0], 'about/legend-tournament-promo.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
+
 
     }
     public function ActionWinnerPromo()
@@ -71,17 +88,14 @@ class Controller extends MainController
         $data['error'] = '';
         $this->view->Generate($this->arrTpl[0], 'about/next-tournament-promo.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
 
-    }
-
-
-
-    public function ActionGamesForever()
-    {
-        $this->headerTxt['title'] = 'Игры навсегда';
-        $data['error'] = '';
-        $this->view->Generate($this->arrTpl[0], 'about/games-forever.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
 
     }
+
+
+
+
 
 
 }
+
+

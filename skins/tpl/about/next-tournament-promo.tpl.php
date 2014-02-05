@@ -1,3 +1,34 @@
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var current = 2;
+        $('#select').find('a').on('click',function(){
+            var direction = $(this).attr('id');
+            if(direction === 'next-btn')
+                ++current;
+            else
+                --current;
+            if(current === 0){
+                current = 3;
+
+            }else if(current === 4){
+                current = 1;
+            }
+            doIt(current);
+        });
+        function doIt(current){
+            $.ajax({
+                type: 'GET',
+                url: document.location.href,
+                data: {'id' : current},
+                success: function(data){
+                    $('#main').html(data);
+
+                }
+            });
+        }
+    })
+</script>
 <style>
 #main{width:960px;margin:0 auto;}
 #slider{margin-top:40px;position:relative;background:url(/skins/img/shadow.png) right 1px top 160px no-repeat;overflow:hidden;}
@@ -5,13 +36,8 @@
 #social-buttons{position:absolute;right:38px;top:30px;}
 #social-buttons a{margin-left:10px;}
 #select{position:absolute;right:1px;top:173px;}
-#prev-btn{display:block;width:60px;height:59px;background:url(/skins/img/prev.png)no-repeat;float:left;}
-#next-btn{display:block;width:57px;height:59px;background:url(/skins/img/next.png)no-repeat;margin-left:59px;}
-#bottom-select{width:99px;margin:25px auto;}
-#left-dot, #center-dot, #right-dot{display:block;width:19px;height:19px;float:left;margin:0 7px;}
-#left-dot{background:url(/skins/img/active-dot.png)no-repeat;}
-#center-dot{background:url(/skins/img/inactive-dot.png)no-repeat;}
-#right-dot{background:url(/skins/img/inactive-dot.png)no-repeat;}
+#prev-btn{display:block;width:60px;height:59px;background:url(/skins/img/prev.png)no-repeat;float:left;cursor:pointer;}
+#next-btn{display:block;width:57px;height:59px;background:url(/skins/img/next.png)no-repeat;margin-left:59px;cursor:pointer;}
 .near-tournaments{margin-top:40px;overflow:hidden;padding:0 15px 0 15px;}
 .near-tournaments h3{font-size:25px;font-weight:100;margin-bottom:15px;}
 .near-tournaments h3 a{color:#1fbba6;}
@@ -47,16 +73,12 @@
                 <a href="#"><img src="/skins/img/tw.png" alt="Twitter" /></a>
             </div>
             <div id="select">
-                <a href="#" id="prev-btn"></a>
-                <a href="#" id="next-btn"></a>
+                <a id="prev-btn"></a>
+                <a id="next-btn"></a>
             </div>
             <img src="/skins/img/slider2.jpg" alt="slider"/>
         </div>
-        <div id="bottom-select">
-            <a href="#" id="left-dot"></a>
-            <a href="#" id="center-dot"></a>
-            <a href="#" id="right-dot"></a>
-        </div>
+
     </div>
     <div class="near-tournaments">
         <div class="left-game">
