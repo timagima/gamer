@@ -169,7 +169,8 @@
         img: true,
         uploadUrl: document.location.href,
         method: "UploadUserGameImg",
-        limit: 40
+        limit: 40,
+        multi: true
     }
 
     $(document).ready(function(){

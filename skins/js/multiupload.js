@@ -72,9 +72,9 @@ function multiUploader(config){
     }
     multiUploader.prototype.renderImage = function(arrFile){
         $("#error-img").remove();
-        var multiHtml = "<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' class='"+arrFile[1]+"' name='"+arrFile[1]+"' value='"+arrFile[0]+"' /></div>";
-        var singleHtml = "<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' name='"+arrFile[1]+"[s][]'  value='"+arrFile[0]+"' /><input type='hidden' name='"+arrFile[1]+"[b][]'  value='"+arrFile[2]+"' /></div>";
-        //var filesSmallBigHtml = "<div class='edit-image' id='test-bred'><img src='/"+arrFile[0]+"' /><input type='hidden' class='"+arrFile[1]+"' name='"+arrFile[1]+"[s][]' value='"+arrFile[0]+"' /><input type='hidden' name='"+arrFile[1]+"[b][]' value='"+arrFile[2]+"' /></div>";
+        var multiHtml = "<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' class='"+arrFile[1]+"' name='"+arrFile[1]+"[]' value='"+arrFile[0]+"' /></div></div>";
+        var singleHtml = "<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' name='"+arrFile[1]+"' id='"+arrFile[1]+"' value='"+arrFile[0]+"' /></div></div>";
+        var filesSmallBigHtml = "<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' class='"+arrFile[1]+"[s][]' name='"+arrFile[1]+"[]' value='"+arrFile[0]+"' /><input type='hidden' name='"+arrFile[1]+"[b][]' id='"+arrFile[1]+"' value='"+arrFile[2]+"' /></div></div>";
         var html = (self.config.preview) ? filesSmallBigHtml : multiHtml;
         //debugger;
         if(arrFile.length <= 1){
@@ -85,11 +85,11 @@ function multiUploader(config){
                 $("#"+ self.idDivParent).after(html);
                 if(self.countImg == self.config.limit-1){
                     $("#"+ self.idDivParent).after(html);
-                    //$("#"+self.idDivParent).hide();
+                    $("#"+self.idDivParent).hide();
                 }
             } else {
                 $("#"+ self.idDivParent).after(singleHtml);
-                //$("#"+self.idDivParent).hide();
+                $("#"+self.idDivParent).hide();
             }
         }
     }
@@ -126,15 +126,14 @@ function multiUploader(config){
             var name = Array("Изображение", "img-upload-btn");
         }
         var deletedImg = ($(link[0]).find("input[type=hidden]").val());
-        var testDelImg = '<input type="hidden" name="deletedImg[]" value="' + deletedImg + '">';
+        var DelImg = '<input type="hidden" name="deletedImg[]" value="' + deletedImg + '">';
         if(self.idDivParent !== undefined){
             self.idDivParent = self.idDivParent;
         }else{
-            //self.idDivParent = $(this).parent().attr("id");
-            $("#img-upload-btn").after(testDelImg);
+            var test = $(link[0]).parent().append(DelImg);
         }
         $(link).remove();
-        var html = '<div id="' +name[1]+ '" class="container upload"><span class="btn">' +name[0]+ '</span><input type="file" name="'+val+'" id="'+val+'" /></div>';
+        var html = '<div id="'+name[1]+'" class="container upload"><span class="btn">'+name[0]+'</span><input type="file" name="'+val+'" id="'+val+'" /></div>';
         //debugger;
         if(self.config.multi){
             var limit = self.config.limit-1 - self.countImg;
@@ -144,7 +143,6 @@ function multiUploader(config){
             }
         }else{
             $("#"+self.idDivParent).show();
-            //$("#"+self.idDivParent).after(testDelImg);
             $(link).after(html);
         }
     }
@@ -171,7 +169,6 @@ function multiUploader(config){
             }
         }
     }
-
     multiUploader.prototype.progressHandlingFunction = function(e){
         if (e.lengthComputable) {
             var percentComplete = parseInt((e.loaded / e.total) * 100);

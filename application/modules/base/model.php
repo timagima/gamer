@@ -109,11 +109,11 @@ class Model extends MainModel
         if(isset($this->_p['source_img'])){
             $idUser = (int)$_SESSION['user-data']['id'];
             $idGame = (int)$this->_p['game-id'];
-            for($i=0; $i < count($this->_p['source_img']['s']);$i++){
-                $imgS = "storage/user_img/" . $_SESSION['user-data']['path'] . "/" . basename($this->_p['source_img']['s'][$i]);
-                $imgB = "storage/user_img/" . $_SESSION['user-data']['path'] . "/" . basename($this->_p['source_img']['b'][$i]);
-                $oldImgS = $this->_p['source_img']['s'][$i];
-                $oldImgB = $this->_p['source_img']['b'][$i];
+            for($i=0; $i < count($this->_p['source_img']); $i++){
+                $imgS = "storage/user_img/" . $_SESSION['user-data']['path'] . "/" . basename($this->_p['source_img'][$i]);
+                $imgB = str_replace("_s", "_b", $imgS);
+                $oldImgS = $this->_p['source_img'][$i];
+                $oldImgB = str_replace("_s", "_b", $oldImgS);
                 if(rename($oldImgS, $imgS) && rename($oldImgB, $imgB)){
                     $imgS = "/".$imgS;
                     $imgB = "/".$imgB;
