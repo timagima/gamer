@@ -12,7 +12,6 @@ class Model extends MainModel
         parent::__construct();
     }
 
-    //test revert comment
     //Функия принимает массив(из 3-х ячеек) и возвращает Юникс метку времени.
     public function MakeUnixTime($date)
     {
@@ -29,10 +28,21 @@ class Model extends MainModel
         }
     }
 
+    //Проверка дат начала и конца прохождения игры, также относительно текущего времени согласно логики
+    public function CheckGameTimePassing(&$start, &$end, $now=PHP_INT_MAX)
+    {
+        $startCopy=$start;
+        if($start > $end){
+            $start = $end;
+            $end = $startCopy;
+        }
+        if($end > $now)
+            $end = $now;
+    }
+
     //Добавление пройденной игры в БД
     public function AddCompletedGame()
     {
-        //todo сделать проверку начало и конца прохождения игры, согласно логики времени
         $gameStartDate = $this->_p['game-start-date'];
         $gameEndDate = $this->_p['game-end-date'];
         $gameStartDate = (((int)$gameStartDate) > 0) ? $this->MakeUnixTime(explode("-", $gameStartDate, 3)) : 0;
@@ -40,32 +50,33 @@ class Model extends MainModel
         $idLevelGame = explode("\$", $this->_p['game-level']);
         $idGame = (isset($idLevelGame[1]))?(int)$idLevelGame[1]:0;
         $idLevel = (int)$idLevelGame[0];
-        $questQount = (int)$this->_p['quest-qount'];
+        $questCount = (int)$this->_p['quest-qount'];
         $idGamePassing = (int)$this->_p['game-passing'];
         $idUser = (int)$_SESSION['user-data']['id'];
         $gameDescription = $this->_p['game-description'];
         $userRating = floatval($this->_p['game-rating']);
         $postDate = time();
+        $this->CheckGameTimePassing($gameStartDate, $gameEndDate, $postDate);
         $checkAddedGame = $this->conn->dbh->query("SELECT id_game FROM user_completed_games WHERE id_game=" . $idGame . " AND id_user=" . $idUser)->fetch(PDO::FETCH_ASSOC);
         $checkGame = $this->conn->dbh->query("SELECT name FROM games WHERE id = ".$idGame)->fetch(PDO::FETCH_ASSOC);
         if ($checkAddedGame === false && $checkGame !== false) {
-            $stmt = $this->conn->dbh->prepare("INSERT INTO user_completed_games (id_user, id_game, id_level, about_game, start_date, end_date, post_date, num_quest, id_type_completed_game, user_rating) VALUES(:idUser, :idGame, :idLevel, :gameDescription, :startDate, :endDate, :postDate, :questQount, :idGamePassing, :userRating)");
+            $stmt = $this->conn->dbh->prepare("INSERT INTO user_completed_games (id_user, id_game, id_level, about_game, start_date, end_date, post_date, num_quest, id_type_completed_game, user_rating) VALUES(:idUser, :idGame, :idLevel, :gameDescription, :startDate, :endDate, :postDate, :questCount, :idGamePassing, :userRating)");
             $stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
             $stmt->bindParam(":idGame", $idGame, PDO::PARAM_INT);
             $stmt->bindParam(":idLevel", $idLevel, PDO::PARAM_INT);
             $stmt->bindParam(":startDate", $gameStartDate, PDO::PARAM_INT);
             $stmt->bindParam(":endDate", $gameEndDate, PDO::PARAM_INT);
             $stmt->bindParam(":postDate", $postDate, PDO::PARAM_INT);
-            $stmt->bindParam(":questQount", $questQount, PDO::PARAM_INT);
+            $stmt->bindParam(":questCount", $questCount, PDO::PARAM_INT);
             $stmt->bindParam(":idGamePassing", $idGamePassing, PDO::PARAM_INT);
             $stmt->bindParam(":userRating", $userRating, PDO::PARAM_INT);
             $stmt->bindParam(":gameDescription", $gameDescription, PDO::PARAM_STR);
-            $getQuery = $stmt->execute();
+            $stmt->execute();
             $updateRating = $this->conn->dbh->prepare("UPDATE games_rating SET rating = rating + :rating, suffrage_count=suffrage_count+1
                                                         WHERE id_game=:idGame");
             $updateRating->bindParam(":rating", $userRating, PDO::PARAM_INT);
             $updateRating->bindParam(":idGame", $idGame, PDO::PARAM_INT);
-            $getUpdate= $updateRating->execute();
+            $updateRating->execute();
             return ("addGame");
         } elseif ($checkAddedGame !== false) {
             return ("isGame");
@@ -77,56 +88,33 @@ class Model extends MainModel
     //Изменение ранее добавленной игры
     public function UpdateAddedGame()
     {
-        //todo сделать проверку начало и конца прохождения игры, согласно логики времени
         $gameStartDate = $this->_p['game-start'];
         $gameEndDate = $this->_p['game-end'];
         $gameStartDate = (((int)$gameStartDate) > 0) ? $this->MakeUnixTime(explode("-", $gameStartDate, 3)) : 0;
         $gameEndDate = (((int)$gameEndDate) > 0) ? $this->MakeUnixTime(explode("-", $gameEndDate, 3)) : 0;
+        $now = time();
+        $this->CheckGameTimePassing($gameStartDate, $gameEndDate, $now);
         $idGame = (int)$this->_p['game-id'];
         $idLevel = (int)$this->_p['level-id'];
-        $questQount = (int)$this->_p['quest-qount'];
+        $questCount = (int)$this->_p['quest-qount'];
         $idGamePassing = (int)$this->_p['game-passing'];
         $idUser = (int)$_SESSION['user-data']['id'];
         $gameDescription = $this->_p['game-description'];
         $stmt = $this->conn->dbh->prepare("UPDATE user_completed_games
-                                            SET id_level=:idLevel, id_type_completed_game=:idGamePassing, num_quest=:questQount, start_date=:startDate, end_date=:endDate, about_game=:gameDescription
+                                            SET id_level=:idLevel, id_type_completed_game=:idGamePassing, num_quest=:questCount, start_date=:startDate, end_date=:endDate, about_game=:gameDescription
                                             WHERE id_user=:idUser AND id_game=:idGame");
         $stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
         $stmt->bindParam(":idGame", $idGame, PDO::PARAM_INT);
         $stmt->bindParam(":idLevel", $idLevel, PDO::PARAM_INT);
         $stmt->bindParam(":startDate", $gameStartDate, PDO::PARAM_INT);
         $stmt->bindParam(":endDate", $gameEndDate, PDO::PARAM_INT);
-        $stmt->bindParam(":questQount", $questQount, PDO::PARAM_INT);
+        $stmt->bindParam(":questCount", $questCount, PDO::PARAM_INT);
         $stmt->bindParam(":idGamePassing", $idGamePassing, PDO::PARAM_INT);
         $stmt->bindParam(":gameDescription", $gameDescription, PDO::PARAM_STR);
-        $getQuery = $stmt->execute();
+        $stmt->execute();
         return true;
     }
 
-    //Загрузка изображений на сервер в папку пользователя.
-    public function UploadUserGameImg()
-    {
-        if(isset($this->_p['source_img'])){
-            $idUser = (int)$_SESSION['user-data']['id'];
-            $idGame = (int)$this->_p['game-id'];
-            for($i=0; $i < count($this->_p['source_img']); $i++){
-                $imgS = "storage/user_img/" . $_SESSION['user-data']['path'] . "/" . basename($this->_p['source_img'][$i]);
-                $imgB = str_replace("_s", "_b", $imgS);
-                $oldImgS = $this->_p['source_img'][$i];
-                $oldImgB = str_replace("_s", "_b", $oldImgS);
-                if(rename($oldImgS, $imgS) && rename($oldImgB, $imgB)){
-                    $imgS = "/".$imgS;
-                    $imgB = "/".$imgB;
-                    $sql = $this->conn->dbh->prepare("INSERT INTO user_game_img SET id_user=:idUser, id_game=:idGame, game_img_s=:imgS, game_img_b=:imgB");
-                    $sql->bindParam(":idUser", $idUser, PDO::PARAM_INT);
-                    $sql->bindParam(":idGame", $idGame, PDO::PARAM_INT);
-                    $sql->bindParam(":imgS", $imgS, PDO::PARAM_STR);
-                    $sql->bindParam(":imgB", $imgB, PDO::PARAM_STR);
-                    $sql->execute();
-                }
-            }
-        }
-    }
 
     //Получение пройденных игр из БД
     public function GetUserCompletedGames()
@@ -188,6 +176,31 @@ class Model extends MainModel
         $sql = $this->conn->dbh->prepare("SELECT * FROM type_complete_game");
         $sql->execute();
         return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //Загрузка изображений на сервер в папку пользователя.
+    public function UploadUserGameImg()
+    {
+        if(isset($this->_p['source_img'])){
+            $idUser = (int)$_SESSION['user-data']['id'];
+            $idGame = (int)$this->_p['game-id'];
+            for($i=0; $i < count($this->_p['source_img']); $i++){
+                $imgS = "storage/user_img/" . $_SESSION['user-data']['path'] . "/" . basename($this->_p['source_img'][$i]);
+                $imgB = str_replace("_s", "_b", $imgS);
+                $oldImgS = $this->_p['source_img'][$i];
+                $oldImgB = str_replace("_s", "_b", $oldImgS);
+                if(rename($oldImgS, $imgS) && rename($oldImgB, $imgB)){
+                    $imgS = "/".$imgS;
+                    $imgB = "/".$imgB;
+                    $sql = $this->conn->dbh->prepare("INSERT INTO user_game_img SET id_user=:idUser, id_game=:idGame, game_img_s=:imgS, game_img_b=:imgB");
+                    $sql->bindParam(":idUser", $idUser, PDO::PARAM_INT);
+                    $sql->bindParam(":idGame", $idGame, PDO::PARAM_INT);
+                    $sql->bindParam(":imgS", $imgS, PDO::PARAM_STR);
+                    $sql->bindParam(":imgB", $imgB, PDO::PARAM_STR);
+                    $sql->execute();
+                }
+            }
+        }
     }
 
     //Получение массива картинок пройденной игры пользователя
