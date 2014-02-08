@@ -72,19 +72,16 @@ function multiUploader(config){
     }
     multiUploader.prototype.renderImage = function(arrFile){
         $("#error-img").remove();
-        var multiHtml = "<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' class='"+arrFile[1]+"' name='"+arrFile[1]+"[]' value='"+arrFile[0]+"' /></div></div>";
-        var singleHtml = "<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' name='"+arrFile[1]+"' id='"+arrFile[1]+"' value='"+arrFile[0]+"' /></div></div>";
-        var filesSmallBigHtml = "<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' class='"+arrFile[1]+"[s][]' name='"+arrFile[1]+"[]' value='"+arrFile[0]+"' /><input type='hidden' name='"+arrFile[1]+"[b][]' id='"+arrFile[1]+"' value='"+arrFile[2]+"' /></div></div>";
-        var html = (self.config.preview) ? filesSmallBigHtml : multiHtml;
-        //debugger;
+        var multiHtml = "<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' class='"+arrFile[1]+"' name='"+arrFile[1]+"[]' value='"+arrFile[0]+"' /></div>";
+        var singleHtml = "<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' name='"+arrFile[1]+"' id='"+arrFile[1]+"' value='"+arrFile[0]+"' /></div>";
         if(arrFile.length <= 1){
             $("#"+ self.idDivParent).after('<div id="error-img" class="right error">'+arrFile[0]+'</div>');
         } else {
             if(self.config.multi){
                 self.countImg = $("."+arrFile[1]).length;
-                $("#"+ self.idDivParent).after(html);
+                $("#"+ self.idDivParent).after(multiHtml);
                 if(self.countImg == self.config.limit-1){
-                    $("#"+ self.idDivParent).after(html);
+                    $("#"+ self.idDivParent).after(multiHtml);
                     $("#"+self.idDivParent).hide();
                 }
             } else {

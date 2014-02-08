@@ -95,28 +95,28 @@
                                         }
                                         ?>
                                     </select><br><br>
-                                    Количество квестов: <input id="quest-count" type="text" style="width:50px; margin-right: 40px"
-                                        value="<?=($data['num_quest']==false)?'Null':$data['num_quest']?>" name="quest-qount"/>
-                                    <label class="checkbox"><input type="checkbox" id="not-quest-count"/> Не помню </label>
+                                    Количество квестов: <input id="quest-count" type="text" style="width:50px; margin-right: 40px; <?=(!$data['num_quest'])?"visibility: hidden;":""?> "
+                                        value="<?=($data['num_quest']==false)?'Null':$data['num_quest']?>" name="quest-qount" />
+                                    <label class="checkbox"><input type="checkbox" id="not-quest-count" <?=(!$data['num_quest'])?"checked":""?>/> Не помню </label>
                                     <div style="float: right; margin: 0px -100px 0px 0px;" class="b-validation">
                                         <div class="tooltip" id="game-quest"></div>
                                     </div><br><br>
                                     Начал играть: <input id="game-start-date" type="text"
-                                                         value="<?=($data['start_date']==false)?'дд-мм-гггг':date('d-m-Y', $data['start_date'])?>"
+                                                         value="<?=(!$data['start_date'])?'Не помню':date('d-m-Y', $data['start_date'])?>"
                                                          onfocus="this.select();_Calendar.lcs(this)"
                                            onclick="event.cancelBubble=true;this.select();_Calendar.lcs(this)" style="width: 90px" readonly="readonly" name="game-start"/>
                                     <label class="checkbox">
-                                        <input type="checkbox" id="game-not-start-date" value="start-date" class="disable-date"/>Не помню
+                                        <input type="checkbox" id="game-not-start-date" value="start-date" class="disable-date" <?=(!$data['start_date'])?"checked":""?>/>Не помню
                                     </label>
                                     <div style="float: right; margin: 0px -100px 0px 0px;" class="b-validation">
                                         <div class="tooltip" id="game-start" style="margin-left: 28px;"></div>
                                     </div><br><br>
                                     Закончил играть: <input id="game-end-date" type="text"
-                                                            value="<?=($data['end_date']==false)?'дд-мм-гггг':date('d-m-Y', $data['end_date'])?>"
+                                                            value="<?=(!$data['end_date'])?'Не помню':date('d-m-Y', $data['end_date'])?>"
                                                             onfocus="this.select();_Calendar.lcs(this)"
                                            onclick="event.cancelBubble=true;this.select();_Calendar.lcs(this)" style="width: 90px" readonly="readonly" name="game-end"/>
                                     <label class="checkbox">
-                                        <input type="checkbox" id="game-not-end-date" class="disable-date" value="end-date"/>Не помню
+                                        <input type="checkbox" id="game-not-end-date" class="disable-date" value="end-date" <?=(!$data['end_date'])?"checked":""?>/>Не помню
                                     </label>
                                     <div style="float: right; margin: 0px -100px 0px 0px;" class="b-validation">
                                         <div class="tooltip" id="game-end" style="margin-left: 28px;"></div>

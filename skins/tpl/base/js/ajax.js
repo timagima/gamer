@@ -72,7 +72,7 @@ $(function () {
 
 
                     } else {
-                        var rating = parseInt(level[1].rating) / parseInt(level[1].suffrage_count);
+                        var rating = parseFloat(level[1].rating) / parseInt(level[1].suffrage_count);
                         var votes = parseInt(level[1].suffrage_count);
                         gameRatingView = true;
                         $("#game-rating-parent").html(
@@ -239,7 +239,7 @@ $(function () {
 
     $("#send-completed-game").click(function(){addCompletedGames()});
 
-
+    // Сохранение изменений пройденной игры
     $("form").submit(function() {
         var gameDescription = $.trim($("#game-description").val());
         var gameStart = $("#game-start-date").val();
