@@ -53,43 +53,40 @@ class Controller extends MainController
     }
     public function ActionPromo()
     {
-        $this->headerTxt['title'] = 'Легендарные Off-line турниры';
+
+        $result = $_GET['page'];
+        $this->headerTxt['title']='Промо страница';
         $data['error'] = '';
-        $result = $_GET['id'];
-        if($result == 1){
-            //echo $result;
+
+
+        if($result == ''){
+            $this->view->Generate($this->arrTpl[0], 'about/legend-tournament-promo.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data,  $this->headerTxt, $this->model->CountQuery());
+             exit();
+        }
+        else if($result == '/about/promo'){
             include $_SERVER['DOCUMENT_ROOT'] . 'skins/tpl/about/legend-tournament-promo.tpl.php';
             exit();
         }
-        else if($result == 2){
-            //echo $result;
+        else if($result == 'next-tournament-promo'){
+            $this->view->Generate($this->arrTpl[0], 'about/next-tournament-promo.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data,  $this->headerTxt, $this->model->CountQuery());
+        }
+         else if($result == '?page=next-tournament-promo'){
            include $_SERVER['DOCUMENT_ROOT'] . 'skins/tpl/about/next-tournament-promo.tpl.php';
-            exit();
+         exit();
+         }
+        else if($result == 'winner-promo'){
+            $this->view->Generate($this->arrTpl[0], 'about/winner-promo.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data,  $this->headerTxt, $this->model->CountQuery());
         }
-        else if($result == 3){
-            //echo $result;
+         else if($result == '?page=winner-promo'){
             include $_SERVER['DOCUMENT_ROOT'] . 'skins/tpl/about/winner-promo.tpl.php';
-            exit();
-        }
-        $this->view->Generate($this->arrTpl[0], 'about/legend-tournament-promo.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
+         exit();
+         }
+
+
 
 
     }
-    public function ActionWinnerPromo()
-    {
-        $this->headerTxt['title'] = 'Победители Off-line турниров';
-        $data['error'] = '';
-        $this->view->Generate($this->arrTpl[0], 'about/winner-promo.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
 
-    }
-    public function ActionNextTournamentPromo()
-    {
-        $this->headerTxt['title'] = 'Ближайшие Off-line турниры';
-        $data['error'] = '';
-        $this->view->Generate($this->arrTpl[0], 'about/next-tournament-promo.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
-
-
-    }
 
 
 

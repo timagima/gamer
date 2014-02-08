@@ -4,29 +4,38 @@
         var current = 3;
         $('#select').find('a').on('click',function(){
             var direction = $(this).attr('id');
-            if(direction === 'next-btn')
-                ++current;
-            else
-                --current;
-            if(current === 0){
-                current = 3;
-
-            }else if(current === 4){
-                current = 1;
-            }
+            if(direction === 'next-btn') ++current;
+            else --current;
+            if(current === 0){current = 3;
+            }else if(current === 4){current = 1;}
+            var link = '';
+            switch(current){
+                case 2: link = '?page=next-tournament-promo';break;
+                case 3: link = '?page=winner-promo';break;
+                default: link = '/about/promo';}
+            current = link;
             doIt(current);
-        });
+
+
+});
+
         function doIt(current){
             $.ajax({
                 type: 'GET',
                 url: document.location.href,
-                data: {'id' : current},
+                data: {'page' : current},
                 success: function(data){
                     $('#main').html(data);
-
                 }
             });
+
+            history.pushState(null, null, current);
+
         }
+        $(window).on('popstate', function(e) {
+            doIt(document.location.pathname);
+
+        });
     })
 </script>
 <style>
