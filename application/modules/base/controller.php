@@ -19,7 +19,7 @@ class Controller extends MainController
     public function ActionIndex()
     {
         $this->AddJs("ajax");
-        //$data['games'] = $this->model->GetGames();
+        $data['check-user-id'] = (int)$_SESSION['user-data']['id'];
         $data['user-completed-games'] = $this->model->GetUserCompletedGames();
         $data['type-complete-game'] = $this->model->GetTypeCompleteGame();
         $this->headerTxt['title'] = "Пройденные игры - GS11";
@@ -29,7 +29,8 @@ class Controller extends MainController
     public function ActionView($idGame)
     {
         if($idGame){
-            $data = $this->model->GetGameView($idGame);
+            $idUser = (int)$this->_g['iduser'];
+            $data = $this->model->GetGameView($idGame, $idUser);
             $this->headerTxt['title'] = "$data[game] - GS11";
             $this->view->Generate('menu/auth-menu.tpl.php', 'base/game-view.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());
         }
@@ -56,6 +57,20 @@ class Controller extends MainController
         $this->model->RemoveUserImgGame($this->_p['deletedImg']);
         $data = "";
         $this->view->Generate('menu/auth-menu.tpl.php', 'base/game-chanched.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());
+    }
+
+    public function ActionUsers()
+    {
+        $data['users-completed-game'] = $this->model->GetUsersCompletedGame();
+        $this->view->Generate('menu/auth-menu.tpl.php', 'base/users.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());
+    }
+
+    public function ActionUserGames($idUser)
+    {
+        $data['games'] = $this->model->GetUserCompletedGames($idUser);
+        $data['user-completed-games'] = $this->model->GetUserCompletedGames($idUser);
+        $this->headerTxt['title'] = "Игры пользователя {$data['games'][0]['nick']} - GS11";
+        $this->view->Generate('menu/auth-menu.tpl.php', 'base/add-completed-games.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());
     }
 
 

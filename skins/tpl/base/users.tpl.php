@@ -10,8 +10,14 @@
                         <div class='left'>
 
                             <div class="game-content">
-                                <h1>Даныые успешно изменены!</h1>
-                                <?php var_dump($_POST)?>
+
+                                <ol><h1>Пользователи!</h1>
+                                    <?php
+                                    foreach($data['users-completed-game'] as $user){?>
+                                        <li><a href="/base/UserGames/<?=$user['id']?>"><?=$user['nick']?></a></li>
+                                    <?php }
+                                    ?>
+                                </ol>
                             </div>
 
                         </div>

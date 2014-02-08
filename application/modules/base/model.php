@@ -117,14 +117,15 @@ class Model extends MainModel
 
 
     //Получение пройденных игр из БД
-    public function GetUserCompletedGames()
+    public function GetUserCompletedGames($idUser=false)
     {
-        $idUser = (int)$_SESSION['user-data']['id'];
+        $idUser = (!$idUser) ? (int)$_SESSION['user-data']['id'] : (int)$idUser;
         $sql = $this->conn->dbh->prepare("SELECT ucg.num_quest, ucg.start_date, ucg.end_date, ucg.post_date, ucg.about_game,
                                             games.name as game, games.source_img_b, games.source_img_s, games.id,
                                             level.name as level, level.description as level_description,
                                             tcg.name as type_complete_game,
-                                            genre.name as genre
+                                            genre.name as genre,
+                                            users.nick, users.id as id_user
                                         FROM user_completed_games ucg
                                         LEFT JOIN users ON users.id=ucg.id_user
                                         LEFT JOIN games ON games.id=ucg.id_game
@@ -138,13 +139,13 @@ class Model extends MainModel
     }
 
     //Получение информации о пройденной игре пользователя по ИД игры
-    public function GetGameView($idGame)
+    public function GetGameView($idGame, $idUser=false)
     {
         /*for($i=1; $i<=189; $i++){
             $r = floatval(mt_rand(30, 49).".".mt_rand(3, 8));
             $checkGame = $this->conn->dbh->query("UPDATE games_rating SET rating = ".$r." , suffrage_count = 10  WHERE id_game= ".$i);
         }*/
-        $idUser = (int)$_SESSION['user-data']['id'];
+        $idUser = (!$idUser) ? (int)$_SESSION['user-data']['id'] : (int)$idUser;
         $idGame = (int)$idGame;
         $sql = $this->conn->dbh->prepare("SELECT ucg.num_quest, ucg.start_date, ucg.end_date, ucg.post_date, ucg.about_game, ucg.id_game,
                                             games.name as game, games.source_img_b, games.source_img_s,
@@ -313,13 +314,34 @@ class Model extends MainModel
     {
         $idGame = (int)$idGame;
         $idUser = (int)$_SESSION['user-data']['id'];
-        $stmt = $this->conn->dbh->prepare("SELECT user_rating FROM user_completed_games
-                                            WHERE id_game = :idGame AND id_user= :idUser");
+        $stmt = $this->conn->dbh->prepare("SELECT user_rating FROM user_completed_games WHERE id_game = :idGame AND id_user= :idUser");
         $stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
         $stmt->bindParam(":idGame", $idGame, PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return ($result == false) ? false : $result['user_rating'];
     }
+
+    public function GetUsersCompletedGame()
+    {
+        $idUser = (int)$_SESSION['user-data']['id'];
+        $sql = $this->conn->dbh->prepare("SELECT DISTINCT u.id, u.nick FROM users u
+                                            LEFT JOIN user_completed_games ucg ON ucg.id_user=u.id
+                                            LEFT JOIN games g ON g.id=ucg.id_game
+                                            WHERE NOT EXISTS(SELECT u2.id FROM users u2 WHERE u2.id=:idUser AND u.id=u2.id)
+                                            AND u.complete_games>0 GROUP BY u.nick ORDER BY u.nick");
+        $sql->bindparam(":idUser", $idUser, PDO::PARAM_INT);
+        $sql->execute();
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /*public function GetUsersCompletedGames($idUser)
+    {
+        $idUser = (int)$idUser;
+        $sql = $this->conn->dbh->prepare("SELECT ");
+        $sql->bindparam(":idUser", $idUser, PDO::PARAM_INT);
+        $sql->execute();
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }*/
 }
 
