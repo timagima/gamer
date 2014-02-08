@@ -17,10 +17,7 @@
 
 
 });
-        $(window).on('popstate', function(e) {
-            doIt(document.location.pathname);
 
-        });
 
 
         function doIt(current){
@@ -36,6 +33,10 @@
             history.pushState(null, null, current);
 
         }
+        $(window).on('popstate', function(e) {
+            doIt(document.location.pathname);
+
+        });
     })
 </script>
 <style>

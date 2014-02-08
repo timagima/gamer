@@ -14,21 +14,12 @@
                 default: link = '/about/promo';}
             current = link;
 
-            setInterval(doIt(current),600);
+            doIt(current);
 
 
 
 
 });
-        $(window).on('popstate', function(e) {
-            doIt(document.location.pathname);
-
-        });
-
-
-
-
-
         function doIt(current){
             $.ajax({
                 type: 'GET',
@@ -42,6 +33,10 @@
             history.pushState(null, null, current);
 
         }
+        $(window).on('popstate', function(e) {
+            doIt(document.location.pathname);
+
+        });
     })
 </script>
 
