@@ -74,11 +74,18 @@
                         <div class='left'>
 
                             <!-- Форма добавления пройденных игр Добавить пройденную игру<br>-->
+                            <?php
+                            $idSession = (int)$_SESSION['user-data']['id'];
+                            $idCheck = $data['check-user-id'];
+                            if($idSession === $idCheck) {
+                            ?>
                             <div>
                                 <a data-reveal-id="edit-main-data" href="javascript:showModal('box-modal-data-gamer')"
                                    data-animation="fade" style="cursor: pointer; text-decoration: none;  color:#507fb6">Добавить
                                     пройденную игру</a>
+                                <br><a href="/base/users/">Пользователи</a>
                             </div>
+                            <?php } ?>
                             <!-- таблица с пройденными играми пользователя здесь таблица с пройденными играми пользователя<br>-->
                             <?php
                             foreach ($data['user-completed-games'] as $arrayGame) {?>
@@ -92,8 +99,12 @@
                                         </p>
                                     </div>
                                     <div class="game-v-ch" style="font: italic bold small serif">
-                                        <a href='<?= "/base/view/$arrayGame[id]" ?>'>Читать подробнее</a>
+                                        <a href='<?= "/base/view/$arrayGame[id]?iduser={$data['user-completed-games'][0]['id_user']}" ?>'>Читать подробнее</a>
+                                        <?php
+                                        if($idSession === $idCheck) {
+                                        ?>
                                         <a href='<?= "/base/edit/$arrayGame[id]" ?>' style="float: right">Редактировать</a>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             <?php }
