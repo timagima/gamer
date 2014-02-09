@@ -30,6 +30,7 @@
 
         });
         window.onpopstate = function(e){
+
             var str = JSON.stringify(history);
             var n1 = str.indexOf(":");
             var n2 = str.lastIndexOf("n");
@@ -43,6 +44,7 @@
                 }
             })
         }
+
     })
 </script>
 <style>
