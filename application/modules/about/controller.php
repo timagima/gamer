@@ -63,21 +63,21 @@ class Controller extends MainController
             $this->view->Generate($this->arrTpl[0], 'about/legend-tournament-promo.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data,  $this->headerTxt, $this->model->CountQuery());
              exit();
         }
-        else if($result == "/about/promo"){
+        else if($result == '/about/promo'){
             include $_SERVER['DOCUMENT_ROOT'] . 'skins/tpl/about/legend-tournament-promo.tpl.php';
             exit();
         }
-        else if($result == "next-tournament-promo"){
+        else if($result == 'next-tournament-promo'){
             $this->view->Generate($this->arrTpl[0], 'about/next-tournament-promo.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data,  $this->headerTxt, $this->model->CountQuery());
         }
-         else if($result == "?page=next-tournament-promo"){
+         else if($result == '?page=next-tournament-promo'){
            include $_SERVER['DOCUMENT_ROOT'] . 'skins/tpl/about/next-tournament-promo.tpl.php';
          exit();
          }
-        else if($result == "winner-promo"){
+        else if($result == 'winner-promo'){
             $this->view->Generate($this->arrTpl[0], 'about/winner-promo.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data,  $this->headerTxt, $this->model->CountQuery());
         }
-         else if($result == "?page=winner-promo"){
+         else if($result == '?page=winner-promo'){
             include $_SERVER['DOCUMENT_ROOT'] . 'skins/tpl/about/winner-promo.tpl.php';
          exit();
          }
