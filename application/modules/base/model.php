@@ -219,6 +219,7 @@ class Model extends MainModel
     //Удаление картинок пройденной игры, загруженных пользователем
     public function RemoveUserImgGame($deleteImg)
     {
+        // todo: вынести в из цикла запрос
         if(count($deleteImg) > 0){
             $imagesId="";
             $countImg=0;
@@ -297,6 +298,7 @@ class Model extends MainModel
         return json_encode($result);
     }
 
+
     //Метод проверки наличия игры в таблеце "Пройденных игр"
     public function CheckAddedGames($idGame)
     {
@@ -328,8 +330,7 @@ class Model extends MainModel
         $sql = $this->conn->dbh->prepare("SELECT DISTINCT u.id, u.nick FROM users u
                                             LEFT JOIN user_completed_games ucg ON ucg.id_user=u.id
                                             LEFT JOIN games g ON g.id=ucg.id_game
-                                            WHERE NOT EXISTS(SELECT u2.id FROM users u2 WHERE u2.id=:idUser AND u.id=u2.id)
-                                            AND u.complete_games>0 GROUP BY u.nick ORDER BY u.nick");
+                                            WHERE ucg.id_user <> 13 AND u.complete_games>0 GROUP BY u.nick ORDER BY u.nick");
         $sql->bindparam(":idUser", $idUser, PDO::PARAM_INT);
         $sql->execute();
         return $sql->fetchAll(PDO::FETCH_ASSOC);
