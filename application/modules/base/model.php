@@ -31,13 +31,15 @@ class Model extends MainModel
     //Проверка дат начала и конца прохождения игры, также относительно текущего времени согласно логики
     public function CheckGameTimePassing(&$start, &$end, $now=PHP_INT_MAX)
     {
-        $startCopy=$start;
-        if($start > $end){
+        if($start > $now)
+            $start = $now;
+        if($end > $now)
+            $end = $now;
+        if($start > $end && $end !== 0){
+            $startCopy=$start;
             $start = $end;
             $end = $startCopy;
         }
-        if($end > $now)
-            $end = $now;
     }
 
     //Добавление пройденной игры в БД
@@ -132,7 +134,7 @@ class Model extends MainModel
                                         LEFT JOIN level ON level.id=ucg.id_level
                                         LEFT JOIN type_complete_game tcg ON tcg.id=ucg.id_type_completed_game
                                         LEFT JOIN genre ON genre.id=games.genre_id
-                                        WHERE users.id=:idUser ORDER BY game");
+                                        WHERE users.id=:idUser ORDER BY games.name");
         $sql->bindParam(":idUser", $idUser, PDO::PARAM_INT);
         $sql->execute();
         return $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -330,7 +332,7 @@ class Model extends MainModel
         $sql = $this->conn->dbh->prepare("SELECT DISTINCT u.id, u.nick FROM users u
                                             LEFT JOIN user_completed_games ucg ON ucg.id_user=u.id
                                             LEFT JOIN games g ON g.id=ucg.id_game
-                                            WHERE ucg.id_user <> 13 AND u.complete_games>0 GROUP BY u.nick ORDER BY u.nick");
+                                            WHERE ucg.id_user <> :idUser AND u.complete_games>0 ORDER BY u.nick");
         $sql->bindparam(":idUser", $idUser, PDO::PARAM_INT);
         $sql->execute();
         return $sql->fetchAll(PDO::FETCH_ASSOC);
