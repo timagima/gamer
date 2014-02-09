@@ -1,43 +1,63 @@
+
 <script type="text/javascript">
     $(document).ready(function(){
         var current = 1;
         $('#select').find('a').on('click',function(){
             var direction = $(this).attr('id');
-            if(direction === 'next-btn') ++current;
-            else --current;
-            if(current === 0){current = 3;
-            }else if(current === 4){current = 1;}
+            if(direction === 'next-btn')
+                ++current;
+            else
+                --current;
             var link = '';
             switch(current){
                 case 2: link = '?page=next-tournament-promo';break;
                 case 3: link = '?page=winner-promo';break;
                 default: link = '/about/promo';}
-            current = link;
+            if(current == 2){
+                current = '/about/promo';
+                history.pushState(current,null,current);
 
-            doIt(current);
+            }
+            if(current == 0){
+                $('#prev-btn').off('click');
+                current = '/about/promo';
 
+            }else{
+                current = link;
+                history.pushState(current,null,current);
+            }
 
-
-
-});
-        function doIt(current){
             $.ajax({
                 type: 'GET',
                 url: document.location.href,
-                data: {'page' : current},
+                data: {"page":current},
                 success: function(data){
                     $('#main').html(data);
                 }
-            });
-
-            history.pushState(null, null, current);
-
-        }
-        $(window).on('popstate', function(e) {
-            doIt(document.location.pathname);
+            })
 
         });
+        window.onpopstate = function(e){
+            var str = JSON.stringify(history);
+            var n1 = str.indexOf(":");
+            var n2 = str.lastIndexOf("n");
+            var newStr = str.substring(n1+2,n2-5);
+
+            $.ajax({
+                type: 'GET',
+                url: document.location.href,
+                data: {"page": newStr},
+                success: function(data){
+                    $('#main').html(data);
+                }
+            })
+        }
     })
+
+
+
+
+
 </script>
 
 <style>
@@ -84,8 +104,8 @@
                 <a href="#"><img src="/skins/img/tw.png" alt="Twitter" /></a>
             </div>
             <div id="select">
-                <a id="prev-btn" ></a>
-                <a id="next-btn" ></a>
+                <a  id="prev-btn" ></a>
+                <a  id="next-btn" ></a>
             </div>
 
                <img src="/skins/img/slider1.jpg" alt="slider"/>

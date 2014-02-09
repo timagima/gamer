@@ -6,12 +6,14 @@
     <meta name="description" content="<?=$headerTxt['description']; ?>" />
     <link type="text/css" rel="stylesheet" href="/skins/css/style.css"/>
 
+    <script type="text/javascript" src="/skins/js/history.js?type=/&redirect=true&basepath=/skins/"></script>
     <script type="text/javascript" src="/skins/js/jquery.min.js"></script>
     <script type="text/javascript" src="/skins/js/script.js"></script>
     <script type="text/javascript" src="/skins/js/jquery.poshytip.js"></script>
     <script type="text/javascript" src="/skins/js/arctic-modal.min.js"></script>
     <script type="text/javascript" src="/skins/js/jquery.autocomplete.js"></script>
     <script type="text/javascript" src="/skins/js/jquery.customSelect.js"></script>
+
 
 </head>
 <style>
