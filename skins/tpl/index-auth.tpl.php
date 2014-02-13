@@ -8,6 +8,7 @@
     <link type="text/css" rel="stylesheet" href="/skins/css/nf.lightbox.css"/>
     <link type="text/css" rel="stylesheet" href="/skins/css/jquery.stars.rating.css"/>
     <link type="text/css" rel="stylesheet" href="/skins/css/stars.rating.styles.css"/>
+    <?=$arrCss;?>
 <!--            <link type="text/css" rel="stylesheet" href="/skins/css/ui.css" />-->
 
     <script type="text/javascript" src="/skins/js/jquery.min.js"></script>
