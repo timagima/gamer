@@ -19,6 +19,7 @@ class Controller extends MainController
     public function ActionIndex()
     {
         $this->AddJs("ajax");
+        $this->AddCss("style");
         $data['check-user-id'] = (int)$_SESSION['user-data']['id'];
         $data['user-completed-games'] = $this->model->GetUserCompletedGames();
         $data['type-complete-game'] = $this->model->GetTypeCompleteGame();
@@ -67,9 +68,9 @@ class Controller extends MainController
 
     public function ActionUserGames($idUser)
     {
-        $data['games'] = $this->model->GetUserCompletedGames($idUser);
+        $this->AddCss("style");
         $data['user-completed-games'] = $this->model->GetUserCompletedGames($idUser);
-        $this->headerTxt['title'] = "Игры пользователя {$data['games'][0]['nick']} - GS11";
+        $this->headerTxt['title'] = "Игры пользователя {$data['user-completed-games'][0]['nick']} - GS11";
         $this->view->Generate('menu/auth-menu.tpl.php', 'base/add-completed-games.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());
     }
 
