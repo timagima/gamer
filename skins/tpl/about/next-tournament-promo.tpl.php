@@ -1,46 +1,62 @@
 <script type="text/javascript">
     $(document).ready(function(){
         var current = 2;
+        var links = [
+            ['/about/promo','?page=next-tournament-promo','?page=winner-promo'],
+            ['Легендарные Off-line турниры','Ближайшие Off-line турниры','Победители Off-line турниров']
+        ];
+        function recLinks (array){
+            var pageLink = '';
+            var pageTitle = '';
+            for(var i = 0; i < array.length; i++){
+                for(var j = 0; j < array[i].length; j++){
+                    if(current-1 == j && i == 0)
+                        pageLink = array[i][j];
+                    if(current-1 == j && i == 1)
+                        pageTitle = array[i][j];
+                }
+            }
+            history.pushState(null,null,pageLink);
+            $('title').text(pageTitle);
+        }
+        function sendAjax(current){
+            $.ajax({
+                type: 'POST',
+                url: document.location.href,
+                data: {"id" : current},
+                success: function(data){
+                    $('#main').html(data);}
+            });
+        }
+        if(current == 1 ){
+            $('#prev-btn').css('backgroundPosition', '0 100%');
+        }
+        if(current == 2){
+            $('#prev-btn').css('backgroundPosition', '0 0');
+            $('#next-btn').css('backgroundPosition','100% 100%');
+        }
+        if(current == 3){
+            $('#next-btn').css('backgroundPosition','100% 0');
+            $('#prev-btn').css('backgroundPosition', '0 0');
+        }
         $('#select').find('a').on('click',function(){
             var direction = $(this).attr('id');
-            if(direction === 'next-btn')
-                ++current;
-            else
-                --current;
-            var link = '';
-            switch(current){
-                case 2: link = '?page=next-tournament-promo';break;
-                case 3: link = '?page=winner-promo';break;
-                default: link = '/about/promo';}
-            current = link;
-
-            history.pushState(current,null,current);
-            $.ajax({
-                type: 'GET',
-                url: document.location.href,
-                data: {"page":current},
-                success: function(data){
-                    $('#main').html(data);
-                }
-            });
+            if(direction == 'next-btn') ++current;
+            else --current;
+            recLinks (links);
+            sendAjax(current);
         });
-        window.onpopstate = function(e){
 
-            var str = JSON.stringify(history);
-            var n1 = str.indexOf(":");
-            var n2 = str.lastIndexOf("n");
-            var newStr = str.substring(n1+2,n2-5);
-
-            $.ajax({
-                type: 'GET',
-                url: document.location.href,
-                data: {"page": newStr},
-                success: function(data){
-                    $('#main').html(data);
-                }
-            })
-        }
-    })
+        window.onpopstate= function(){
+            if(history.location.pathname == '/about/promo'&&document.location.search == '')
+                --current;
+            else if(history.location.search == '?page=next-tournament-promo'&&current !=1)
+                --current;
+            else
+                ++current;
+            sendAjax(current);
+        };
+});
 </script>
 <style>
 #main{width:960px;margin:0 auto;}
@@ -49,8 +65,8 @@
 #social-buttons{position:absolute;right:38px;top:30px;}
 #social-buttons a{margin-left:10px;}
 #select{position:absolute;right:1px;top:173px;}
-#prev-btn{display:block;width:60px;height:59px;background:url(/skins/img/prev.png)no-repeat;float:left;cursor:pointer;}
-#next-btn{display:block;width:57px;height:59px;background:url(/skins/img/next.png)no-repeat;margin-left:59px;cursor:pointer;}
+#prev-btn{display:block;width:60px;height:59px;background:url(/skins/img/slider-btn.png) top 100% left 0 no-repeat;float:left;cursor:pointer;}
+#next-btn{display:block;width:57px;height:59px;background:url(/skins/img/slider-btn.png) top 100% left 100% no-repeat;margin-left:59px;cursor:pointer;}
 .near-tournaments{margin-top:40px;overflow:hidden;padding:0 15px 0 15px;}
 .near-tournaments h3{font-size:25px;font-weight:100;margin-bottom:15px;}
 .near-tournaments h3 a{color:#1fbba6;}
