@@ -1,99 +1,3 @@
-<script type="text/javascript">
-    $(document).ready(function(){
-        var current = 1;
-        var links = [
-            ['/about/promo','?page=next-tournament-promo','?page=winner-promo'],
-            ['Легендарные Off-line турниры','Ближайшие Off-line турниры','Победители Off-line турниров']
-        ];
-        function recLinks (array){
-            var pageLink = '';
-            var pageTitle = '';
-            for(var i = 0; i < array.length; i++){
-                for(var j = 0; j < array[i].length; j++){
-                    if(current-1 == j && i == 0)
-                        pageLink = array[i][j];
-                    if(current-1 == j && i == 1)
-                        pageTitle = array[i][j];
-                }
-            }
-            history.pushState(null,null,pageLink);
-            $('title').text(pageTitle);
-        }
-
-        function sendAjax(current){
-            $.ajax({
-                type: 'POST',
-                url: document.location.href,
-                data: {"id" : current},
-                success: function(data){
-                    $('#main').html(data);}
-             });
-        }
-        if(current == 1 ){
-            $('#prev-btn').css('backgroundPosition', '0 100%');
-        }
-        if(current == 2){
-            $('#prev-btn').css('backgroundPosition', '0 0');
-            $('#next-btn').css('backgroundPosition','100% 100%');
-        }
-        if(current == 3){
-            $('#next-btn').css('backgroundPosition','100% 0');
-            $('#prev-btn').css('backgroundPosition', '0 0');
-        }
-
-        $('#select').find('a').on('click',function(){
-            var direction = $(this).attr('id');
-            if(direction == 'next-btn') ++current;
-            else --current;
-            recLinks (links);
-            sendAjax(current);
-        });
-
-        window.onpopstate= function(){
-            if(history.location.pathname == '/about/promo'&&document.location.search == '')
-                --current;
-            else if(history.location.search == '?page=next-tournament-promo'&&current !=1)
-                --current;
-            else
-                ++current;
-            sendAjax(current);
-        };
-});
-</script>
-
-<style>
-    #main{width:960px;margin:0 auto;}
-    #slider{height:370px;margin-top:40px;position:relative;background:url(/skins/img/shadow.png) right 1px top 160px no-repeat;overflow:hidden;}
-    #internal-slider{width:930px;margin:auto;height:370px;overflow:hidden;}
-    #internal-slider ul{list-style:none;margin:0;padding:0;width:10000px;}
-    #internal-slider ul li{float:left;}
-    #social-buttons{position:absolute;right:38px;top:30px;}
-    #social-buttons a{margin-left:10px;}
-    #select{position:absolute;right:1px;top:173px;}
-    #prev-btn{display:block;width:60px;height:59px;background:url(/skins/img/slider-btn.png) top 100% left 0 no-repeat;float:left;cursor:pointer;}
-    #next-btn{display:block;width:57px;height:59px;background:url(/skins/img/slider-btn.png) top 100% left 100% no-repeat;  margin-left:59px;cursor:pointer;}
-    .top-content{margin-top:35px;overflow:hidden;}
-    .left-content{padding-left:25px;float:left;width:650px;}
-    .right-content{margin-left:675px;padding:10px 0 0 40px;}
-    .left-content h2{color:#f93c18;font-size:35px;line-height:1.2;font-weight:600;margin:0;}
-    .left-content p{font-size:21px;line-height:1.5;color:#3a4e70;margin-bottom:0; }
-    .left-content a{display:block;backgroud:#2483cb;width:99px;text-decoration:none;color:#fff;
-        font-size:18px;padding:8px 23px 8px 33px;border-radius:3px;float:right;background:#2483cb;}
-    .middle-content{margin-top:70px;overflow:hidden;}
-    .left-middle{float:left;padding-left:25px;}
-    .left-middle > span{display:block;color:#b8bec7;margin-bottom:10px;}
-    .left-middle p{display:inline;color:#1fbba6;font-size:35px;margin-left:15px;}
-    .right-middle{float:right;padding:30px 25px 0 0;}
-    .right-middle a{display:block;text-decoration:none;color:#fff;font-size:25px;
-        padding:12px 30px;border-radius:3px;background:#e86950;}
-    .center-middle{margin-left:340px;}
-    .bottom-content{margin:50px 150px 40px 80px;}
-    .bottom-content p{color:#384c6e;font-size:12px;padding:}
-    .bottom-content a{color:#68bca7;}
-
-
-</style>
-
 <div id="main">
     <div id="slider">
         <div id="internal-slider">
@@ -111,9 +15,6 @@
             </div>
 
                <img src="/skins/img/slider1.jpg" alt="slider"/>
-
-
-
         </div>
 
     </div>

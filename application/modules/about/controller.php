@@ -13,6 +13,7 @@ class Controller extends MainController
     {
 
 
+
     }
     public function ActionTariff()
     {
@@ -53,6 +54,8 @@ class Controller extends MainController
     }
     public function ActionPromo()
     {
+        $this->AddCss("style");
+        $this->AddJs("script");
         $resGet = $_GET['page'];
         $resPost = $_POST['id'];
         $pageTitle = 'Легендарные Off-line турниры';
@@ -67,21 +70,18 @@ class Controller extends MainController
             $pageUrl = 'about/winner-promo.tpl.php';
         }
         if($resPost == 1){
-
             include $_SERVER['DOCUMENT_ROOT'] . '/skins/tpl/about/legend-tournament-promo.tpl.php';
-
             exit();
         }
         else if($resPost == 2){
-
             include $_SERVER['DOCUMENT_ROOT'] . '/skins/tpl/about/next-tournament-promo.tpl.php';
             exit();
         }
         else if($resPost == 3){
-
             include $_SERVER['DOCUMENT_ROOT'] . '/skins/tpl/about/winner-promo.tpl.php';
             exit();
         }
+
         $this->headerTxt['title']= $pageTitle;
         $data['error'] = '';
         $this->view->Generate($this->arrTpl[0], $pageUrl, $this->GetTplView(), $this->arrTpl[1], $data,  $this->headerTxt, $this->model->CountQuery());
