@@ -12,6 +12,7 @@ class Likes{
         $this->_g = $_GET;
         $this->conn = Config::GetInstance();
     }
+
     public function Like()
     {
         $idUser=(int)$_SESSION['user-data']['id'];
