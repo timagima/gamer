@@ -150,7 +150,7 @@ class Model extends MainModel
         }*/
         $idUser = (!$idUser) ? (int)$_SESSION['user-data']['id'] : (int)$idUser;
         $idGame = (int)$idGame;
-        $sql = $this->conn->dbh->prepare("SELECT ucg.num_quest, ucg.start_date, ucg.end_date, ucg.post_date, ucg.about_game, ucg.id_game, ucg.id as id_ucg,
+        $sql = $this->conn->dbh->prepare("SELECT ucg.num_quest, ucg.start_date, ucg.end_date, ucg.post_date, ucg.about_game, ucg.id_game, ucg.id as id_ucg, ucg.id_user,
                                             games.name as game, games.source_img_b, games.source_img_s,
                                             level.name as level, level.description as level_description,
                                             tcg.name as type_complete_game,
