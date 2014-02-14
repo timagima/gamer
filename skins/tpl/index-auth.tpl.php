@@ -24,6 +24,7 @@
     <script type="text/javascript" src="/skins/js/service.js"></script>
     <script type="text/javascript" src="/skins/js/jquery.rating.js"></script>
     <script type="text/javascript" src="/skins/js/multiupload.js"></script>
+    <script type="text/javascript" src="/skins/js/likes.js"></script>
     <?=$arrJs;?>
 
 

@@ -62,7 +62,8 @@ class Model extends MainModel
         $checkAddedGame = $this->conn->dbh->query("SELECT id_game FROM user_completed_games WHERE id_game=" . $idGame . " AND id_user=" . $idUser)->fetch(PDO::FETCH_ASSOC);
         $checkGame = $this->conn->dbh->query("SELECT name FROM games WHERE id = ".$idGame)->fetch(PDO::FETCH_ASSOC);
         if ($checkAddedGame === false && $checkGame !== false) {
-            $stmt = $this->conn->dbh->prepare("INSERT INTO user_completed_games (id_user, id_game, id_level, about_game, start_date, end_date, post_date, num_quest, id_type_completed_game, user_rating) VALUES(:idUser, :idGame, :idLevel, :gameDescription, :startDate, :endDate, :postDate, :questCount, :idGamePassing, :userRating)");
+            $stmt = $this->conn->dbh->prepare("INSERT INTO user_completed_games (id_user, id_game, id_level, about_game, start_date, end_date, post_date, num_quest, id_type_completed_game, user_rating)
+                                                        VALUES(:idUser, :idGame, :idLevel, :gameDescription, :startDate, :endDate, :postDate, :questCount, :idGamePassing, :userRating)");
             $stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
             $stmt->bindParam(":idGame", $idGame, PDO::PARAM_INT);
             $stmt->bindParam(":idLevel", $idLevel, PDO::PARAM_INT);
@@ -149,7 +150,7 @@ class Model extends MainModel
         }*/
         $idUser = (!$idUser) ? (int)$_SESSION['user-data']['id'] : (int)$idUser;
         $idGame = (int)$idGame;
-        $sql = $this->conn->dbh->prepare("SELECT ucg.num_quest, ucg.start_date, ucg.end_date, ucg.post_date, ucg.about_game, ucg.id_game,
+        $sql = $this->conn->dbh->prepare("SELECT ucg.num_quest, ucg.start_date, ucg.end_date, ucg.post_date, ucg.about_game, ucg.id_game, ucg.id as id_ucg,
                                             games.name as game, games.source_img_b, games.source_img_s,
                                             level.name as level, level.description as level_description,
                                             tcg.name as type_complete_game,

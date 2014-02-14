@@ -4,6 +4,7 @@ use application\core\mvc\MainModel;
 use classes\pagination;
 use classes\url;
 use classes\upload;
+use classes\likes;
 use PDO;
 
 
@@ -121,6 +122,22 @@ class MainController
             $objUpload = new Upload($path);
             $method = $this->_p['method'];
             $objUpload->$method($path);
+            exit();
+        }
+    }
+
+    public function PrepareLikes($field=false, $fieldId=false)
+    {
+        if($field!==false && $fieldId!==false){
+            $objLikes = new Likes();
+            return $objLikes->GetUserLikesInfo($field, $fieldId);
+        }
+        if(isset($this->_p['method']))
+        {
+            $objLikes = new Likes();
+            $method = $this->_p['method'];
+            $result = $objLikes->$method();
+            if($result) echo  $result;
             exit();
         }
     }
