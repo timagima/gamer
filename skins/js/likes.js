@@ -20,7 +20,7 @@ function likes(){
             type: 'POST',
             url: document.location.href,
             dataType: 'html',
-            data: {"method": method, "voted": voted, "table":fieldIdArray[0], "id":fieldIdArray[1]},
+            data: {"method": method, "voted": voted, "likes-group":fieldIdArray[0], "record":fieldIdArray[1]},
             success: function(data){
                 if( data==="liked" ){
                     $(parentElement).attr("class", "likes voted");

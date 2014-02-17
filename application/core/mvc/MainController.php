@@ -126,11 +126,11 @@ class MainController
         }
     }
 
-    public function PrepareLikes($field=false, $fieldId=false)
+    public function PrepareLikes($idLikesGroup=false, $idRecord=false)
     {
-        if($field!==false && $fieldId!==false){
+        if($idLikesGroup!==false && $idRecord!==false){
             $objLikes = new Likes();
-            return $objLikes->GetUserLikesInfo($field, $fieldId);
+            return $objLikes->GetUserLikesInfo($idLikesGroup, $idRecord);
         }
         if(isset($this->_p['method']))
         {
