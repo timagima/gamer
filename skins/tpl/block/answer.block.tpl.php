@@ -18,14 +18,16 @@
     #text-comment{width: 99%; resize: none;  margin-top: 15px; z-index: 9}
     #action-answer{background-color: gray; margin-left: 160px; padding: 8px; opacity: 0.5;}
 </style>
+
 <div class="br-points"></div>
 <h3>Ответы</h3>
 <div class="content-comment"></div>
 <br class="clear">
+
 <?php if($_SESSION['auth'] == 1){?>
-<a href="javascript:void(0)" id="send-comment" class="left btn">Отправить</a>
-<div id="action-answer" class="hide right"></div>
-<textarea id="text-comment"></textarea>
+    <a href="javascript:void(0)" id="send-comment" class="left btn">Отправить</a>
+    <div id="action-answer" class="hide right"></div>
+    <textarea id="text-comment"></textarea>
 <?}else{
     echo "<h3>Комментарии могут оставлять только зарегистрированные пользователи</h3>";
 }?>
@@ -36,6 +38,7 @@
         var month = new Array('Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря');
 
         listComment();
+
         function renderMenu(){
             // нужно проверять кому принадлежит комментарий
             var sessionUser =  '<?= $this->user['id'];?>';
@@ -91,6 +94,7 @@
                 }
             })
         }
+
         function listComment(){
             $.ajax({
                 url:  document.location.href,
@@ -103,6 +107,7 @@
                 }
             });
         }
+
         function renderComment(result, param){
             res = $.parseJSON(result);
             var result = '';
@@ -134,7 +139,6 @@
 
         $("#send-comment").click(function(){
             var comment = $.trim($('#text-comment').val());
-
             var idUserAnswer = ($('#user-comment').val() == undefined) ? 0 : $('#user-comment').val();
             if (comment != "" && comment.length > 2){
                 $.ajax({
