@@ -126,7 +126,9 @@ class MainController
         }
     }
 
-    public function PrepareLikes($idLikesGroup=false, $idRecord=false)
+    //Если переданы аргументы(группа лайков, ид оцениваемой записи) - метод возвращает информацию лайкал, дислайкал или не голосовал юзер;
+    // Без аргументов метод заносит в БД о Выборе юзера(лайк, дислайк), информация передаётся аяксом
+    public function GetSetUserLikes($idLikesGroup=false, $idRecord=false)
     {
         if($idLikesGroup!==false && $idRecord!==false){
             $objLikes = new Likes();
@@ -140,6 +142,12 @@ class MainController
             if($result) echo  $result;
             exit();
         }
+    }
+
+    public function GetRecordLikes($idLikesGroup, $idRecord)
+    {
+        $objLikes = new Likes();
+        return $objLikes->GetRecordLikes($idLikesGroup, $idRecord);
     }
 
     public function TplAuth()

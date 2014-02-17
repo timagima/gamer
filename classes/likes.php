@@ -27,7 +27,13 @@ class Likes{
         $sql->bindParam(":idUser", $idUser, PDO::PARAM_INT);
         $sql->bindParam(":id_likes_group", $idLikesGroup, PDO::PARAM_STR);
         $sql->bindParam(":id_record", $idRecord, PDO::PARAM_STR);
-        return($sql->execute())?"liked":"false";
+        $sql->execute();
+        $stmt = $this->conn->dbh->prepare("SELECT SUM(likes)-SUM(dislikes) as likes FROM likes WHERE id_likes_group=:id_likes_group AND id_record=:id_record");
+        $stmt->bindParam(":id_likes_group", $idLikesGroup, PDO::PARAM_STR);
+        $stmt->bindParam(":id_record", $idRecord, PDO::PARAM_STR);
+        $stmt->execute();
+        $result =$stmt->fetch(PDO:: FETCH_ASSOC);
+        return "liked"."$".$result['likes'];
     }
 
     public function Dislike()
@@ -44,7 +50,13 @@ class Likes{
         $sql->bindParam(":idUser", $idUser, PDO::PARAM_INT);
         $sql->bindParam(":id_likes_group", $idLikesGroup, PDO::PARAM_STR);
         $sql->bindParam(":id_record", $idRecord, PDO::PARAM_STR);
-        return($sql->execute())?"disliked":"false";
+        $sql->execute();
+        $stmt = $this->conn->dbh->prepare("SELECT SUM(likes)-SUM(dislikes) as likes FROM likes WHERE id_likes_group=:id_likes_group AND id_record=:id_record");
+        $stmt->bindParam(":id_likes_group", $idLikesGroup, PDO::PARAM_STR);
+        $stmt->bindParam(":id_record", $idRecord, PDO::PARAM_STR);
+        $stmt->execute();
+        $result =$stmt->fetch(PDO:: FETCH_ASSOC);
+        return "disliked"."$".$result['likes'];
     }
 
     public function GetUserLikesInfo($idLikesGroup, $idRecord)
@@ -58,6 +70,17 @@ class Likes{
         $sql->bindParam(":id_record", $idRecord, PDO::PARAM_STR);
         $sql->execute();
         return $sql->fetch(PDO:: FETCH_ASSOC);
+    }
+
+    public function GetRecordLikes($idLikesGroup, $idRecord)
+    {
+        $idLikesGroup = (int)$idLikesGroup;
+        $idRecord = (int)$idRecord;
+        $stmt = $this->conn->dbh->prepare("SELECT SUM(likes)-SUM(dislikes) as likes FROM likes WHERE id_likes_group=:id_likes_group AND id_record=:id_record");
+        $stmt->bindParam(":id_likes_group", $idLikesGroup, PDO::PARAM_STR);
+        $stmt->bindParam(":id_record", $idRecord, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetch(PDO:: FETCH_ASSOC);
     }
 
 

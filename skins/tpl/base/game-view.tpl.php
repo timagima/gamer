@@ -46,8 +46,12 @@
                                     <p>Уровень сложности:<?= $data['level'] ?> -> <?= $data['level_description'] ?></p>
                                     <p>Качество прохождения: <?= $data['type_complete_game'] ?></p>
                                     <p>Количество квестов: <?= $data['num_quest'] ?></p>
-                                    <?php if($data['id_user']!==$_SESSION['user-data']['id']){?>
+                                    <?php
+                                    $color = ($data['record-likes']['likes']>0)?"green":"";
+                                    $color = ($data['record-likes']['likes']<0)?"red":$color;
+                                    if($data['id_user']!==$_SESSION['user-data']['id']){?>
                                     <p class="likes<?=( $data['user-likes']!==false ) ? ' voted' : ''?>" id="2-<?=$data['id_ucg']?>">
+                                        <span class="rating" style="color:<?=$color?>;"><?=$data['record-likes']['likes']?></span>
                                         <span class="like<?=( $data['user-likes']['likes']==="1" ) ? ' liked' : ''?>">Like</span>
                                         <span class="dislike<?=( $data['user-likes']['dislikes']==="1" ) ? ' disliked' : ''?>">Dislike</span>
                                     </p>

@@ -3,15 +3,18 @@ namespace application\modules\base;
 use application\core\mvc\MainController;
 use application\modules\base\model;
 use classes\SimpleImage;
+use classes\likes;
 
 
 class Controller extends MainController
 {
     public $block, $model, $sms;
+    private $likes;
     public function __construct()
     {
         parent::__construct();
         $this->model = new Model();
+        $this->likes = new Likes();
         $this->ExistSessionAuth();
         $this->RunAjax();
     }
@@ -30,10 +33,11 @@ class Controller extends MainController
     public function ActionView($idGame)
     {
         if($idGame){
-            $this->PrepareLikes();
+            $this->GetSetUserLikes();
             $idUser = (int)$this->_g['iduser'];
             $data = $this->model->GetGameView($idGame, $idUser);
-            $data['user-likes'] = $this->PrepareLikes(2, $data['id_ucg']);
+            $data['user-likes'] = $this->GetSetUserLikes(2, $data['id_ucg']);
+            $data['record-likes'] = $this->likes->GetRecordLikes(2, $data['id_ucg']);
             $this->headerTxt['title'] = "$data[game] - GS11";
             $this->view->Generate('menu/auth-menu.tpl.php', 'base/game-view.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());
         }
