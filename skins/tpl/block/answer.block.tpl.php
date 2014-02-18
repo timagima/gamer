@@ -42,6 +42,7 @@
         function renderMenu(){
             // нужно проверять кому принадлежит комментарий
             var sessionUser =  '<?= $this->user['id'];?>';
+
             $(".icon-menu-comment").mouseover(function(){
                 if($(".menu-comment").length == 0){
                     var userComment = $(this).parent(".user-comment").attr("class").split("-");
@@ -55,6 +56,7 @@
                     //'<div style="padding-top: 5px;">Все ответы (0)</div></div>';
                     $(this).append(res);
                     var idComment = $(this).parent(".user-comment").attr("id").split("-");
+
                     $(".menu-comment-remove").click(function(){
                         $("#user-comment-"+idComment[2]).remove();
                         $.ajax({
@@ -64,6 +66,7 @@
                             dataType: 'html'
                         });
                     })
+
                     $(".menu-comment-spam").click(function(){
                         $("#user-comment-"+idComment[2]).html("Вы отметили данное сообщение как спам");
                         /*$.ajax({
@@ -109,11 +112,11 @@
         }
 
         function renderComment(result, param){
-            res = $.parseJSON(result);
+            var res = $.parseJSON(result); // тестовое изменение
             var result = '';
             // здесь необходимо сделать проверку если есть
             for(var k in res){
-                debugger;
+                //debugger;
                 var imgAvatarAnswer = (res[k].img_avatar_answer == null || res[k].img_avatar_answer == "") ? '/skins/img/m.jpg' : res[k].img_avatar_answer;
                 var imgAvatar = (res[k].img_avatar == null || res[k].img_avatar == "") ? '/skins/img/m.jpg' : res[k].img_avatar;
                 var nickAnswer = (res[k].nick_answer == null) ? 'Анонимный' : res[k].nick_answer;

@@ -8,7 +8,8 @@ class Likes{
     public $_p, $_g = array();
 
     public function __construct()
-    {   $this->_p = $_POST;
+    {
+        $this->_p = $_POST;
         $this->_g = $_GET;
         $this->conn = Config::GetInstance();
     }

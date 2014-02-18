@@ -37,7 +37,7 @@ class Controller extends MainController
             $idUser = (int)$this->_g['iduser'];
             $data = $this->model->GetGameView($idGame, $idUser);
             $data['user-likes'] = $this->GetSetUserLikes(2, $data['id_ucg']);
-            $data['record-likes'] = $this->likes->GetRecordLikes(2, $data['id_ucg']);
+            $data['ucg-likes'] = $this->likes->GetRecordLikes(2, $data['id_ucg']);
             $this->headerTxt['title'] = "$data[game] - GS11";
             $this->view->Generate('menu/auth-menu.tpl.php', 'base/game-view.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());
         }

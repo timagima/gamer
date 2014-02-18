@@ -1,6 +1,7 @@
 <?php
 namespace application\core\mvc;
 use application\core\mvc\MainModel;
+use classes\Comments;
 use classes\pagination;
 use classes\url;
 use classes\upload;
@@ -11,7 +12,7 @@ use PDO;
 class MainController
 {
     public $_p, $_g, $headerTxt, $arrTpl = array();
-    public $mainModel, $view, $pagination, $model;
+    public $mainModel, $view, $pagination, $model, $comments;
     public static $storageTemp = "storage/temp";
     public function __construct()
     {
@@ -22,6 +23,7 @@ class MainController
         $this->headerTxt['keywords'] = '';
         $this->view = new MainView($user);
         $this->model = new MainModel();
+        $this->comments = new Comments();
         $this->TplAuth();
 
         if(empty($_SESSION['auth']))

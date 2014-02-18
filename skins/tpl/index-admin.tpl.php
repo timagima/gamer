@@ -19,6 +19,7 @@
     <script type="text/javascript" src="/skins/js/NFLightBox.js"></script>
     <script type="text/javascript" src="/skins/js/multiupload.js"></script>
     <script type="text/javascript" src="/skins/js/likes.js"></script>
+    <script type="text/javascript" src="/skins/js/comments.js"></script>
 
 
 

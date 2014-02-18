@@ -4,9 +4,10 @@ $(document).ready(function(){
 
     listComment();
 
+    var sessionUser;
+    var sessionAuth=0;
     function renderMenu(){
         // нужно проверять кому принадлежит комментарий
-        var sessionUser =  "<?= $this->user['id']?>";
 
         $(".icon-menu-comment").mouseover(function(){
             if($(".menu-comment").length == 0){
@@ -23,11 +24,12 @@ $(document).ready(function(){
                 var idComment = $(this).parent(".user-comment").attr("id").split("-");
 
                 $(".menu-comment-remove").click(function(){
+                    var idSectionTable = $('#text-comment').parent().attr("id").split("-");
                     $("#user-comment-"+idComment[2]).remove();
                     $.ajax({
                         url:  document.location.href,
                         type: 'POST',
-                        data:{'ajax-query': 'true', 'type-class':'model', 'method': 'RemoveComment', 'id': idComment[2]},
+                        data:{'ajax-query': 'true', 'type-class':'comments', 'method': 'RemoveComment', 'id': idComment[2], 'id-section': idSectionTable[0], 'table-id':idSectionTable[1]},
                         dataType: 'html'
                     });
                 })
@@ -64,10 +66,11 @@ $(document).ready(function(){
     }
 
     function listComment(){
+        var idSectionTable = $('#text-comment').parent().attr("id").split("-");
         $.ajax({
             url:  document.location.href,
             type: 'POST',
-            data:{'ajax-query': 'true', 'type-class':'model', 'method': 'ListComments'},
+            data:{'ajax-query': 'true', 'type-class':'comments', 'method': 'ListComments', 'id-section': idSectionTable[0], 'table-id':idSectionTable[1]},
             dataType: 'html',
             success: function (result){
                 renderComment(result, true);
@@ -78,6 +81,9 @@ $(document).ready(function(){
 
     function renderComment(result, param){
         var res = $.parseJSON(result); // тестовое изменение
+        var serverInfo = res.pop().split("-");
+        sessionUser = parseInt(serverInfo[0]);
+        sessionAuth = parseInt(serverInfo[1]);
         var result = '';
         // здесь необходимо сделать проверку если есть
         for(var k in res){
@@ -86,12 +92,14 @@ $(document).ready(function(){
             var imgAvatar = (res[k].img_avatar == null || res[k].img_avatar == "") ? '/skins/img/m.jpg' : res[k].img_avatar;
             var nickAnswer = (res[k].nick_answer == null) ? 'Анонимный' : res[k].nick_answer;
             var nick = (res[k].nick == null) ? 'Анонимный' : res[k].nick;
+            var userAuthImg = (sessionAuth===1)?'<div class="right icon-menu-comment"></div>':'';
             var userAnswer = (res[k].id_user_answer != 0) ?
                 '<img src="/skins/img/interface/comment-answer.png" style="position: relative; bottom: 5px; left: 30px;" /></td>' +
                     '<td style="width: 75px"><img src="' + imgAvatarAnswer + '" class="avatar-comment" /></td>' +
                     '<td class="info-comment" style="width:1px; padding-right: 20px;"><b id="user-nick-'+res[k].id+'">'+nickAnswer+'</b>' +
                     '</td>' : '</td>';
             var date = new Date(res[k].date * 1000);
+            var likes = '';
             result += '<div style="padding: 15px 0;" class="user-comment user-comment-'+res[k].id_user+'" id="user-comment-' + res[k].id + '">' +
                 '<table class="left table-comment" style="width: 940px;"><tr>' +
                 '<td style="width: 75px;"><img src=' + imgAvatar + ' class="avatar-comment" /></div></td>' +
@@ -99,7 +107,7 @@ $(document).ready(function(){
                 '<span>'+ date.getDate() + " " + month[date.getMonth()] + " " + date.getHours() + ":" + date.getMinutes() +'</span>' +
                 userAnswer +
                 '<td><div class="text-comment"><span>'+res[k].comment+'</span></div></td></tr></table>' +
-                '<?php if($_SESSION['auth'] == 1){?><div class="right icon-menu-comment"></div><?}?>' +
+                userAuthImg +
             '</div><br class="clear">';
         }
         (param == "last-msg") ? $(".content-comment").append(result) : $(".content-comment").html(result);
@@ -108,11 +116,12 @@ $(document).ready(function(){
     $("#send-comment").click(function(){
         var comment = $.trim($('#text-comment').val());
         var idUserAnswer = ($('#user-comment').val() == undefined) ? 0 : $('#user-comment').val();
+        var idSectionTable = $('#text-comment').parent().attr("id").split("-");
         if (comment != "" && comment.length > 2){
             $.ajax({
                 url:  document.location.href,
                 type: 'POST',
-                data:{'ajax-query': 'true', 'type-class':'model', 'method': 'AddComment', 'id-user-answer': idUserAnswer, 'comment': comment, 'id-section': 3},
+                data:{'ajax-query': 'true', 'type-class':'comments', 'method': 'AddComment', 'id-user-answer': idUserAnswer, 'comment': comment, 'id-section': idSectionTable[0], 'table-id':idSectionTable[1]},
                 dataType: 'html',
                 success: function (result){
                     $("#text-comment").val('');
