@@ -80,33 +80,33 @@ $(document).ready(function(){
     }
 
     function renderComment(result, param){
-        var res = $.parseJSON(result); // тестовое изменение
-        var serverInfo = res.pop().split("-");
+        var comments = $.parseJSON(result); // тестовое изменение
+        var serverInfo = comments.pop().split("-");
         sessionUser = parseInt(serverInfo[0]);
         sessionAuth = parseInt(serverInfo[1]);
         var result = '';
         // здесь необходимо сделать проверку если есть
-        for(var k in res){
+        for(var k in comments){
             //debugger;
-            var imgAvatarAnswer = (res[k].img_avatar_answer == null || res[k].img_avatar_answer == "") ? '/skins/img/m.jpg' : res[k].img_avatar_answer;
-            var imgAvatar = (res[k].img_avatar == null || res[k].img_avatar == "") ? '/skins/img/m.jpg' : res[k].img_avatar;
-            var nickAnswer = (res[k].nick_answer == null) ? 'Анонимный' : res[k].nick_answer;
-            var nick = (res[k].nick == null) ? 'Анонимный' : res[k].nick;
+            var imgAvatarAnswer = (comments[k].img_avatar_answer == null || comments[k].img_avatar_answer == "") ? '/skins/img/m.jpg' : comments[k].img_avatar_answer;
+            var imgAvatar = (comments[k].img_avatar == null || comments[k].img_avatar == "") ? '/skins/img/m.jpg' : comments[k].img_avatar;
+            var nickAnswer = (comments[k].nick_answer == null) ? 'Анонимный' : comments[k].nick_answer;
+            var nick = (comments[k].nick == null) ? 'Анонимный' : comments[k].nick;
             var userAuthImg = (sessionAuth===1)?'<div class="right icon-menu-comment"></div>':'';
-            var userAnswer = (res[k].id_user_answer != 0) ?
+            var userAnswer = (comments[k].id_user_answer != 0) ?
                 '<img src="/skins/img/interface/comment-answer.png" style="position: relative; bottom: 5px; left: 30px;" /></td>' +
                     '<td style="width: 75px"><img src="' + imgAvatarAnswer + '" class="avatar-comment" /></td>' +
-                    '<td class="info-comment" style="width:1px; padding-right: 20px;"><b id="user-nick-'+res[k].id+'">'+nickAnswer+'</b>' +
+                    '<td class="info-comment" style="width:1px; padding-right: 20px;"><b id="user-nick-'+comments[k].id+'">'+nickAnswer+'</b>' +
                     '</td>' : '</td>';
-            var date = new Date(res[k].date * 1000);
+            var date = new Date(comments[k].date * 1000);
             var likes = '';
-            result += '<div style="padding: 15px 0;" class="user-comment user-comment-'+res[k].id_user+'" id="user-comment-' + res[k].id + '">' +
+            result += '<div style="padding: 15px 0;" class="user-comment user-comment-'+comments[k].id_user+'" id="user-comment-' + comments[k].id + '">' +
                 '<table class="left table-comment" style="width: 940px;"><tr>' +
                 '<td style="width: 75px;"><img src=' + imgAvatar + ' class="avatar-comment" /></div></td>' +
-                '<td class="info-comment"><b id="user-nick-'+res[k].id+'">'+nick+'</b><br>' +
+                '<td class="info-comment"><b id="user-nick-'+comments[k].id+'">'+nick+'</b><br>' +
                 '<span>'+ date.getDate() + " " + month[date.getMonth()] + " " + date.getHours() + ":" + date.getMinutes() +'</span>' +
                 userAnswer +
-                '<td><div class="text-comment"><span>'+res[k].comment+'</span></div></td></tr></table>' +
+                '<td><div class="text-comment"><span>'+comments[k].comment+'</span></div></td></tr></table>' +
                 userAuthImg +
             '</div><br class="clear">';
         }
