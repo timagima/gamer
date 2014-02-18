@@ -19,7 +19,7 @@ class Comments
                 case 1:
                     $this->_tableName="comments_tournament";
                     break;
-                case 2:
+                case 3:
                     $this->_tableName="comments_user_completed_games";
                     break;
                 default:

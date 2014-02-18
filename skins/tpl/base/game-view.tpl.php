@@ -77,7 +77,7 @@
 
                                 </div>
                                 <!-- Подключение комментариев -->
-                                <div id="<?=$data['id_ucg']?>-2">
+                                <div id="<?=$data['id_ucg']?>-3">
                                     <div class="br-points"></div>
                                     <h3>Ответы</h3>
                                     <div class="content-comment"></div>

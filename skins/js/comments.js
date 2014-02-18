@@ -87,7 +87,11 @@ $(document).ready(function(){
         var result = '';
         // здесь необходимо сделать проверку если есть
         for(var k in comments){
-            //debugger;
+            var likes = (sessionUser === parseInt(comments[k].id_user))?'':'' +
+                '<p class="likes" id="3-'+comments[k].id+'">' +
+                    '<span class="like">Like</span> ' +
+                    '<span class="dislike">Dislike</span>' +
+                '</p>';
             var imgAvatarAnswer = (comments[k].img_avatar_answer == null || comments[k].img_avatar_answer == "") ? '/skins/img/m.jpg' : comments[k].img_avatar_answer;
             var imgAvatar = (comments[k].img_avatar == null || comments[k].img_avatar == "") ? '/skins/img/m.jpg' : comments[k].img_avatar;
             var nickAnswer = (comments[k].nick_answer == null) ? 'Анонимный' : comments[k].nick_answer;
@@ -99,7 +103,6 @@ $(document).ready(function(){
                     '<td class="info-comment" style="width:1px; padding-right: 20px;"><b id="user-nick-'+comments[k].id+'">'+nickAnswer+'</b>' +
                     '</td>' : '</td>';
             var date = new Date(comments[k].date * 1000);
-            var likes = '';
             result += '<div style="padding: 15px 0;" class="user-comment user-comment-'+comments[k].id_user+'" id="user-comment-' + comments[k].id + '">' +
                 '<table class="left table-comment" style="width: 940px;"><tr>' +
                 '<td style="width: 75px;"><img src=' + imgAvatar + ' class="avatar-comment" /></div></td>' +
@@ -107,10 +110,11 @@ $(document).ready(function(){
                 '<span>'+ date.getDate() + " " + month[date.getMonth()] + " " + date.getHours() + ":" + date.getMinutes() +'</span>' +
                 userAnswer +
                 '<td><div class="text-comment"><span>'+comments[k].comment+'</span></div></td></tr></table>' +
-                userAuthImg +
+                userAuthImg +likes+
             '</div><br class="clear">';
         }
         (param == "last-msg") ? $(".content-comment").append(result) : $(".content-comment").html(result);
+        initLikes();   // Инициализация лайков в коментариях
     }
 
     $("#send-comment").click(function(){
