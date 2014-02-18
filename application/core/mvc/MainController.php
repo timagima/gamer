@@ -12,7 +12,7 @@ use PDO;
 class MainController
 {
     public $_p, $_g, $headerTxt, $arrTpl = array();
-    public $mainModel, $view, $pagination, $model, $comments;
+    public $mainModel, $view, $pagination, $model, $comments, $likes;
     public static $storageTemp = "storage/temp";
     public function __construct()
     {
@@ -24,6 +24,7 @@ class MainController
         $this->view = new MainView($user);
         $this->model = new MainModel();
         $this->comments = new Comments();
+        $this->likes = new Likes();
         $this->TplAuth();
 
         if(empty($_SESSION['auth']))
@@ -133,14 +134,12 @@ class MainController
     public function GetSetUserLikes($idLikesGroup=false, $idRecord=false)
     {
         if($idLikesGroup!==false && $idRecord!==false){
-            $objLikes = new Likes();
-            return $objLikes->GetUserLikesInfo($idLikesGroup, $idRecord);
+            return $this->likes->GetUserLikesInfo($idLikesGroup, $idRecord);
         }
         if(isset($this->_p['method']))
         {
-            $objLikes = new Likes();
             $method = $this->_p['method'];
-            $result = $objLikes->$method();
+            $result = $this->likes->$method();
             if($result) echo  $result;
             exit();
         }
@@ -148,8 +147,7 @@ class MainController
 
     public function GetRecordLikes($idLikesGroup, $idRecord)
     {
-        $objLikes = new Likes();
-        return $objLikes->GetRecordLikes($idLikesGroup, $idRecord);
+        return $this->likes->GetRecordLikes($idLikesGroup, $idRecord);
     }
 
     public function TplAuth()

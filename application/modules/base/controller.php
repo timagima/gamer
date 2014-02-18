@@ -9,12 +9,10 @@ use classes\likes;
 class Controller extends MainController
 {
     public $block, $model, $sms;
-    private $likes;
     public function __construct()
     {
         parent::__construct();
         $this->model = new Model();
-        $this->likes = new Likes();
         $this->ExistSessionAuth();
         $this->RunAjax();
     }

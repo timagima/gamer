@@ -84,5 +84,14 @@ class Likes{
         return $stmt->fetch(PDO:: FETCH_ASSOC);
     }
 
+    public function GetUserLikesCommentsUCG()
+    {
+        $res = $this->conn->dbh->query("SELECT cucg.id, l.likes, l.dislikes FROM likes l
+	                                            LEFT JOIN comments_user_completed_games cucg ON l.id_record=cucg.id
+	                                            WHERE cucg.id_section=".$this->_p['id-section']." AND l.id_user=".$_SESSION['user-data']['id']."
+	                                            AND l.id_likes_group=".$this->_p['table-id'])->fetchAll(PDO::FETCH_ASSOC);
+        return json_encode($res);
+    }
+
 
 }

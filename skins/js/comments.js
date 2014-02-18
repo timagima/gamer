@@ -6,6 +6,7 @@ $(document).ready(function(){
 
     var sessionUser;
     var sessionAuth=0;
+    var commentsLikes;
     function renderMenu(){
         // нужно проверять кому принадлежит комментарий
 
@@ -66,17 +67,31 @@ $(document).ready(function(){
     }
 
     function listComment(){
-        var idSectionTable = $('#text-comment').parent().attr("id").split("-");
-        $.ajax({
-            url:  document.location.href,
-            type: 'POST',
-            data:{'ajax-query': 'true', 'type-class':'comments', 'method': 'ListComments', 'id-section': idSectionTable[0], 'table-id':idSectionTable[1]},
-            dataType: 'html',
-            success: function (result){
-                renderComment(result, true);
-                renderMenu();
-            }
-        });
+        var infoTag = $('#text-comment').parent().attr("id");
+        var idSectionTable = (infoTag!== undefined) ? infoTag.split("-") : '';
+        if(infoTag!== undefined){
+            $.ajax({
+                url:  document.location.href,
+                type: 'POST',
+                data:{'ajax-query': 'true', 'type-class':'likes', 'method': idSectionTable[2], 'id-section': idSectionTable[0], 'table-id':idSectionTable[1]},
+                dataType: 'html',
+                success: function (result){
+                    commentsLikes = $.parseJSON(result);
+                }
+            });
+
+
+            $.ajax({
+                url:  document.location.href,
+                type: 'POST',
+                data:{'ajax-query': 'true', 'type-class':'comments', 'method': 'ListComments', 'id-section': idSectionTable[0], 'table-id':idSectionTable[1]},
+                dataType: 'html',
+                success: function (result){
+                    renderComment(result, true);
+                    renderMenu();
+                }
+            });
+        }
     }
 
     function renderComment(result, param){
@@ -87,10 +102,24 @@ $(document).ready(function(){
         var result = '';
         // здесь необходимо сделать проверку если есть
         for(var k in comments){
+            var voted = '';
+            var liked = '';
+            var disliked = '';
+            for(var i in commentsLikes){
+                if(comments[k].id === commentsLikes[i].id && commentsLikes[i].likes==="1"){
+                   voted = ' voted';
+                   liked = ' liked';
+                }
+                if(comments[k].id === commentsLikes[i].id && commentsLikes[i].dislikes==="1"){
+                    voted = ' voted';
+                    disliked = ' disliked';
+                }
+
+            }
             var likes = (sessionUser === parseInt(comments[k].id_user))?'':'' +
-                '<p class="likes" id="3-'+comments[k].id+'">' +
-                    '<span class="like">Like</span> ' +
-                    '<span class="dislike">Dislike</span>' +
+                '<p class="likes' + voted + '" id="3-' + comments[k].id + '">' +
+                    '<span class="like' + liked + '">Like</span> ' +
+                    '<span class="dislike' + disliked + '">Dislike</span>' +
                 '</p>';
             var imgAvatarAnswer = (comments[k].img_avatar_answer == null || comments[k].img_avatar_answer == "") ? '/skins/img/m.jpg' : comments[k].img_avatar_answer;
             var imgAvatar = (comments[k].img_avatar == null || comments[k].img_avatar == "") ? '/skins/img/m.jpg' : comments[k].img_avatar;
