@@ -69,6 +69,7 @@
                                     $color = ($data['ucg-likes']['likes']<0)?"red":$color;
                                     ?>
 
+                                    <!--Подключение лайков -->
                                     <p class="likes<?=( $data['user-likes']!==false ) ? ' voted' : ''?>" id="2-<?=$data['id_ucg']?>">
                                         <span class="rating" style="color:<?=$color?>;">
                                             <?=($data['ucg-likes']['likes']>0 || $data['ucg-likes']['likes']<0) ? $data['ucg-likes']['likes'] : "0"?>
@@ -78,6 +79,7 @@
                                         <span class="dislike<?=( $data['user-likes']['dislikes']==="1" ) ? ' disliked' : ''?>">Dislike</span>
                                         <?php } ?>
                                     </p>
+                                    <!--Конец подключения лайков -->
 
 
                                 </div>

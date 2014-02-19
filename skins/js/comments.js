@@ -6,6 +6,7 @@ $(document).ready(function(){
 
     var sessionUser;
     var sessionAuth=0;
+    var commentsUserLikes;
     var commentsLikes;
     function renderMenu(){
         // нужно проверять кому принадлежит комментарий
@@ -76,6 +77,16 @@ $(document).ready(function(){
                 data:{'ajax-query': 'true', 'type-class':'likes', 'method': idSectionTable[2], 'id-section': idSectionTable[0], 'table-id':idSectionTable[1]},
                 dataType: 'html',
                 success: function (result){
+                    commentsUserLikes = $.parseJSON(result);
+                }
+            });
+
+            $.ajax({
+                url:  document.location.href,
+                type: 'POST',
+                data:{'ajax-query': 'true', 'type-class':'likes', 'method': 'GetCommentsLikes', 'id-section': idSectionTable[0], 'table-id':idSectionTable[1]},
+                dataType: 'html',
+                success: function (result){
                     commentsLikes = $.parseJSON(result);
                 }
             });
@@ -105,20 +116,32 @@ $(document).ready(function(){
             var voted = '';
             var liked = '';
             var disliked = '';
-            for(var i in commentsLikes){
-                if(comments[k].id === commentsLikes[i].id && commentsLikes[i].likes==="1"){
+            var likesRating = '0';
+            var ratingColor = 'black';
+            for(var i in commentsUserLikes){
+                if(comments[k].id === commentsUserLikes[i].id && commentsUserLikes[i].likes==="1"){
                    voted = ' voted';
                    liked = ' liked';
                 }
-                if(comments[k].id === commentsLikes[i].id && commentsLikes[i].dislikes==="1"){
+                if(comments[k].id === commentsUserLikes[i].id && commentsUserLikes[i].dislikes==="1"){
                     voted = ' voted';
                     disliked = ' disliked';
                 }
-
+            }
+            for(var r in commentsLikes){
+                if(comments[k].id === commentsLikes[r].id && commentsLikes[r].rating>0){
+                    ratingColor = 'green';
+                    likesRating = commentsLikes[r].rating;
+                }
+                if(comments[k].id === commentsLikes[r].id && commentsLikes[r].rating<0){
+                    ratingColor = 'red';
+                    likesRating = commentsLikes[r].rating;
+                }
             }
             var likes = (sessionUser === parseInt(comments[k].id_user))?'':'' +
                 '<p class="likes' + voted + '" id="3-' + comments[k].id + '">' +
-                    '<span class="like' + liked + '">Like</span> ' +
+                    '<span class="rating" style="color:' + ratingColor + '">' + likesRating + '</span>' +
+                    ' <span class="like' + liked + '">Like</span> ' +
                     '<span class="dislike' + disliked + '">Dislike</span>' +
                 '</p>';
             var imgAvatarAnswer = (comments[k].img_avatar_answer == null || comments[k].img_avatar_answer == "") ? '/skins/img/m.jpg' : comments[k].img_avatar_answer;

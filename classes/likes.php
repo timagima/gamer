@@ -93,5 +93,15 @@ class Likes{
         return json_encode($res);
     }
 
+    public function GetCommentsLikes()
+    {
+        $res = $this->conn->dbh->query("SELECT  SUM(likes)-SUM(dislikes) AS rating, cucg.id FROM likes l
+                                            LEFT JOIN comments_user_completed_games cucg ON l.id_record=cucg.id
+                                            WHERE cucg.id_section=".$this->_p['id-section']."
+                                            AND l.id_likes_group=".$this->_p['table-id']." GROUP BY l.id_record")->fetchAll(PDO::FETCH_ASSOC);
+        return json_encode($res);
+
+    }
+
 
 }
