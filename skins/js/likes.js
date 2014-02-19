@@ -29,7 +29,7 @@ function likes(){
             type: 'POST',
             url: document.location.href,
             dataType: 'html',
-            data: {"method": method, "voted": voted, "likes-group":fieldIdArray[0], "record":fieldIdArray[1]},
+            data: {'ajax-query': 'true', 'type-class':'likes', "method": method, "voted": voted, "likes-group":fieldIdArray[0], "record":fieldIdArray[1]},
             success: function(data){
                 data = data.split("$")
                 color = (data[1]>0)?"green":"";

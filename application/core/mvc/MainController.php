@@ -129,32 +129,12 @@ class MainController
         }
     }
 
-    //Если переданы аргументы(группа лайков, ид оцениваемой записи) - метод возвращает информацию лайкал, дислайкал или не голосовал юзер;
-    // Без аргументов метод заносит в БД о Выборе юзера(лайк, дислайк), информация передаётся аяксом
-    public function GetSetUserLikes($idLikesGroup=false, $idRecord=false)
-    {
-        if($idLikesGroup!==false && $idRecord!==false){
-            return $this->likes->GetUserLikesInfo($idLikesGroup, $idRecord);
-        }
-        if(isset($this->_p['method']))
-        {
-            $method = $this->_p['method'];
-            $result = $this->likes->$method();
-            if($result) echo  $result;
-            exit();
-        }
-    }
-
-    public function GetRecordLikes($idLikesGroup, $idRecord)
-    {
-        return $this->likes->GetRecordLikes($idLikesGroup, $idRecord);
-    }
-
     public function TplAuth()
     {
         $this->arrTpl = (isset($_SESSION['auth'])) ? array('menu/auth-menu.tpl.php', 'index-auth.tpl.php') : array('menu/main-menu.tpl.php', 'index.tpl.php');
         return $this->arrTpl;
     }
+
 	public function AddJs($file)
     {
         $arrUrl = explode("/", $_SERVER['REDIRECT_URL']);
@@ -162,6 +142,7 @@ class MainController
         $name = "/skins/tpl".$path. "/js/". $file.".js";
         $this->view->RenderJs($name);
     }
+
 	public function AddCss($file)
     {
         $arrUrl = explode("/", $_SERVER['REDIRECT_URL']);
