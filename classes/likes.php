@@ -4,6 +4,7 @@ use application\core\config\config;
 use PDO;
 
 class Likes{
+    private $_tableName;
     public $conn;
     public $_p, $_g = array();
 
@@ -12,6 +13,18 @@ class Likes{
         $this->_p = $_POST;
         $this->_g = $_GET;
         $this->conn = Config::GetInstance();
+        if( !empty($this->_p['likes-group']) ){
+            switch($this->_p['likes-group']){
+                case 1:
+                    $this->_tableName="comments_tournament";
+                    break;
+                case 3:
+                    $this->_tableName="comments_user_completed_games";
+                    break;
+                default:
+                    $this->tableName=false;
+            }
+        }
     }
 
     public function Like()
@@ -20,6 +33,9 @@ class Likes{
         $idLikesGroup = (int)$this->_p['likes-group'];
         $idRecord = (int)$this->_p['record'];
         $voted = $this->_p['voted'];
+        $checkUserId = (int)$this->conn->dbh->query("SELECT id_user FROM ".$this->_tableName." WHERE id =".$idRecord)->fetch(PDO::FETCH_ASSOC)['id_user'];
+        if($checkUserId === $idUser )
+            return false;
         if($voted === "false"){
             $sql = $this->conn->dbh->prepare("INSERT INTO likes (likes, dislikes, id_user, id_likes_group, id_record) VALUES (1, 0, :idUser, :id_likes_group, :id_record)");
         }else{
@@ -43,6 +59,9 @@ class Likes{
         $idLikesGroup = (int)$this->_p['likes-group'];
         $idRecord = (int)$this->_p['record'];
         $voted = $this->_p['voted'];
+        $checkUserId = (int)$this->conn->dbh->query("SELECT id_user FROM ".$this->_tableName." WHERE id =".$idRecord)->fetch(PDO::FETCH_ASSOC)['id_user'];
+        if($checkUserId === $idUser )
+            return false;
         if($voted === "false"){
             $sql = $this->conn->dbh->prepare("INSERT INTO likes (likes, dislikes, id_user, id_likes_group, id_record) VALUES (0, 1, :idUser, :id_likes_group, :id_record)");
         }else{
