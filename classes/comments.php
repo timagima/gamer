@@ -43,9 +43,12 @@ class Comments
 
     public function ListComments()
     {
-        $result = $this->conn->dbh->query("SELECT  ".$this->_tableName.".*, u.nick, u.img_avatar, u2.nick as nick_answer, u2.img_avatar as img_avatar_answer  FROM ".$this->_tableName."
+        $stmt = $this->conn->dbh->prepare("SELECT  ".$this->_tableName.".*, u.nick, u.img_avatar, u2.nick as nick_answer, u2.img_avatar as img_avatar_answer  FROM ".$this->_tableName."
                                                 LEFT JOIN users u ON ".$this->_tableName.".id_user = u.id
-                                                LEFT JOIN users u2 ON ".$this->_tableName.".id_user_answer = u2.id WHERE ".$this->_tableName.".id_section = ". $_POST['id-section']." LIMIT 0, 1000")->fetchAll(PDO::FETCH_ASSOC);
+                                                LEFT JOIN users u2 ON ".$this->_tableName.".id_user_answer = u2.id WHERE ".$this->_tableName.".id_section = :id_section LIMIT 0, 1000");
+        $stmt->bindParam(":id_section", $_POST['id-section'], PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach($result as &$comment){
             $comment["comment"] = $this->getHtml($comment["comment"]);
         }
@@ -56,7 +59,11 @@ class Comments
 
     public function RemoveComment()
     {
-        $this->conn->dbh->query("DELETE FROM ".$this->_tableName." WHERE id = ".(int)$_POST['id']. " AND id_user = ". $_SESSION['user-data']['id'] . " AND id_section = ".$_POST['id-section']);
+        $stmt = $this->conn->dbh->prepare("DELETE FROM ".$this->_tableName." WHERE id = :id AND id_user = :id_user AND id_section = :id_section");
+        $stmt->bindParam(":id", $_POST['id'], PDO::PARAM_INT);
+        $stmt->bindParam(":id_user", $_SESSION['user-data']['id'], PDO::PARAM_INT);
+        $stmt->bindParam(":id_section", $_POST['id-section'], PDO::PARAM_INT);
+        $stmt->execute();
     }
 
     public function MarkSpam()
@@ -72,9 +79,13 @@ class Comments
     private function LastComment($id)
     {
         $result = array();
-        $result[] = $this->conn->dbh->query("SELECT ".$this->_tableName.".*, u.nick, u.img_avatar, u2.nick as nick_answer, u2.img_avatar as img_avatar_answer  FROM ".$this->_tableName."
+        $stmt = $this->conn->dbh->prepare("SELECT ".$this->_tableName.".*, u.nick, u.img_avatar, u2.nick as nick_answer, u2.img_avatar as img_avatar_answer  FROM ".$this->_tableName."
                                                 LEFT JOIN users u ON ".$this->_tableName.".id_user = u.id
-                                                LEFT JOIN users u2 ON ".$this->_tableName.".id_user_answer = u2.id WHERE ".$this->_tableName.".id = ". (int)$id. " AND ".$this->_tableName.".id_section =".$_POST['id-section'])->fetchAll(PDO::FETCH_ASSOC)[0];
+                                                LEFT JOIN users u2 ON ".$this->_tableName.".id_user_answer = u2.id WHERE ".$this->_tableName.".id = :id AND ".$this->_tableName.".id_section = :id_section");
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->bindParam(":id_section", $_POST['id-section'], PDO::PARAM_INT);
+        $stmt->execute();
+        $result[] = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
         foreach($result as &$comment){
             $comment["comment"] = $this->getHtml($comment["comment"]);
         }
