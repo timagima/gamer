@@ -139,10 +139,11 @@ $(document).ready(function(){
                 }
             }
             var likes = (sessionUser === parseInt(comments[k].id_user))?'':'' +
-                '<p class="likes' + voted + '" id="3-' + comments[k].id + '">' +
-                    '<span class="rating" style="color:' + ratingColor + '">' + likesRating + '</span>' +
                     ' <span class="like' + liked + '">Like</span> ' +
-                    '<span class="dislike' + disliked + '">Dislike</span>' +
+                    '<span class="dislike' + disliked + '">Dislike</span>';
+            var likesBlock = '<p class="likes' + voted + '" id="3-' + comments[k].id + '">' +
+                '<span class="rating" style="color:' + ratingColor + '">' + likesRating + '</span>' +
+                 likes+
                 '</p>';
             var imgAvatarAnswer = (comments[k].img_avatar_answer == null || comments[k].img_avatar_answer == "") ? '/skins/img/m.jpg' : comments[k].img_avatar_answer;
             var imgAvatar = (comments[k].img_avatar == null || comments[k].img_avatar == "") ? '/skins/img/m.jpg' : comments[k].img_avatar;
@@ -162,7 +163,7 @@ $(document).ready(function(){
                 '<span>'+ date.getDate() + " " + month[date.getMonth()] + " " + date.getHours() + ":" + date.getMinutes() +'</span>' +
                 userAnswer +
                 '<td><div class="text-comment"><span>'+comments[k].comment+'</span></div></td></tr></table>' +
-                userAuthImg +likes+
+                userAuthImg +likesBlock+
             '</div><br class="clear">';
         }
         (param == "last-msg") ? $(".content-comment").append(result) : $(".content-comment").html(result);
@@ -190,4 +191,29 @@ $(document).ready(function(){
             alert("Введите комментарий");
         }
     })
+
+    //Вставка BB-кодов
+    var codes = $('#codes').children('span');
+    var i = codes.length;
+
+    while(i--) {
+        $(codes[i]).click(function(e){
+            addBB('['+ e.currentTarget.firstChild.innerText+']', '[/'+e.currentTarget.firstChild.innerText+']')
+        })
+    }
+
+    function addBB(ltag, rtag) {
+        var textarea = $('#text-comment')[0];
+        textarea.focus();
+        if(document.selection && document.selection.createRange) {
+            sel = document.selection.createRange();
+            if (sel.parentElement() == textarea)  sel.text = ltag + sel.text + rtag;
+        }
+        else if(typeof(textarea) != undefined) {
+            var start = textarea.selectionStart, end = textarea.selectionEnd;
+            textarea.value = textarea.value.substring(0, start) + ltag + textarea.value.substring(start, end) + rtag + textarea.value.substring(end, textarea.value.length|0);
+        }
+        else textarea.value += ltag + rtag;
+    }
+
 })

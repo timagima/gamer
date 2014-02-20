@@ -45,7 +45,11 @@ class Comments
     {
         $result = $this->conn->dbh->query("SELECT  ".$this->_tableName.".*, u.nick, u.img_avatar, u2.nick as nick_answer, u2.img_avatar as img_avatar_answer  FROM ".$this->_tableName."
                                                 LEFT JOIN users u ON ".$this->_tableName.".id_user = u.id
-                                                LEFT JOIN users u2 ON ".$this->_tableName.".id_user_answer = u2.id WHERE ".$this->_tableName.".id_section = ". $_POST['id-section']." LIMIT 0, 1000")->fetchAll(PDO::FETCH_OBJ);
+                                                LEFT JOIN users u2 ON ".$this->_tableName.".id_user_answer = u2.id WHERE ".$this->_tableName.".id_section = ". $_POST['id-section']." LIMIT 0, 1000")->fetchAll(PDO::FETCH_ASSOC);
+        foreach($result as &$comment){
+            $comment["comment"] = $this->getHtml($comment["comment"]);
+        }
+        unset($comment);
         $result[] = $_SESSION['user-data']['id']."-".$_SESSION['auth'];
         return json_encode($result);
     }
@@ -70,9 +74,31 @@ class Comments
         $result = array();
         $result[] = $this->conn->dbh->query("SELECT ".$this->_tableName.".*, u.nick, u.img_avatar, u2.nick as nick_answer, u2.img_avatar as img_avatar_answer  FROM ".$this->_tableName."
                                                 LEFT JOIN users u ON ".$this->_tableName.".id_user = u.id
-                                                LEFT JOIN users u2 ON ".$this->_tableName.".id_user_answer = u2.id WHERE ".$this->_tableName.".id = ". (int)$id. " AND ".$this->_tableName.".id_section =".$_POST['id-section'])->fetchAll(PDO::FETCH_OBJ)[0];
+                                                LEFT JOIN users u2 ON ".$this->_tableName.".id_user_answer = u2.id WHERE ".$this->_tableName.".id = ". (int)$id. " AND ".$this->_tableName.".id_section =".$_POST['id-section'])->fetchAll(PDO::FETCH_ASSOC)[0];
+        foreach($result as &$comment){
+            $comment["comment"] = $this->getHtml($comment["comment"]);
+        }
+        unset($comment);
         $result[] = $_SESSION['user-data']['id']."-".$_SESSION['auth'];
         return $result;
+    }
+
+    public function getHtml($str){
+        $bb = array(
+            "#\[b\](.*?)\[/b\]#si",
+            "#\[i\](.*?)\[/i\]#si",
+            "#\[u\](.*?)\[/u\]#si",
+            "#\[s\](.*?)\[/s\]#si"
+
+        );
+        $html = array(
+                "<b>\\1</b>",
+                "<i>\\1</i>",
+                "<u>\\1</u>",
+                "<s>\\1</s>"
+        );
+        $str = preg_replace ($bb, $html, $str);
+        return $str;
     }
 
 }

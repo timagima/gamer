@@ -36,6 +36,7 @@
     #send-comment{margin-left: 10px; background: #5cade2 !important; margin-right: 10px;}
     #text-comment{width: 99%; resize: none;  margin-top: 15px; z-index: 9}
     #action-answer{background-color: gray; margin-left: 160px; padding: 8px; opacity: 0.5;}
+    #codes span{border: 1px solid black; padding: 5px; cursor: pointer;}
 </style>
 <div id="featured-section" style="position: relative; z-index: 10;" class="FL">
     <table>
@@ -93,6 +94,13 @@
                                     <?php if($_SESSION['auth'] == 1){?>
                                         <a href="javascript:void(0)" id="send-comment" class="left btn">Отправить</a>
                                         <div id="action-answer" class="hide right"></div>
+                                        <br><br>
+                                        <div id="codes">
+                                            <span><b>B</b></span>
+                                            <span><u>U</u></span>
+                                            <span ><i>I</i></span>
+                                            <span ><s>S</s></span>
+                                        </div>
                                         <textarea id="text-comment"></textarea>
                                     <?}else{
                                         echo "<h3>Комментарии могут оставлять только зарегистрированные пользователи</h3>";
