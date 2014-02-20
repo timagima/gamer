@@ -195,11 +195,19 @@ $(document).ready(function(){
     //Вставка BB-кодов
     var codes = $('#codes').children('span');
     var i = codes.length;
+    //var array = ['B', 'U', 'I', 'S'];
 
     while(i--) {
         $(codes[i]).click(function(e){
-            addBB('['+ e.currentTarget.firstChild.innerText+']', '[/'+e.currentTarget.firstChild.innerText+']')
+            addBB('['+ e.currentTarget.firstChild.nodeName+']', '[/'+e.currentTarget.firstChild.nodeName+']')
         })
+         /*codes[i].onclick = function(i) {
+            return function() {
+                addBB('['+i+']', '[/'+i+']');
+                return false;
+            };
+        }(array[i]);*/
+
     }
 
     function addBB(ltag, rtag) {

@@ -50,7 +50,7 @@ class Comments
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach($result as &$comment){
-            $comment["comment"] = $this->getHtml($comment["comment"]);
+            $comment["comment"] = $this->parseBBCode($comment["comment"]);
         }
         unset($comment);
         $result[] = $_SESSION['user-data']['id']."-".$_SESSION['auth'];
@@ -87,14 +87,14 @@ class Comments
         $stmt->execute();
         $result[] = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
         foreach($result as &$comment){
-            $comment["comment"] = $this->getHtml($comment["comment"]);
+            $comment["comment"] = $this->parseBBCode($comment["comment"]);
         }
         unset($comment);
         $result[] = $_SESSION['user-data']['id']."-".$_SESSION['auth'];
         return $result;
     }
 
-    public function getHtml($str){
+    public function parseBBCode($str){
         $bb = array(
             "#\[b\](.*?)\[/b\]#si",
             "#\[i\](.*?)\[/i\]#si",
