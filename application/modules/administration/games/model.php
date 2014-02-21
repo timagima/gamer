@@ -243,7 +243,7 @@ class Model extends MainModel
     {
         $dateReleaseWorld = strtotime($this->_p['date_release_world']);
         $dateReleaseRussia = strtotime($this->_p['date_release_russia']);
-        $query = $this->conn->dbh->prepare("INSERT INTO main_page_games SET date = UNIX_TIMESTAMP(NOW()), id_game = :id_game, name = :name, game_mode = :game_mode,
+        $query = $this->conn->dbh->prepare("INSERT INTO main_page_games SET date = UNIX_TIMESTAMP(NOW()), id_game = :id_game, game_mode = :game_mode,
                 text = :text, title = :title, description = :description, keywords = :keywords,
                 date_release_world = :date_release_world,
                 date_release_russia = :date_release_russia,
@@ -259,9 +259,7 @@ class Model extends MainModel
                 distribution = :distribution,
                 video_img = :video_img,
                 video_link = :video_link,
-                sr_os = :sr_os, sr_cpu = :sr_cpu, sr_ram = :sr_ram, sr_video = :sr_video, sr_hdd = :sr_hdd,
-                source_img = :source_img, source_img_small = :source_img_small");
-        $query->bindParam(":name", $this->_p['name'], PDO::PARAM_STR);
+                sr_os = :sr_os, sr_cpu = :sr_cpu, sr_ram = :sr_ram, sr_video = :sr_video, sr_hdd = :sr_hdd");
         $query->bindParam(":game_mode", $this->_p['game_mode'], PDO::PARAM_STR);
         $query->bindParam(":id_game", $objGame->id, PDO::PARAM_INT);
         $query->bindParam(":text", $this->_p['text'], PDO::PARAM_STR);
@@ -287,8 +285,6 @@ class Model extends MainModel
         $query->bindParam(":sr_ram", $this->_p['sr_ram'], PDO::PARAM_STR);
         $query->bindParam(":sr_video", $this->_p['sr_video'], PDO::PARAM_STR);
         $query->bindParam(":sr_hdd", $this->_p['sr_hdd'], PDO::PARAM_STR);
-        $query->bindParam(":source_img", $objGame->source_img, PDO::PARAM_STR);
-        $query->bindParam(":source_img_small", $objGame->source_img_small, PDO::PARAM_STR);
         $query->execute();
         $id = $this->conn->dbh->lastInsertId();
         //return $this->GetById($id);
@@ -298,9 +294,10 @@ class Model extends MainModel
     {
         if(isset($this->_p['new-rubrics']) ||isset($this->_p['deleted-rubrics']))
             $this->UpdateMainPageGameRubric();
+        $this->UploadMainPageImg();
         $dateReleaseWorld = strtotime($this->_p['date_release_world']);
         $dateReleaseRussia = strtotime($this->_p['date_release_russia']);
-        $query = $this->conn->dbh->prepare("UPDATE main_page_games SET `name` = :name, game_mode = :game_mode, text = :text, title = :title,
+        $query = $this->conn->dbh->prepare("UPDATE main_page_games SET  game_mode = :game_mode, text = :text, title = :title,
         description = :description,
         keywords = :keywords,
         date_release_world = :date_release_world,
@@ -317,10 +314,8 @@ class Model extends MainModel
         distribution = :distribution,
         video_img = :video_img,
         video_link = :video_link,
-        sr_os = :sr_os, sr_cpu = :sr_cpu, sr_ram = :sr_ram, sr_video = :sr_video, sr_hdd = :sr_hdd,
-        source_img = :source_img, source_img_small = :source_img_small WHERE id = :id");
+        sr_os = :sr_os, sr_cpu = :sr_cpu, sr_ram = :sr_ram, sr_video = :sr_video, sr_hdd = :sr_hdd WHERE id = :id");
         $query->bindParam(":id", $this->_p['id'], PDO::PARAM_INT);
-        $query->bindParam(":name", $this->_p['name'], PDO::PARAM_STR);
         $query->bindParam(":game_mode", $this->_p['game_mode'], PDO::PARAM_STR);
         $query->bindParam(":text", $this->_p['text'], PDO::PARAM_STR);
         $query->bindParam(":title", $this->_p['title'], PDO::PARAM_STR);
@@ -345,8 +340,6 @@ class Model extends MainModel
         $query->bindParam(":sr_ram", $this->_p['sr_ram'], PDO::PARAM_STR);
         $query->bindParam(":sr_video", $this->_p['sr_video'], PDO::PARAM_STR);
         $query->bindParam(":sr_hdd", $this->_p['sr_hdd'], PDO::PARAM_STR);
-        $query->bindParam(":source_img", $objGame->source_img, PDO::PARAM_STR);
-        $query->bindParam(":source_img_small", $objGame->source_img_small, PDO::PARAM_STR);
         $query->execute();
         $id = $this->conn->dbh->lastInsertId();
         //return $this->GetById($id);
@@ -369,7 +362,7 @@ class Model extends MainModel
                 $sql->bindParam(":rubric", $rubric, PDO::PARAM_STR);
                 $sql->execute();
             }
-        }/**/
+        }
         if(isset($this->_p['deleted-rubrics'])){
             $i = 0;
             $rubricIdString = '';
@@ -382,6 +375,30 @@ class Model extends MainModel
             $sql->execute();
         }
 
+    }
+
+    public function UploadMainPageImg()
+    {
+        foreach($this->_p['id-rubrics'] as $id){
+            $imgName = "img-files-".$id;
+            if(!empty($this->_p[$imgName])){
+                $imgS = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p[$imgName]);
+                $imgB = str_replace("_s", "_b", $imgS);
+                $oldImgS = $this->_p[$imgName];
+                $oldImgB = str_replace("_s", "_b", $oldImgS);
+                if(rename($oldImgS, $imgS) && rename($oldImgB, $imgB)){
+                    $imgS = "/".$imgS;
+                    $imgB = "/".$imgB;
+                    $sql = $this->conn->dbh->prepare("UPDATE main_page_games_rubric SET rubric_img_s=:rubricImgS, rubric_img_b=:rubricImgB WHERE id=:id");
+                    $sql->bindParam(":id", $id, PDO::PARAM_INT);
+                    $sql->bindParam(":rubricImgS", $imgS, PDO::PARAM_STR);
+                    $sql->bindParam(":rubricImgB", $imgB, PDO::PARAM_STR);
+                    $sql->execute();
+                }
+
+            }
+
+        }
     }
 
 

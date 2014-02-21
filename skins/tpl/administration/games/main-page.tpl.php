@@ -163,15 +163,8 @@ use classes\url;
 
     <div id="rubrics">
 
-        <? if(empty($data['rubrics'])){?>
-        <div class="rubric">
-            <div class="field" style="">
-                <?=Render::LabelEdit("Отсутствует", "rubrics[]", "Рубрика игры", false); ?>
-            </div>
-        </div>
 
-        <? } ?>
-        <? $i=1; foreach($data['rubrics'] as $r){ ?>
+        <?foreach($data['rubrics'] as $r){ ?>
 
             <div class="rubric" style="margin-bottom: 200px;">
                 <div id="img-upload-btn-<?=$r['id']?>" class="container upload" style="display: inline-block; margin-right: 80px;">
@@ -179,17 +172,15 @@ use classes\url;
                     <input id="img-files-<?=$r['id']?>" type="file" name="img-files[]" multiple />
                 </div>
                 <div class="field" style="display: inline-block;">
-                    <?=Render::Hidden($r['id'], "id-delete")?>
+                    <?=Render::Hidden($r['id'], "id-rubrics[]")?>
                     <?=Render::LabelEdit($r['rubric'], "rubrics[]", "Рубрика игры", false); ?>
                 </div>
-                <? if($i > 0){ ?>
                 <div class="field" style="display: inline-block;">
-                    <a href="javascript:void(0)" class="remove-rubric">Удалить</a>
+                    <a href="javascript:void(0)" class="remove-rubric" id="<?=$r['id']?>">Удалить</a>
                 </div>
-                <? } ?>
             </div>
 
-            <? ++$i; } ?>
+            <? } ?>
 
     </div>
     <div class="field" style="padding: 10px 10px 10px 0px">
@@ -218,7 +209,8 @@ use classes\url;
 
         $("body").on("click", ".remove-rubric", function(){
             //debugger;
-            var id = $(this).closest("div.rubric").find("input[type=hidden]").val();
+            var id = $(this).attr('id');
+            //var id = $(this).closest("div.rubric").find("input[name=id-rubrics]").val();
             if(id!== undefined)
                 $('form').append("<input type='hidden' name='deleted-rubrics[]' value='"+id+"'>");
             $(this).closest("div.rubric").remove();
