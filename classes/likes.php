@@ -18,6 +18,9 @@ class Likes{
                 case 1:
                     $this->_tableName="comments_tournament";
                     break;
+                case 2:
+                    $this->_tableName="user_completed_games";
+                    break;
                 case 3:
                     $this->_tableName="comments_user_completed_games";
                     break;

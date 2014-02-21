@@ -130,6 +130,7 @@
                                         <a href="javascript: void(0)" class="btn-login" id="update-completed-game">Сохранить изменения</a>
                                     </div>-->
 
+                                    <!--Подключение загрузчика изображений-->
                                     <div id="edit-main-game">
                                         <div id="img-upload-btn" class="container upload">
                                             <span class="btn">Изображение</span>
@@ -146,6 +147,7 @@
                                         }
                                         ?>
                                     </div><br><br>
+                                    <!--Конец загрузчика изображений-->
 
                                     <input type="image" value="Сохранить изменения" class="btn-login" style=""/>
                                 </form>
