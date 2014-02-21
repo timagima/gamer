@@ -173,13 +173,17 @@ use classes\url;
         <? } ?>
         <? $i=1; foreach($data['rubrics'] as $r){ ?>
 
-            <div class="rubric">
-                <div class="field" style="">
+            <div class="rubric" style="margin-bottom: 200px;">
+                <div id="img-upload-btn-<?=$r['id']?>" class="container upload" style="display: inline-block; margin-right: 80px;">
+                    <span class="btn">Изображение</span>
+                    <input id="img-files-<?=$r['id']?>" type="file" name="img-files[]" multiple />
+                </div>
+                <div class="field" style="display: inline-block;">
                     <?=Render::Hidden($r['id'], "id-delete")?>
                     <?=Render::LabelEdit($r['rubric'], "rubrics[]", "Рубрика игры", false); ?>
                 </div>
                 <? if($i > 0){ ?>
-                <div class="field" style="float: right;">
+                <div class="field" style="display: inline-block;">
                     <a href="javascript:void(0)" class="remove-rubric">Удалить</a>
                 </div>
                 <? } ?>
@@ -240,10 +244,11 @@ use classes\url;
         visualProgress: "modal",
         img: true,
         method: "MainPageGame",
-        multi: true,
-        limit: 6,
-        uploadUrl: document.location.href
-    }
+        multi: false,
+        limit: 1,
+        uploadUrl: document.location.href,
+
+    };
 
     $(function () {
         tinymce.init({
