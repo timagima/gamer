@@ -101,6 +101,7 @@ class Controller extends MainController
             $this->PrepareFiles("storage/guide-games/".$_GET['id']);
             $data['game'] = $this->model->GetGame($_GET['id']);
             $data['main-page'] = $this->model->GetMainPageGame($_GET['id']);
+            $data['rubrics'] =  $this->model->GetGameRubrics($_GET['id']);
             $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/main-page.tpl.php', '', 'index-admin.tpl.php', $data);
         }
 

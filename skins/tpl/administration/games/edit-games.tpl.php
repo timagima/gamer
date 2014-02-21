@@ -132,7 +132,7 @@ use classes\url;
 
     $(document).ready(function(){
         $("body").on("click", ".remove-difficulty", function(){
-            debugger;
+            //debugger;
             var id = $(this).closest("tr").find("input[type=hidden]").val();
             $('form').append("<input type='hidden' name='delete-field[]' value='"+id+"'>");
             $(this).closest("tr").remove();

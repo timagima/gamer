@@ -296,6 +296,8 @@ class Model extends MainModel
     }
     public function EditMainPageGame($objGame)
     {
+        if(isset($this->_p['new-rubrics']) ||isset($this->_p['deleted-rubrics']))
+            $this->UpdateMainPageGameRubric();
         $dateReleaseWorld = strtotime($this->_p['date_release_world']);
         $dateReleaseRussia = strtotime($this->_p['date_release_russia']);
         $query = $this->conn->dbh->prepare("UPDATE main_page_games SET `name` = :name, game_mode = :game_mode, text = :text, title = :title,
@@ -348,6 +350,37 @@ class Model extends MainModel
         $query->execute();
         $id = $this->conn->dbh->lastInsertId();
         //return $this->GetById($id);
+
+    }
+
+    public function GetGameRubrics($id)
+    {
+        $result = $this->conn->dbh->query("SELECT * FROM main_page_games_rubric WHERE id_main_page_game=".$id)->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public function UpdateMainPageGameRubric()
+    {
+        if(isset($this->_p['new-rubrics'])){
+            $idGame=$this->_p['id-game'];
+            foreach($this->_p['new-rubrics'] as $rubric){
+                $sql = $this->conn->dbh->prepare("INSERT INTO main_page_games_rubric SET id_main_page_game=:id_game, rubric=:rubric");
+                $sql->bindParam(":id_game", $idGame, PDO::PARAM_INT);
+                $sql->bindParam(":rubric", $rubric, PDO::PARAM_STR);
+                $sql->execute();
+            }
+        }/**/
+        if(isset($this->_p['deleted-rubrics'])){
+            $i = 0;
+            $rubricIdString = '';
+            foreach($this->_p['deleted-rubrics'] as $rubricId){
+                $rubricIdString .= ($i==0) ? $rubricId  : ",".$rubricId ;
+                $i++;
+            }
+            $sql = $this->conn->dbh->prepare("DELETE FROM main_page_games_rubric WHERE FIND_IN_SET(id, :id)");
+            $sql->bindParam(":id", $rubricIdString, PDO::PARAM_STR);
+            $sql->execute();
+        }
 
     }
 

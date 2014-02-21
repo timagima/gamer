@@ -161,6 +161,37 @@ use classes\url;
         <?=Render::LabelEdit($data['main-page']->keywords, "keywords", "Ключевые слова")?>
     </div>
 
+    <div id="rubrics">
+
+        <? if(empty($data['rubrics'])){?>
+        <div class="rubric">
+            <div class="field" style="">
+                <?=Render::LabelEdit("Отсутствует", "rubrics[]", "Рубрика игры", false); ?>
+            </div>
+        </div>
+
+        <? } ?>
+        <? $i=1; foreach($data['rubrics'] as $r){ ?>
+
+            <div class="rubric">
+                <div class="field" style="">
+                    <?=Render::Hidden($r['id'], "id-delete")?>
+                    <?=Render::LabelEdit($r['rubric'], "rubrics[]", "Рубрика игры", false); ?>
+                </div>
+                <? if($i > 0){ ?>
+                <div class="field" style="float: right;">
+                    <a href="javascript:void(0)" class="remove-rubric">Удалить</a>
+                </div>
+                <? } ?>
+            </div>
+
+            <? ++$i; } ?>
+
+    </div>
+    <div class="field" style="padding: 10px 10px 10px 0px">
+        <input type="button" id="add-rubric" value="Добавить ещё рубрику">
+    </div>
+
     <div id="img-upload-btn" class="container upload">
         <span class="btn">Изображение</span>
         <input id="img-files" type="file" name="img-files[]" multiple />
@@ -180,6 +211,27 @@ use classes\url;
 <script type="text/javascript">
     $(document).ready(function(){
         initMultiUploader(config);
+
+        $("body").on("click", ".remove-rubric", function(){
+            //debugger;
+            var id = $(this).closest("div.rubric").find("input[type=hidden]").val();
+            if(id!== undefined)
+                $('form').append("<input type='hidden' name='deleted-rubrics[]' value='"+id+"'>");
+            $(this).closest("div.rubric").remove();
+        });
+
+        $("#add-rubric").click(function(){
+            //var element = $(".add-rubric")[1];
+            var html = '<div class="rubric">' +
+                            '<div class="field" style="">' +
+                                '<label>Рубрика игры</label><br>' +
+                                '<input type="text" value="" name="new-rubrics[]">' +
+                            '</div>' +
+                            '<div class="field" style="float: right;"><a href="javascript:void(0)" class="remove-rubric">Удалить</a></div>' +
+                        '</div>';
+            $("#rubrics").append(html);
+            //$(cloneEl).find("input[type=text]").val("");
+        });
     })
     // todo: сделать порог входящих файлов
     // todo: сделать мультизагрузку файлов
