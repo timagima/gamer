@@ -167,6 +167,10 @@ use classes\url;
         <?foreach($data['rubrics'] as $r){ ?>
 
             <div class="rubric" style="margin-bottom: 200px;">
+                <div class="edit-image" style="width: 200px;">
+                    <img src="<?=$r['rubric_img_s']?>">
+                    <input type="hidden" name="saved-img[]" value="<?=$r['id']."$".$r['rubric_img_s']?>">
+                </div>
                 <div id="img-upload-btn-<?=$r['id']?>" class="container upload" style="display: inline-block; margin-right: 80px;">
                     <span class="btn">Изображение</span>
                     <input id="img-files-<?=$r['id']?>" type="file" name="img-files[]" multiple />

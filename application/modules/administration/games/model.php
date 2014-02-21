@@ -401,7 +401,6 @@ class Model extends MainModel
         }
     }
 
-
     public function GetData($page = 1)
     {
         return $this->conn->dbh->query("SELECT id, date, header FROM quest_guide_games ORDER BY date DESC LIMIT 0, 10 ")->fetchAll(PDO::FETCH_ASSOC);
