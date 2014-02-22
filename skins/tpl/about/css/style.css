@@ -26,3 +26,42 @@
 .bottom-content{margin:50px 150px 40px 80px;}
 .bottom-content p{color:#384c6e;font-size:12px;}
 .bottom-content a{color:#68bca7;}
+
+.near-tournaments{margin-top:40px;overflow:hidden;padding:0 15px 0 15px;}
+.near-tournaments h3{font-size:25px;font-weight:100;margin-bottom:15px;}
+.near-tournaments h3 a{color:#1fbba6;}
+.near-tournaments p{color:#63738e;font-size:18px;margin-top:0;}
+.img-center{text-align:center;}
+.left-game{float:left;}
+.center-game{margin:0 325px 0 329px;}
+.right-game{float:right;}
+.middle-content{margin-top:70px;padding-bottom:10px;overflow:hidden;}
+.left-middle{float:left;padding-left:25px;}
+.left-middle > span{display:block;color:#b8bec7;margin-bottom:10px;}
+.left-middle p{display:inline;color:#1fbba6;font-size:35px;margin-left:15px;}
+.right-middle{float:right;padding:30px 25px 0 0;}
+.right-middle a{display:block;text-decoration:none;color:#fff;font-size:25px;
+    padding:12px 30px;border-radius:3px;background:#e86950;}
+.center-middle{margin-left: 340px;}
+.center-middle p{font-size:20px;margin:5px 0 12px 0;}
+.center-middle span{font-size:36px;margin-left:60px;font-weight:100;}
+.center-middle span + p{font-size:28px;margin:5px 0 0 180px;}
+
+
+
+.profile-winner{margin-top:50px;overflow:hidden;padding:0 15px 0 15px;text-align: center;}
+.profile-winner p{font-size:11px;margin:0 0 2px 0;line-height: 1.5;}
+.profile-winner p + p{margin-top:20px;}
+.profile-winner p a{font-size:16px;color:#0bad98;}
+.left-profile, .center-profile, .right-profile{width:277px;border:1px solid #807e7e;border-radius:3px;}
+.center-profile{margin:0 325px 0 329px;}
+.right-profile{float:right;}
+.left-profile{float:left;}
+.content-profile{padding:5px 15px 15px;}
+.content-profile p + p{margin:0;}
+.content-profile p a{font-size:11px;}
+
+
+
+
+

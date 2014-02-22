@@ -12,7 +12,7 @@
 <!--            <link type="text/css" rel="stylesheet" href="/skins/css/ui.css" />-->
 
     <script type="text/javascript" src="/skins/js/jquery.min.js"></script>
-
+    <script type="text/javascript" src="/skins/js/history.js?type=/&redirect=true&basepath=/skins/"></script>
     <script type="text/javascript" src="/skins/js/jquery.poshytip.js"></script>
     <script type="text/javascript" src="/skins/js/arctic-modal.min.js"></script>
     <script type="text/javascript" src="/skins/js/jquery.autocomplete.js"></script>
