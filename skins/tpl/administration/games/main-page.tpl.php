@@ -196,7 +196,7 @@ use classes\url;
 
     </div>
     <div class="field" style="padding: 10px 10px 10px 0px">
-        <input type="button" id="add-rubric" value="Добавить ещё рубрику">
+        <input type="button" id="add-rubric" value="Добавить новую рубрику">
     </div>
 
     <div style="height: 50px; width: 100%">

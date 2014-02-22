@@ -292,8 +292,7 @@ class Model extends MainModel
     }
     public function EditMainPageGame($objGame)
     {
-        if(isset($this->_p['new-rubrics']) ||isset($this->_p['deleted-rubrics']))
-            $this->UpdateMainPageGameRubric();
+        $this->UpdateMainPageGameRubric();
         $this->UploadMainPageRubricImg();
         $dateReleaseWorld = strtotime($this->_p['date_release_world']);
         $dateReleaseRussia = strtotime($this->_p['date_release_russia']);
@@ -363,6 +362,7 @@ class Model extends MainModel
                 $sql->execute();
             }
         }
+
         if(isset($this->_p['deleted-rubrics'])){
             $i = 0;
             $rubricIdString = '';
@@ -370,6 +370,15 @@ class Model extends MainModel
                 $rubricIdString .= ($i==0) ? $rubricId  : ",".$rubricId ;
                 $i++;
             }
+            $path = $this->conn->dbh->prepare("SELECT rubric_img_s, rubric_img_b  FROM main_page_games_rubric WHERE FIND_IN_SET(id, :id)");
+            $path->bindParam(":id", $rubricIdString, PDO::PARAM_STR);
+            $path->execute();
+            $pathDelImgs = $path->fetchAll(PDO::FETCH_ASSOC);
+            foreach($pathDelImgs as $pathImg){
+                $a = unlink(substr($pathImg['rubric_img_s'], 1));
+                $b = unlink(substr($pathImg['rubric_img_b'], 1));
+            }
+
             $sql = $this->conn->dbh->prepare("DELETE FROM main_page_games_rubric WHERE FIND_IN_SET(id, :id)");
             $sql->bindParam(":id", $rubricIdString, PDO::PARAM_STR);
             $sql->execute();
@@ -384,8 +393,8 @@ class Model extends MainModel
             $delId ='';
             foreach($this->_p['deletedImg'] as $delImgId){
                 $delImgArray = explode('$', $delImgId);
-                $delImgB = substr(str_replace("_s", "_b", $delImgArray[1]), 1);
                 $delImgS = substr($delImgArray[1], 1);
+                $delImgB = str_replace("_s", "_b", $delImgS);
                 if( unlink($delImgS) && unlink($delImgB) ){
                     $delId .= ($i===0) ? $delImgArray[0] : ','.$delImgArray[0];
                     $i++;
