@@ -72,8 +72,8 @@ function multiUploader(config){
     }
     multiUploader.prototype.renderImage = function(arrFile){
         $("#error-img").remove();
-        var multiHtml = "<div class='edit-image' style='"+ self.config.style +"'><img src='/"+arrFile[0]+"' /><input type='hidden' class='"+arrFile[1]+"' name='"+arrFile[1]+"[]' value='"+arrFile[0]+"' /></div>";
-        var singleHtml = "<div class='edit-image' style='"+ self.config.style +"'><img src='/"+arrFile[0]+"' /><input type='hidden' name='"+arrFile[1]+"' id='"+arrFile[1]+"' value='"+arrFile[0]+"' /></div>";
+        var multiHtml = "<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' class='"+arrFile[1]+"' name='"+arrFile[1]+"[]' value='"+arrFile[0]+"' /></div>";
+        var singleHtml = "<div class='edit-image'><img src='/"+arrFile[0]+"' /><input type='hidden' name='"+arrFile[1]+"' id='"+arrFile[1]+"' value='"+arrFile[0]+"' /></div>";
         if(arrFile.length <= 1){
             $("#"+ self.idDivParent).after('<div id="error-img" class="right error">'+arrFile[0]+'</div>');
         } else {
@@ -117,6 +117,7 @@ function multiUploader(config){
     multiUploader.prototype.deleteImg = function(link){
         --self.countImg;
         var val = $(link).find("input[type=hidden]").attr("name");
+        var showBtn = ($(link).attr("name") === "show-btn") ? true : false;
         if(val == "source_img_s"){
             var name = Array("Иконка", "icon-upload-btn");
         } else {
@@ -128,6 +129,9 @@ function multiUploader(config){
             self.idDivParent = self.idDivParent;
         }else{
             var test = $(link[0]).parent().append(DelImg);
+        }
+        if(showBtn){
+            var btn = $($(link).parent().children()[0]).css("display", "inline-block");
         }
         $(link).remove();
         var html = '<div id="'+name[1]+'" class="container upload"><span class="btn">'+name[0]+'</span><input type="file" name="'+val+'" id="'+val+'" /></div>';

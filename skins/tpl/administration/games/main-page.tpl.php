@@ -167,14 +167,22 @@ use classes\url;
         <?foreach($data['rubrics'] as $r){ ?>
 
             <div class="rubric" style="margin-bottom: 200px;">
-                <div class="edit-image" style="width: 200px;">
+                <?php if($r['rubric_img_s']!=false){?>
+                <div id="img-upload-btn-<?=$r['id']?>" class="container upload" style="display: none; margin-right: 80px;">
+                    <span class="btn">Изображение</span>
+                    <input id="img-files-<?=$r['id']?>" type="file" name="img-files[]" multiple />
+                </div>
+                <div class="edit-image" style="width: 200px;" name="show-btn">
                     <img src="<?=$r['rubric_img_s']?>">
                     <input type="hidden" name="saved-img[]" value="<?=$r['id']."$".$r['rubric_img_s']?>">
                 </div>
+                <?php } ?>
+                <?php if($r['rubric_img_s']==false){?>
                 <div id="img-upload-btn-<?=$r['id']?>" class="container upload" style="display: inline-block; margin-right: 80px;">
                     <span class="btn">Изображение</span>
                     <input id="img-files-<?=$r['id']?>" type="file" name="img-files[]" multiple />
                 </div>
+                <?php } ?>
                 <div class="field" style="display: inline-block;">
                     <?=Render::Hidden($r['id'], "id-rubrics[]")?>
                     <?=Render::LabelEdit($r['rubric'], "rubrics[]", "Рубрика игры", false); ?>
@@ -189,11 +197,6 @@ use classes\url;
     </div>
     <div class="field" style="padding: 10px 10px 10px 0px">
         <input type="button" id="add-rubric" value="Добавить ещё рубрику">
-    </div>
-
-    <div id="img-upload-btn" class="container upload">
-        <span class="btn">Изображение</span>
-        <input id="img-files" type="file" name="img-files[]" multiple />
     </div>
 
     <div style="height: 50px; width: 100%">

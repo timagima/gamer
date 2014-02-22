@@ -294,7 +294,7 @@ class Model extends MainModel
     {
         if(isset($this->_p['new-rubrics']) ||isset($this->_p['deleted-rubrics']))
             $this->UpdateMainPageGameRubric();
-        $this->UploadMainPageImg();
+        $this->UploadMainPageRubricImg();
         $dateReleaseWorld = strtotime($this->_p['date_release_world']);
         $dateReleaseRussia = strtotime($this->_p['date_release_russia']);
         $query = $this->conn->dbh->prepare("UPDATE main_page_games SET  game_mode = :game_mode, text = :text, title = :title,
@@ -377,28 +377,47 @@ class Model extends MainModel
 
     }
 
-    public function UploadMainPageImg()
+    public function UploadMainPageRubricImg()
     {
-        foreach($this->_p['id-rubrics'] as $id){
-            $imgName = "img-files-".$id;
-            if(!empty($this->_p[$imgName])){
-                $imgS = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p[$imgName]);
-                $imgB = str_replace("_s", "_b", $imgS);
-                $oldImgS = $this->_p[$imgName];
-                $oldImgB = str_replace("_s", "_b", $oldImgS);
-                if(rename($oldImgS, $imgS) && rename($oldImgB, $imgB)){
-                    $imgS = "/".$imgS;
-                    $imgB = "/".$imgB;
-                    $sql = $this->conn->dbh->prepare("UPDATE main_page_games_rubric SET rubric_img_s=:rubricImgS, rubric_img_b=:rubricImgB WHERE id=:id");
-                    $sql->bindParam(":id", $id, PDO::PARAM_INT);
-                    $sql->bindParam(":rubricImgS", $imgS, PDO::PARAM_STR);
-                    $sql->bindParam(":rubricImgB", $imgB, PDO::PARAM_STR);
-                    $sql->execute();
+        if( isset($this->_p['deletedImg']) && is_array($this->_p['deletedImg']) ){
+            $i=0;
+            $delId ='';
+            foreach($this->_p['deletedImg'] as $delImgId){
+                $delImgArray = explode('$', $delImgId);
+                $delImgB = substr(str_replace("_s", "_b", $delImgArray[1]), 1);
+                $delImgS = substr($delImgArray[1], 1);
+                if( unlink($delImgS) && unlink($delImgB) ){
+                    $delId .= ($i===0) ? $delImgArray[0] : ','.$delImgArray[0];
+                    $i++;
                 }
-
             }
-
+            $sql = $this->conn->dbh->prepare("UPDATE main_page_games_rubric SET rubric_img_b=null, rubric_img_s=NULL WHERE FIND_IN_SET(id, :id)");
+            $sql->bindParam(":id", $delId, PDO::PARAM_STR);
+            $sql->execute();
         }
+
+        if(is_array($this->_p['id-rubrics'])){
+            foreach($this->_p['id-rubrics'] as $id){
+                $imgName = "img-files-".$id;
+                if(!empty($this->_p[$imgName])){
+                    $imgS = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p[$imgName]);
+                    $imgB = str_replace("_s", "_b", $imgS);
+                    $oldImgS = $this->_p[$imgName];
+                    $oldImgB = str_replace("_s", "_b", $oldImgS);
+                    if(rename($oldImgS, $imgS) && rename($oldImgB, $imgB)){
+                        $imgS = "/".$imgS;
+                        $imgB = "/".$imgB;
+                        $sql = $this->conn->dbh->prepare("UPDATE main_page_games_rubric SET rubric_img_s=:rubricImgS, rubric_img_b=:rubricImgB WHERE id=:id");
+                        $sql->bindParam(":id", $id, PDO::PARAM_INT);
+                        $sql->bindParam(":rubricImgS", $imgS, PDO::PARAM_STR);
+                        $sql->bindParam(":rubricImgB", $imgB, PDO::PARAM_STR);
+                        $sql->execute();
+                    }
+                }
+            }
+        }
+
+
     }
 
     public function GetData($page = 1)
