@@ -57,31 +57,30 @@ class Controller extends MainController
         $this->AddCss("style");
         $this->AddJs("script");
         $resGet = $_GET['page'];
-        $resPost = $_POST['id'];
-        $pageTitle = 'Легендарные Off-line турниры';
-        $pageUrl = 'about/legend-tournament-promo.tpl.php';
 
-        if($resGet == 'next-tournament-promo' ){
+        $arrFileTpl = array("1"=>"/skins/tpl/about/legend-tournament-promo.tpl.php",
+        "2"=>"/skins/tpl/about/next-tournament-promo.tpl.php",
+        "3"=>"/skins/tpl/about/winner-promo.tpl.php");
+        if(!empty($_POST['id']))
+        {
+            include $_SERVER['DOCUMENT_ROOT'].$arrFileTpl[$_POST['id']];
+            exit();
+        }
+        if($resGet == 'legendary-tournament')
+        {
+            $pageTitle = 'Легендарные Off-line турниры';
+            $pageUrl = 'about/legend-tournament-promo.tpl.php';
+        }
+        if($resGet == 'next-tournament' )
+        {
             $pageTitle = 'Ближайшие Off-line турниры';
             $pageUrl = 'about/next-tournament-promo.tpl.php';
         }
-        else if($resGet == 'winner-promo'){
+        if($resGet == 'winner')
+        {
             $pageTitle = 'Победители Off-line турниров';
             $pageUrl = 'about/winner-promo.tpl.php';
         }
-        if($resPost == 1){
-            include $_SERVER['DOCUMENT_ROOT'] . '/skins/tpl/about/legend-tournament-promo.tpl.php';
-            exit();
-        }
-        else if($resPost == 2){
-            include $_SERVER['DOCUMENT_ROOT'] . '/skins/tpl/about/next-tournament-promo.tpl.php';
-            exit();
-        }
-        else if($resPost == 3){
-            include $_SERVER['DOCUMENT_ROOT'] . '/skins/tpl/about/winner-promo.tpl.php';
-            exit();
-        }
-
         $this->headerTxt['title']= $pageTitle;
         $data['error'] = '';
         $this->view->Generate($this->arrTpl[0], $pageUrl, $this->GetTplView(), $this->arrTpl[1], $data,  $this->headerTxt, $this->model->CountQuery());

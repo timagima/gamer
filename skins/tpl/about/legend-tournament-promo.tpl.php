@@ -10,8 +10,8 @@
                 <a href="#"><img src="/skins/img/tw.png" alt="Twitter" /></a>
             </div>
             <div id="select">
-                <a class="active" id="prev-btn" ></a>
-                <a class="active" id="next-btn" ></a>
+                <a id="prev-btn" onclick="ajaxStart(this)" ></a>
+                <a id="next-btn" onclick="ajaxStart(this)" ></a>
             </div>
 
                <img src="/skins/img/slider1.jpg" alt="slider"/>
