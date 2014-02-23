@@ -54,7 +54,7 @@
 .profile-winner p + p{margin-top:20px;}
 .profile-winner p a{font-size:16px;color:#0bad98;}
 .left-profile, .center-profile, .right-profile{width:277px;border:1px solid #807e7e;border-radius:3px;}
-.center-profile{margin:0 325px 0 329px;}
+.center-profile{float:left;margin-left:45px;}
 .right-profile{float:right;}
 .left-profile{float:left;}
 .content-profile{padding:5px 15px 15px;}

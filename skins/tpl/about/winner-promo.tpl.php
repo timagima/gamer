@@ -1,3 +1,4 @@
+
 <div id="main">
    <div id="slider">
         <div id="internal-slider">
@@ -18,21 +19,21 @@
 
     </div>
 
-    <div class="profile-winner">
-        <?  $cssClass = array("left-profile", "right-profile", "center-profile");
-            foreach($data['users_winner'] as $key => $value){ ?>
-             <div class="<?=$cssClass[$key];?>">
-            <img src="<?echo $value['img_avatar']?>" />
-            <p><a href="#"><?echo $value['first_name']," ". $value['last_name']?></a></p>
-            <span><?echo $value['nick']?></span>
-            <div class="content-profile">
-                <p>24 года, г. Пермь. Победил в турнире по игре.
-                    Название игры. Получил приз 1000 р.</p>
-                <p>Вот, что говорит победитель <a href="#">Ссылка на видео</a></p>
+   <div class="profile-winner">
+        <?$cssClass = array("left-profile","center-profile","right-profile");
+            foreach($data['users_winner'] as $key => $value){?>
+            <div class="<?echo $cssClass[$key];?>">
+                <img src="<?echo $value['img_avatar'];?>" />
+                <p><a href="#"><?echo $value['first_name']," ".$value['last_name']?></a></p>
+                <span><?echo $value['nick']?></span>
+                <div class="content-profile">
+                    <p>24 года, г. Пермь. Победил в турнире по игре.
+                        Название игры. Получил приз 1000 р.</p>
+                    <p>Вот, что говорит победитель <a href="#">Ссылка на видео</a></p>
+                </div>
             </div>
-         </div>
         <? } ?>
-    </div>
+   </div>
 
 
     <div class="middle-content">

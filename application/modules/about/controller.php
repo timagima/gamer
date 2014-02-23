@@ -55,6 +55,7 @@ class Controller extends MainController
     public function ActionPromo()
     {
         $data['users_winner'] = $this->model->GetLastWinner();
+        $data['near_tournaments'] = $this->model->GetLastTournament();
         $this->AddCss("style");
         $this->AddJs("script");
         $resGet = $_GET['page'];
