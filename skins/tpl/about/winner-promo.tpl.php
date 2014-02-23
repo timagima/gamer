@@ -1,4 +1,6 @@
-
+<?
+print_r($data['near_tournaments'][2]);
+?>
 <div id="main">
    <div id="slider">
         <div id="internal-slider">

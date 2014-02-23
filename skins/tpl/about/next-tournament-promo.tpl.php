@@ -18,42 +18,32 @@
 
     </div>
     <div class="near-tournaments">
-        <div class="left-game">
-            <h3><a href="#">Название игры</a></h3>
+        <?$cssClass = array("left-game","center-game","right-game");
+        foreach($data['near_tournaments'] as $key=>$value){?>
+        <div class="<?echo $cssClass[$key]?>">
+            <h3><a href="#"><?echo $value['title'] = substr($value['title'],0,strripos(substr($value['title'],0,45),''))?></a></h3>
             <p>С 1 июля, призовой фонд 1000 р</p>
-            <p class="img-center"><img src="/skins/img/icon2.jpg" alt="Heroes 3" /></p>
+            <p class="img-center"><img src="/storage<?echo $value['source_img_s']?>" /></p>
         </div>
-
-        <div class="right-game">
-            <h3><a href="#">Название игры</a></h3>
-            <p>С 1 июля, призовой фонд 1000 р</p>
-            <p class="img-center"><img src="/skins/img/icon3.jpg" alt="Dungeon Lords" /></p>
-         </div>
-
-        <div class="center-game">
-            <h3><a href="#">Название игры</a></h3>
-            <p>С 1 июля, призовой фонд 1000 р</p>
-            <p class="img-center"><img src="/skins/img/icon1.jpg" alt="Kings Bounty" /></p>
-        </div>
-
+        <? } ?>
     </div>
 
 
 
     <div class="middle-content">
-        <div class="left-middle">
-            <span>Участников</span>
-            <img src="/skins/img/inquiries.png"/>
-            <p>+350</p>
-        </div>
-        <div class="right-middle">
-            <a href="#">Принять участие</a>
-        </div>
-        <div class="center-middle">
-            <p>абсолютно</p>
-            <span>бесплатное</span>
-            <p>участие</p>
-        </div>
+            <div class="left-middle">
+                <span>Участников</span>
+                <img src="/skins/img/inquiries.png"/>
+                <p>+350</p>
+            </div>
+            <div class="right-middle">
+                <a href="#">Принять участие</a>
+            </div>
+            <div class="center-middle">
+                <p>абсолютно</p>
+                <span>бесплатное</span>
+                <p>участие</p>
+            </div>
     </div>
     <div class="bottom-content">
         <p>Все условия и правила ближайшего турнира читайте на нашем сайте <a href="#">http://gs11.ru/tournament</a>.

@@ -7,7 +7,7 @@
 #social-buttons a{margin-left:10px;}
 #select{position:absolute;right:1px;top:173px;}
 #prev-btn{display:block;width:60px;height:59px;background:url(/skins/img/slider-btn.png) top 100% left 0 no-repeat;float:left;cursor:pointer;}
-#next-btn{display:block;width:57px;height:59px;background:url(/skins/img/slider-btn.png) top 100% left 100% no-repeat;  margin-left:59px;cursor:pointer;}
+#next-btn{display:block;width:57px;height:59px;background:url(/skins/img/slider-btn.png) top 0 left 100% no-repeat;  margin-left:59px;cursor:pointer;}
 .top-content{margin-top:35px;overflow:hidden;}
 .left-content{padding-left:25px;float:left;width:650px;}
 .right-content{margin-left:675px;padding:10px 0 0 40px;}
@@ -32,9 +32,13 @@
 .near-tournaments h3 a{color:#1fbba6;}
 .near-tournaments p{color:#63738e;font-size:18px;margin-top:0;}
 .img-center{text-align:center;}
-.left-game{float:left;}
-.center-game{margin:0 325px 0 329px;}
+.img-center img {width:196px;height:208px}
+
+
+.center-game, .right-game, .left-game{width:277px;overflow:hidden;}
+.center-game{float:left;margin-left:45px;}
 .right-game{float:right;}
+.left-game{float:left;}
 .middle-content{margin-top:70px;padding-bottom:10px;overflow:hidden;}
 .left-middle{float:left;padding-left:25px;}
 .left-middle > span{display:block;color:#b8bec7;margin-bottom:10px;}
