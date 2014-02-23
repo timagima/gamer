@@ -195,7 +195,7 @@ use classes\url;
             <? } ?>
 
     </div>
-    <div class="field" style="padding: 10px 10px 10px 0px">
+    <div class="field" style="padding: 10px 10px 10px 0px; display: block;">
         <input type="button" id="add-rubric" value="Добавить новую рубрику">
     </div>
 
@@ -215,25 +215,29 @@ use classes\url;
         initMultiUploader(config);
 
         $("body").on("click", ".remove-rubric", function(){
-            //debugger;
             var id = $(this).attr('id');
-            //var id = $(this).closest("div.rubric").find("input[name=id-rubrics]").val();
             if(id!== undefined)
                 $('form').append("<input type='hidden' name='deleted-rubrics[]' value='"+id+"'>");
             $(this).closest("div.rubric").remove();
         });
 
+        var ImgRubric = 0;
         $("#add-rubric").click(function(){
-            //var element = $(".add-rubric")[1];
             var html = '<div class="rubric">' +
-                            '<div class="field" style="">' +
+                            '<div id="add-img-upload-btn-'+ ImgRubric +'" class="container upload" style="display: inline-block; margin-right: 80px;">' +
+                                '<span class="btn">Изображение</span>' +
+                                '<input id="add-img-files-'+ ImgRubric +'" type="file" name="new-img-files[]" multiple />' +
+                            '</div>' +
+                            '<div class="field" style="display: inline-block;">' +
                                 '<label>Рубрика игры</label><br>' +
                                 '<input type="text" value="" name="new-rubrics[]">' +
                             '</div>' +
-                            '<div class="field" style="float: right;"><a href="javascript:void(0)" class="remove-rubric">Удалить</a></div>' +
-                        '</div>';
+                            '<div class="field" style="display: inline-block;"><a href="javascript:void(0)" class="remove-rubric">Удалить</a></div>' +
+                        '</div>' +
+                        '<div style="clear: both;"></div>';
             $("#rubrics").append(html);
-            //$(cloneEl).find("input[type=text]").val("");
+            initMultiUploader(config);
+            ImgRubric++;
         });
     })
     // todo: сделать порог входящих файлов

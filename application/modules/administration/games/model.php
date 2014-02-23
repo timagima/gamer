@@ -355,11 +355,29 @@ class Model extends MainModel
     {
         if(isset($this->_p['new-rubrics'])){
             $idGame=$this->_p['id-game'];
+            $newImgCount = 0;
             foreach($this->_p['new-rubrics'] as $rubric){
-                $sql = $this->conn->dbh->prepare("INSERT INTO main_page_games_rubric SET id_main_page_game=:id_game, rubric=:rubric");
+                $imgName = "add-img-files-".$newImgCount;
+                if(isset($this->_p[$imgName])){
+                    $imgS = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p[$imgName]);
+                    $imgB = str_replace("_s", "_b", $imgS);
+                    $oldImgS = $this->_p[$imgName];
+                    $oldImgB = str_replace("_s", "_b", $oldImgS);
+                    if(rename($oldImgS, $imgS) && rename($oldImgB, $imgB)){
+                        $imgS = "/".$imgS;
+                        $imgB = "/".$imgB;
+                    }
+                }else{
+                    $imgS = "";
+                    $imgB = "";
+                }
+                $sql = $this->conn->dbh->prepare("INSERT INTO main_page_games_rubric SET id_main_page_game=:id_game, rubric=:rubric, rubric_img_s=:imgS, rubric_img_b=:imgB");
                 $sql->bindParam(":id_game", $idGame, PDO::PARAM_INT);
                 $sql->bindParam(":rubric", $rubric, PDO::PARAM_STR);
+                $sql->bindParam(":imgS", $imgS, PDO::PARAM_STR);
+                $sql->bindParam(":imgB", $imgB, PDO::PARAM_STR);
                 $sql->execute();
+                $newImgCount++;
             }
         }
 
@@ -375,8 +393,8 @@ class Model extends MainModel
             $path->execute();
             $pathDelImgs = $path->fetchAll(PDO::FETCH_ASSOC);
             foreach($pathDelImgs as $pathImg){
-                $a = unlink(substr($pathImg['rubric_img_s'], 1));
-                $b = unlink(substr($pathImg['rubric_img_b'], 1));
+                unlink(substr($pathImg['rubric_img_s'], 1));
+                unlink(substr($pathImg['rubric_img_b'], 1));
             }
 
             $sql = $this->conn->dbh->prepare("DELETE FROM main_page_games_rubric WHERE FIND_IN_SET(id, :id)");
@@ -425,8 +443,6 @@ class Model extends MainModel
                 }
             }
         }
-
-
     }
 
     public function GetData($page = 1)
