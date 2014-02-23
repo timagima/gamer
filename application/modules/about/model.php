@@ -24,8 +24,8 @@ class Model extends MainModel
     }
     public function GetLastWinner()
     {
-        $stmt = $this->conn->dbh->prepare("SELECT u.img_avatar, u.first_name, u.last_name, u.nick,
-         u.birthday,  u.city FROM info_winner i  LEFT JOIN users u ON u.id = i.id_user ORDER BY i.id DESC LIMIT 3");
+        $stmt = $this->conn->dbh->prepare("SELECT u.img_avatar, u.first_name, u.last_name, u.nick
+         FROM info_winner i  LEFT JOIN users u ON u.id = i.id_user ORDER BY i.id DESC LIMIT 3");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

@@ -17,40 +17,50 @@
         </div>
 
     </div>
+
     <div class="profile-winner">
+
         <div class="left-profile">
-            <img src="<?echo $data['users_winner'][0]['img_avatar']?>" />
-                <p><a href="#"><?echo $data['users_winner'][0]['first_name']?></a></p>
-                    <span><?echo $data['users_winner'][0]['nick']?></span>
+            <?foreach($data['users_winner'] as $key=> $value){if($key == 0){?>
+                <img src="<?echo $value['img_avatar']?>" />
+                <p><a href="#"><?echo $value['first_name']," ". $value['last_name']?></a></p>
+                <span><?echo $value['nick']?></span>
                 <div class="content-profile">
-                <p>24 года, г. Пермь. Победил в турнире по игре.
-                Название игры. Получил приз 1000 р.</p>
-                <p>Вот, что говорит победитель <a href="#">Ссылка на видео</a></p>
+                    <p>24 года, г. Пермь. Победил в турнире по игре.
+                        Название игры. Получил приз 1000 р.</p>
+                    <p>Вот, что говорит победитель <a href="#">Ссылка на видео</a></p>
                 </div>
+            <?}}?>
         </div>
 
         <div class="right-profile">
-            <img src="<?echo $data['users_winner'][2]['img_avatar']?>" />
-                <p><a href="#"><?echo $data['users_winner'][2]['first_name']?></a></p>
-                    <span><?echo $data['users_winner'][2]['nick']?></span>
+            <?foreach($data['users_winner'] as $key=> $value){if($key == 2){?>
+            <img src="<?echo $value['img_avatar']?>" />
+                <p><a href="#"><?echo $value['first_name']," ". $value['last_name']?></a></p>
+                    <span><?echo $value['nick']?></span>
                 <div class="content-profile">
                 <p>24 года, г. Пермь. Победил в турнире по игре.
                 Название игры. Получил приз 1000 р.</p>
                 <p>Вот, что говорит победитель <a href="#">Ссылка на видео</a></p>
                 </div>
+            <?}}?>
+
         </div>
 
         <div class="center-profile">
-            <img src="<?echo $data['users_winner'][1]['img_avatar']?>" />
-                <p><a href="#"><?echo $data['users_winner'][1]['first_name']?></a></p>
-                    <span><?echo $data['users_winner'][1]['nick']?></span>
+            <?foreach($data['users_winner'] as $key=> $value){if($key == 1){?>
+            <img src="<?echo $value['img_avatar']?>" />
+                <p><a href="#"><?echo $value['first_name']," ". $value['last_name']?></a></p>
+                    <span><?echo $value['nick']?></span>
                 <div class="content-profile">
                 <p>24 года, г. Пермь. Победил в турнире по игре.
                 Название игры. Получил приз 1000 р.</p>
             <p>Вот, что говорит победитель <a href="#">Ссылка на видео</a></p>
                 </div>
+            <?}}?>
         </div>
     </div>
+
 
     <div class="middle-content">
         <div class="left-middle">
