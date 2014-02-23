@@ -19,46 +19,19 @@
     </div>
 
     <div class="profile-winner">
-
-        <div class="left-profile">
-            <?foreach($data['users_winner'] as $key=> $value){if($key == 0){?>
-                <img src="<?echo $value['img_avatar']?>" />
-                <p><a href="#"><?echo $value['first_name']," ". $value['last_name']?></a></p>
-                <span><?echo $value['nick']?></span>
-                <div class="content-profile">
-                    <p>24 года, г. Пермь. Победил в турнире по игре.
-                        Название игры. Получил приз 1000 р.</p>
-                    <p>Вот, что говорит победитель <a href="#">Ссылка на видео</a></p>
-                </div>
-            <?}}?>
-        </div>
-
-        <div class="right-profile">
-            <?foreach($data['users_winner'] as $key=> $value){if($key == 2){?>
+        <?  $cssClass = array("left-profile", "right-profile", "center-profile");
+            foreach($data['users_winner'] as $key => $value){ ?>
+             <div class="<?=$cssClass[$key];?>">
             <img src="<?echo $value['img_avatar']?>" />
-                <p><a href="#"><?echo $value['first_name']," ". $value['last_name']?></a></p>
-                    <span><?echo $value['nick']?></span>
-                <div class="content-profile">
+            <p><a href="#"><?echo $value['first_name']," ". $value['last_name']?></a></p>
+            <span><?echo $value['nick']?></span>
+            <div class="content-profile">
                 <p>24 года, г. Пермь. Победил в турнире по игре.
-                Название игры. Получил приз 1000 р.</p>
+                    Название игры. Получил приз 1000 р.</p>
                 <p>Вот, что говорит победитель <a href="#">Ссылка на видео</a></p>
-                </div>
-            <?}}?>
-
-        </div>
-
-        <div class="center-profile">
-            <?foreach($data['users_winner'] as $key=> $value){if($key == 1){?>
-            <img src="<?echo $value['img_avatar']?>" />
-                <p><a href="#"><?echo $value['first_name']," ". $value['last_name']?></a></p>
-                    <span><?echo $value['nick']?></span>
-                <div class="content-profile">
-                <p>24 года, г. Пермь. Победил в турнире по игре.
-                Название игры. Получил приз 1000 р.</p>
-            <p>Вот, что говорит победитель <a href="#">Ссылка на видео</a></p>
-                </div>
-            <?}}?>
-        </div>
+            </div>
+         </div>
+        <? } ?>
     </div>
 
 
