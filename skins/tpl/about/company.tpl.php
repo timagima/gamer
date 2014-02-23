@@ -48,7 +48,7 @@
                 <h4>Кирилл Кузнецов</h4>
                 <div>
                     <img onmouseover="showInfoLead('movie-maker')" onmouseout="showInfoLead('out')" src="/skins/img/kkv.jpg" alt="Кузнецов Кирилл"><br>
-                    <span style="color: #52c7b0">Мувимейкер</span>
+                    <span style="color: #52c7b0"></span>
                     <div class="hide movie-maker" style=" bottom: -8px;">
                         <span>Мувимейкер компании - GS11</span><br>
                         <span style="color: #34495e">Главный мувимейкер.</span><br>

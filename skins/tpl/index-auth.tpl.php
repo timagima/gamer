@@ -18,6 +18,7 @@
     <script type="text/javascript" src="/skins/js/jquery.autocomplete.js"></script>
     <script type="text/javascript" src="/skins/js/jquery.customSelect.js"></script>
     <script type="text/javascript" src="/skins/js/custom_radio.js"></script>
+    <script type="text/javascript" src="/skins/js/history.js"></script>
     <script type="text/javascript" src="/skins/js/custom_checkbox_and_radio.js"></script>
     <script type="text/javascript" src="/skins/js/script.js"></script>
     <script type="text/javascript" src="/skins/js/chat_scripts.js"></script>

@@ -11,8 +11,8 @@
                 <a href="#"><img src="/skins/img/tw.png" alt="Twitter" /></a>
             </div>
             <div id="select">
-                <a id="prev-btn" onclick="ajaxStart(this)"></a>
-                <a id="next-btn" onclick="ajaxStart(this)"></a>
+                <a id="prev-btn"></a>
+                <a id="next-btn" class="slider-action" page="next-tournament"></a>
             </div>
             <img src="/skins/img/slider3.jpg" alt="slider"/>
         </div>

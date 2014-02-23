@@ -62,15 +62,15 @@ class Controller extends MainController
 
 
 
-        $arrFileTpl = array("1"=>"/skins/tpl/about/legend-tournament-promo.tpl.php",
-        "2"=>"/skins/tpl/about/next-tournament-promo.tpl.php",
-        "3"=>"/skins/tpl/about/winner-promo.tpl.php");
-        if(!empty($_POST['id']))
+        $arrFileTpl = array("legend-tournament"=>"/skins/tpl/about/legend-tournament-promo.tpl.php",
+        "next-tournament"=>"/skins/tpl/about/next-tournament-promo.tpl.php",
+        "winner"=>"/skins/tpl/about/winner-promo.tpl.php");
+        if(!empty($_POST['page']))
         {
-            include $_SERVER['DOCUMENT_ROOT'].$arrFileTpl[$_POST['id']];
+            include $_SERVER['DOCUMENT_ROOT'].$arrFileTpl[$_POST['page']];
             exit();
         }
-        if($resGet == 'legendary-tournament')
+        if($resGet == 'legend-tournament')
         {
             $pageTitle = 'Легендарные Off-line турниры';
             $pageUrl = 'about/legend-tournament-promo.tpl.php';
