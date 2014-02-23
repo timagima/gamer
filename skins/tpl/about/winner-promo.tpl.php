@@ -1,5 +1,5 @@
 <div id="main">
-    <div id="slider">
+   <div id="slider">
         <div id="internal-slider">
             <div id="social-buttons">
                 <a href="#"><img src="/skins/img/youtube.png" alt="YouTube" /></a>
@@ -19,9 +19,9 @@
     </div>
     <div class="profile-winner">
         <div class="left-profile">
-            <img src="/skins/img/profile1.jpg" />
-                <p><a href="#">Имя Фамилия</a></p>
-                    <span>НИК</span>
+            <img src="<?echo $data['users_winner'][0]['img_avatar']?>" />
+                <p><a href="#"><?echo $data['users_winner'][0]['first_name']?></a></p>
+                    <span><?echo $data['users_winner'][0]['nick']?></span>
                 <div class="content-profile">
                 <p>24 года, г. Пермь. Победил в турнире по игре.
                 Название игры. Получил приз 1000 р.</p>
@@ -30,19 +30,20 @@
         </div>
 
         <div class="right-profile">
-            <img src="/skins/img/profile1.jpg" />
-                <p><a href="#">Имя Фамилия</a></p>
-                    <span>НИК</span>
+            <img src="<?echo $data['users_winner'][2]['img_avatar']?>" />
+                <p><a href="#"><?echo $data['users_winner'][2]['first_name']?></a></p>
+                    <span><?echo $data['users_winner'][2]['nick']?></span>
                 <div class="content-profile">
                 <p>24 года, г. Пермь. Победил в турнире по игре.
                 Название игры. Получил приз 1000 р.</p>
                 <p>Вот, что говорит победитель <a href="#">Ссылка на видео</a></p>
                 </div>
         </div>
+
         <div class="center-profile">
-            <img src="/skins/img/profile2.jpg" />
-                <p><a href="#">Имя Фамилия</a></p>
-                    <span>НИК</span>
+            <img src="<?echo $data['users_winner'][1]['img_avatar']?>" />
+                <p><a href="#"><?echo $data['users_winner'][1]['first_name']?></a></p>
+                    <span><?echo $data['users_winner'][1]['nick']?></span>
                 <div class="content-profile">
                 <p>24 года, г. Пермь. Победил в турнире по игре.
                 Название игры. Получил приз 1000 р.</p>

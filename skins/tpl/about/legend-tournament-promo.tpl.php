@@ -1,5 +1,6 @@
+
 <div id="main">
-    <div id="slider">
+   <div id="slider">
         <div id="internal-slider">
             <div id="social-buttons">
                 <a href="#"><img src="/skins/img/youtube.png" alt="YouTube" /></a>

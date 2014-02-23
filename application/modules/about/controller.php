@@ -54,9 +54,12 @@ class Controller extends MainController
     }
     public function ActionPromo()
     {
+        $data['users_winner'] = $this->model->GetLastWinner();
         $this->AddCss("style");
         $this->AddJs("script");
         $resGet = $_GET['page'];
+
+
 
         $arrFileTpl = array("1"=>"/skins/tpl/about/legend-tournament-promo.tpl.php",
         "2"=>"/skins/tpl/about/next-tournament-promo.tpl.php",
@@ -81,6 +84,7 @@ class Controller extends MainController
             $pageTitle = 'Победители Off-line турниров';
             $pageUrl = 'about/winner-promo.tpl.php';
         }
+
         $this->headerTxt['title']= $pageTitle;
         $data['error'] = '';
         $this->view->Generate($this->arrTpl[0], $pageUrl, $this->GetTplView(), $this->arrTpl[1], $data,  $this->headerTxt, $this->model->CountQuery());

@@ -60,6 +60,7 @@
 .content-profile{padding:5px 15px 15px;}
 .content-profile p + p{margin:0;}
 .content-profile p a{font-size:11px;}
+.left-profile img, .center-profile img, .right-profile img {width:277px;height:170px;};
 
 
 
