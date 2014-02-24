@@ -294,6 +294,7 @@ class Model extends MainModel
     {
         $this->UpdateMainPageGameRubric();
         $this->UploadMainPageRubricImg();
+        $this->UploadMainPageGameScreenshot();
         $dateReleaseWorld = strtotime($this->_p['date_release_world']);
         $dateReleaseRussia = strtotime($this->_p['date_release_russia']);
         $query = $this->conn->dbh->prepare("UPDATE main_page_games SET  game_mode = :game_mode, text = :text, title = :title,
@@ -349,6 +350,31 @@ class Model extends MainModel
     {
         $result = $this->conn->dbh->query("SELECT * FROM main_page_games_rubric WHERE id_main_page_game=".$id)->fetchAll(PDO::FETCH_ASSOC);
         return $result;
+    }
+
+    public function UploadMainPageGameScreenshot()
+    {
+        $i=0;
+        $screenName="screen-file-".$i;
+        while($i < 7){
+            if(isset($this->_p[$screenName])){
+                $imgS = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p[$screenName]);
+                $imgB = str_replace("_s", "_b", $imgS);
+                $oldImgS = $this->_p[$screenName];
+                $oldImgB = str_replace("_s", "_b", $oldImgS);
+                if(rename($oldImgS, $imgS) && rename($oldImgB, $imgB)){
+                    $imgS = "/".$imgS;
+                    $imgB = "/".$imgB;
+                    $sql = $this->conn->dbh->prepare("INSERT INTO main_page_games_screenshot SET id_main_page_game=:id_game, screenshot_s=:imgS, screenshot_b=:imgB");
+                    $sql->bindParam(":id_game", $this->_p['id-game'], PDO::PARAM_INT);
+                    $sql->bindParam(":imgS", $imgS, PDO::PARAM_STR);
+                    $sql->bindParam(":imgB", $imgB, PDO::PARAM_STR);
+                    $sql->execute();
+                }
+            }
+            $i++;
+            $screenName="screen-file-".$i;
+        }
     }
 
     public function UpdateMainPageGameRubric()
@@ -433,9 +459,16 @@ class Model extends MainModel
                     $i++;
                 }
             }
-            $sql = $this->conn->dbh->prepare("UPDATE main_page_games_rubric SET rubric_img_b=null, rubric_img_s=NULL WHERE FIND_IN_SET(id, :id)");
-            $sql->bindParam(":id", $delId, PDO::PARAM_STR);
-            $sql->execute();
+            if($delImgArray[2]==="rubric"){
+                $sql = $this->conn->dbh->prepare("UPDATE main_page_games_rubric SET rubric_img_b=null, rubric_img_s=NULL WHERE FIND_IN_SET(id, :id)");
+                $sql->bindParam(":id", $delId, PDO::PARAM_STR);
+                $sql->execute();
+            }
+            if($delImgArray[2]==="screen"){
+                $sql = $this->conn->dbh->prepare("DELETE FROM main_page_games_screenshot WHERE FIND_IN_SET(id, :id)");
+                $sql->bindParam(":id", $delId, PDO::PARAM_STR);
+                $sql->execute();
+            }
         }
 
         if(is_array($this->_p['id-rubrics'])){
@@ -458,6 +491,10 @@ class Model extends MainModel
                 }
             }
         }
+    }
+    public function GetMainPageScreenshot($id)
+    {
+        return $this->conn->dbh->query("SELECT * FROM main_page_games_screenshot WHERE id_main_page_game=".$id)->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function GetData($page = 1)

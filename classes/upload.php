@@ -6,6 +6,7 @@ class Upload extends SimpleImage
 {
     private $fileName, $path ,$rootDir;
     public $conn;
+    public $videoIcon = "skins/img/youtube.png";
 
     public function __construct($path)
     {
@@ -36,6 +37,12 @@ class Upload extends SimpleImage
             $this->path = "storage/temp";
             $ext = "." . pathinfo($value['name'], PATHINFO_EXTENSION);
             $name = $this->path . "/" . md5(microtime() + rand(0, 10000));
+            if($ext === ".webm"){
+                $videoFileName = $name.$ext;
+                move_uploaded_file($value['tmp_name'], $videoFileName);
+                echo json_encode(array($videoFileName, $this->fileName,$this->videoIcon));
+                return;
+            }
             $fileNameSmall = $name . "_s" . $ext;
             $fileNameBig = $name . "_b" . $ext;
             $this->load($value['tmp_name'])->square_crop(170)->save($fileNameSmall);

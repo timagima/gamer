@@ -170,17 +170,17 @@ use classes\url;
                 <?php if($r['rubric_img_s']!=false){?>
                 <div id="img-upload-btn-<?=$r['id']?>" class="container upload" style="display: none; margin-right: 80px;">
                     <span class="btn">Изображение</span>
-                    <input id="img-files-<?=$r['id']?>" type="file" name="img-files[]" multiple />
+                    <input id="img-files-<?=$r['id']?>" type="file" name="img-files[]"/>
                 </div>
                 <div class="edit-image" style="width: 200px;" name="show-btn">
                     <img src="<?=$r['rubric_img_s']?>">
-                    <input type="hidden" name="saved-img[]" value="<?=$r['id']."$".$r['rubric_img_s']?>">
+                    <input type="hidden" name="saved-img[]" value="<?=$r['id']."$".$r['rubric_img_s']?>$rubric">
                 </div>
                 <?php } ?>
                 <?php if($r['rubric_img_s']==false){?>
                 <div id="img-upload-btn-<?=$r['id']?>" class="container upload" style="display: inline-block; margin-right: 80px;">
                     <span class="btn">Изображение</span>
-                    <input id="img-files-<?=$r['id']?>" type="file" name="img-files[]" multiple />
+                    <input id="img-files-<?=$r['id']?>" type="file" name="img-files[]"/>
                 </div>
                 <?php } ?>
                 <div class="field" style="display: inline-block;">
@@ -200,6 +200,62 @@ use classes\url;
         <input type="button" id="add-rubric" value="создать">
         <p style="display: none; color: red; margin-left: 70px;" id="warning">Заполните поле!</p>
     </div>
+
+    <div style="border: solid 1px #34495E;">
+        <h2>Screeshots</h2>
+        <?php if($data['screenshot']!=false){
+            $screenCount = count($data['screenshot']);
+            $newScreenCount = (int)$data['screenshot-count']-$screenCount;
+            $i=0;
+            foreach($data['screenshot'] as $screenshot){?>
+            <div style="width: 180px; height: 180px; display: inline-block;">
+                <div id="screen-upload-btn-<?=$i?>" class="container upload" style="display: none;">
+                    <span class="btn">Скриншот</span>
+                    <input id="screen-file-<?=$i?>" type="file" name="screen-file[]"/>
+                </div>
+                <div class="edit-image" style="width: 200px;" name="show-btn">
+                    <img src="<?=$screenshot['screenshot_s']?>">
+                    <input type="hidden" name="saved-screen[]" value="<?=$screenshot['id']."$".$screenshot['screenshot_s']?>$screen">
+                </div>
+            </div>
+            <?php
+                $i++;
+            }
+
+            if($newScreenCount!==0){
+                while($newScreenCount > 0){?>
+
+                    <div style="width: 180px; height: 180px; display: inline-block;">
+                        <div id="screen-upload-btn-<?=$i?>" class="container upload">
+                            <span class="btn">Скриншот</span>
+                            <input id="screen-file-<?=$i?>" type="file" name="screen-file[]"/>
+                        </div>
+                    </div>
+
+                    <?php $newScreenCount--;
+                    $i++;
+                }
+            }
+
+            ?>
+        <?php }else{
+                    for($newScreen = (int)$data['screenshot-count'], $i = 0; $newScreen > 0; $newScreen--, $i++){?>
+                        <div style="width: 180px; height: 180px; display: inline-block;">
+                        <div id="screen-upload-btn-<?=$i?>" class="container upload" >
+                            <span class="btn">Скриншот</span>
+                            <input id="screen-file-<?=$i?>" type="file" name="screen-file[]"/>
+                        </div>
+                        </div>
+
+              <?php }
+              } ?>
+    </div>
+
+
+        <div id="video-upload-btn" class="container upload">
+            <span class="btn">Видеофайл</span>
+            <input id="video-file" type="file" name="video-file"/>
+        </div>
 
     <div style="height: 50px; width: 100%">
         <input type="submit" value="Сохранить" class="right">
@@ -236,7 +292,7 @@ use classes\url;
                 var html = '<div class="rubric">' +
                                 '<div id="add-img-upload-btn-'+ i +'" class="container upload" style="display: inline-block; margin-right: 80px;">' +
                                     '<span class="btn">Изображение</span>' +
-                                    '<input id="add-img-files-'+ i +'" type="file" name="new-img-files[]" multiple />' +
+                                    '<input id="add-img-files-'+ i +'" type="file" name="new-img-files[]"/>' +
                                 '</div>' +
                                 '<div class="field" style="display: inline-block;">' +
                                     '<label>Рубрика игры</label><br>' +
