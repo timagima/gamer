@@ -196,7 +196,9 @@ use classes\url;
 
     </div>
     <div class="field" style="padding: 10px 10px 10px 0px; display: block;">
-        <input type="button" id="add-rubric" value="Добавить новую рубрику">
+        Новых рубрик: <input type="text" id="rubrics-count" style="width: 30px;">
+        <input type="button" id="add-rubric" value="создать">
+        <p style="display: none; color: red; margin-left: 70px;" id="warning">Заполните поле!</p>
     </div>
 
     <div style="height: 50px; width: 100%">
@@ -221,23 +223,33 @@ use classes\url;
             $(this).closest("div.rubric").remove();
         });
 
-        var ImgRubric = 0;
         $("#add-rubric").click(function(){
-            var html = '<div class="rubric">' +
-                            '<div id="add-img-upload-btn-'+ ImgRubric +'" class="container upload" style="display: inline-block; margin-right: 80px;">' +
-                                '<span class="btn">Изображение</span>' +
-                                '<input id="add-img-files-'+ ImgRubric +'" type="file" name="new-img-files[]" multiple />' +
+            var imgRubricCount = parseInt($("#rubrics-count").val());
+            var i=0;
+            if(isNaN(imgRubricCount)){
+                $("#warning").show();
+                $("#rubrics-count").focus();
+                $("#rubrics-count").css("border", "solid red 2px");
+                return false;
+            }
+            while(i < imgRubricCount){
+                var html = '<div class="rubric">' +
+                                '<div id="add-img-upload-btn-'+ i +'" class="container upload" style="display: inline-block; margin-right: 80px;">' +
+                                    '<span class="btn">Изображение</span>' +
+                                    '<input id="add-img-files-'+ i +'" type="file" name="new-img-files[]" multiple />' +
+                                '</div>' +
+                                '<div class="field" style="display: inline-block;">' +
+                                    '<label>Рубрика игры</label><br>' +
+                                    '<input type="text" value="" name="new-rubrics[]">' +
+                                '</div>' +
+                                '<div class="field" style="display: inline-block;"><a href="javascript:void(0)" class="remove-rubric">Удалить</a></div>' +
                             '</div>' +
-                            '<div class="field" style="display: inline-block;">' +
-                                '<label>Рубрика игры</label><br>' +
-                                '<input type="text" value="" name="new-rubrics[]">' +
-                            '</div>' +
-                            '<div class="field" style="display: inline-block;"><a href="javascript:void(0)" class="remove-rubric">Удалить</a></div>' +
-                        '</div>' +
-                        '<div style="clear: both;"></div>';
-            $("#rubrics").append(html);
+                            '<div style="clear: both;"></div>';
+                $("#rubrics").append(html);
+                i++;
+            }
             initMultiUploader(config);
-            ImgRubric++;
+            $("#add-rubric").parent().hide();
         });
     })
     // todo: сделать порог входящих файлов
