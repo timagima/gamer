@@ -357,6 +357,8 @@ class Model extends MainModel
             $idGame=$this->_p['id-game'];
             $newImgCount = 0;
             foreach($this->_p['new-rubrics'] as $rubric){
+                if($rubric==="")
+                    continue;
                 $imgName = "add-img-files-".$newImgCount;
                 if(isset($this->_p[$imgName])){
                     $imgS = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p[$imgName]);
@@ -368,8 +370,8 @@ class Model extends MainModel
                         $imgB = "/".$imgB;
                     }
                 }else{
-                    $imgS = "";
-                    $imgB = "";
+                    $imgS = null;
+                    $imgB = null;
                 }
                 $sql = $this->conn->dbh->prepare("INSERT INTO main_page_games_rubric SET id_main_page_game=:id_game, rubric=:rubric, rubric_img_s=:imgS, rubric_img_b=:imgB");
                 $sql->bindParam(":id_game", $idGame, PDO::PARAM_INT);
@@ -400,6 +402,19 @@ class Model extends MainModel
             $sql = $this->conn->dbh->prepare("DELETE FROM main_page_games_rubric WHERE FIND_IN_SET(id, :id)");
             $sql->bindParam(":id", $rubricIdString, PDO::PARAM_STR);
             $sql->execute();
+        }
+
+        if(is_array($this->_p['rubrics']) && is_array($this->_p['id-rubrics'])){
+            $i=0;
+            foreach($this->_p['rubrics'] as $rubricName){
+                if(isset($this->_p['id-rubrics'][$i])){
+                    $upd = $this->conn->dbh->prepare("UPDATE main_page_games_rubric SET rubric=:rubricName WHERE id=:id");
+                    $upd->bindParam(":id", $this->_p['id-rubrics'][$i], PDO::PARAM_INT);
+                    $upd->bindParam(":rubricName", $rubricName, PDO::PARAM_STR);
+                    $upd->execute();
+                }
+                $i++;
+            }
         }
 
     }
