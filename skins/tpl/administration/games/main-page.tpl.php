@@ -170,17 +170,17 @@ use classes\url;
                 <?php if($r['rubric_img_s']!=false){?>
                 <div id="img-upload-btn-<?=$r['id']?>" class="container upload" style="display: none; margin-right: 80px;">
                     <span class="btn">Изображение</span>
-                    <input id="img-files-<?=$r['id']?>" type="file" name="img-files[]" multiple />
+                    <input id="img-files-<?=$r['id']?>" type="file" name="img-files[]"/>
                 </div>
                 <div class="edit-image" style="width: 200px;" name="show-btn">
                     <img src="<?=$r['rubric_img_s']?>">
-                    <input type="hidden" name="saved-img[]" value="<?=$r['id']."$".$r['rubric_img_s']?>">
+                    <input type="hidden" name="saved-img[]" value="<?=$r['id']."$".$r['rubric_img_s']?>$rubric">
                 </div>
                 <?php } ?>
                 <?php if($r['rubric_img_s']==false){?>
                 <div id="img-upload-btn-<?=$r['id']?>" class="container upload" style="display: inline-block; margin-right: 80px;">
                     <span class="btn">Изображение</span>
-                    <input id="img-files-<?=$r['id']?>" type="file" name="img-files[]" multiple />
+                    <input id="img-files-<?=$r['id']?>" type="file" name="img-files[]"/>
                 </div>
                 <?php } ?>
                 <div class="field" style="display: inline-block;">
@@ -196,8 +196,81 @@ use classes\url;
 
     </div>
     <div class="field" style="padding: 10px 10px 10px 0px; display: block;">
-        <input type="button" id="add-rubric" value="Добавить новую рубрику">
+        Новых рубрик: <input type="text" id="rubrics-count" style="width: 30px;">
+        <input type="button" id="add-rubric" value="создать">
+        <p style="display: none; color: red; margin-left: 70px;" id="warning">Заполните поле!</p>
     </div>
+
+    <div style="border: solid 1px #34495E;">
+        <h2>Screeshots</h2>
+        <?php if($data['screenshot']!=false){
+                $screenCount = count($data['screenshot']);
+                $newScreenCount = (int)$data['screenshot-count']-$screenCount;
+                $i=0;
+                foreach($data['screenshot'] as $screenshot){?>
+                <div style="width: 180px; height: 180px; display: inline-block;">
+                    <div id="screen-upload-btn-<?=$i?>" class="container upload" style="display: none;">
+                        <span class="btn">Скриншот</span>
+                        <input id="screen-file-<?=$i?>" type="file" name="screen-file[]"/>
+                    </div>
+                    <div class="edit-image" style="width: 200px;" name="show-btn">
+                        <img src="<?=$screenshot['screenshot_s']?>">
+                        <input type="hidden" name="saved-screen[]" value="<?=$screenshot['id']."$".$screenshot['screenshot_s']?>$screen">
+                    </div>
+                </div>
+                <?php
+                    $i++;
+                }
+
+                if($newScreenCount!==0){
+                    while($newScreenCount > 0){?>
+
+                        <div style="width: 180px; height: 180px; display: inline-block;">
+                            <div id="screen-upload-btn-<?=$i?>" class="container upload">
+                                <span class="btn">Скриншот</span>
+                                <input id="screen-file-<?=$i?>" type="file" name="screen-file[]"/>
+                            </div>
+                        </div>
+
+                        <?php $newScreenCount--;
+                        $i++;
+                    }
+                }
+            }else{
+                    for($newScreen = (int)$data['screenshot-count'], $i = 0; $newScreen > 0; $newScreen--, $i++){?>
+                        <div style="width: 180px; height: 180px; display: inline-block;">
+                        <div id="screen-upload-btn-<?=$i?>" class="container upload" >
+                            <span class="btn">Скриншот</span>
+                            <input id="screen-file-<?=$i?>" type="file" name="screen-file[]"/>
+                        </div>
+                        </div>
+
+              <?php }
+            } ?>
+    </div>
+
+
+    <?php if( $data['main-page']->video_link!=false && $data['main-page']->video_img!=false ) { ?>
+        <div id="video-upload-btn" class="container upload" style = "display: none;">
+            <span class="btn">Видеофайл</span>
+            <input id="video-file" type="file" name="video-file"/>
+        </div>
+        <div class="span8 demo-video" style="position: relative; top: 22px;">
+            <video class="video-js" controls preload="auto" width="420" height="258" poster="<?=$data['main-page']->video_img?>" data-setup="{}">
+                <source src="<?=$data['main-page']->video_link?>" type="video/webm" />
+                </video>
+            <input type="hidden" name="video-link" value="<?=$data['main-page']->video_link?>">
+            <input type="hidden" name="video-img" value="<?=$data['main-page']->video_img?>">
+            <div style="height: 50px; width: 100%">
+                <input type="button" value="Удалить видео" id="delete-video">
+            </div>
+        </div><div style="clear: both;"></div><br>
+    <?php } else{ ?>
+        <div id="video-upload-btn" class="container upload" style = "">
+            <span class="btn">Видеофайл</span>
+            <input id="video-file" type="file" name="video-file"/>
+        </div>
+    <?php } ?>
 
     <div style="height: 50px; width: 100%">
         <input type="submit" value="Сохранить" class="right">
@@ -214,6 +287,19 @@ use classes\url;
     $(document).ready(function(){
         initMultiUploader(config);
 
+        $('#delete-video').click(function(){
+            //var parentElement =$(this).parent();
+            //alert(parentElement);
+            var removeVideoLink = $('input[name=video-link]').val();
+            var removeVideoImg = $('input[name=video-img]').val();
+            if(removeVideoLink !== undefined && removeVideoImg !== undefined){
+                $('form').append("<input type='hidden' name='deleted-video-link' value='"+removeVideoLink+"'>");
+                $('form').append("<input type='hidden' name='deleted-video-img' value='"+removeVideoImg+"'>");
+            }
+            $(this).closest(".demo-video")[0].remove();
+            $("#video-file").parent().show();
+        });
+
         $("body").on("click", ".remove-rubric", function(){
             var id = $(this).attr('id');
             if(id!== undefined)
@@ -221,23 +307,33 @@ use classes\url;
             $(this).closest("div.rubric").remove();
         });
 
-        var ImgRubric = 0;
         $("#add-rubric").click(function(){
-            var html = '<div class="rubric">' +
-                            '<div id="add-img-upload-btn-'+ ImgRubric +'" class="container upload" style="display: inline-block; margin-right: 80px;">' +
-                                '<span class="btn">Изображение</span>' +
-                                '<input id="add-img-files-'+ ImgRubric +'" type="file" name="new-img-files[]" multiple />' +
+            var imgRubricCount = parseInt($("#rubrics-count").val());
+            var i=0;
+            if(isNaN(imgRubricCount)){
+                $("#warning").show();
+                $("#rubrics-count").focus();
+                $("#rubrics-count").css("border", "solid red 2px");
+                return false;
+            }
+            while(i < imgRubricCount){
+                var html = '<div class="rubric">' +
+                                '<div id="add-img-upload-btn-'+ i +'" class="container upload" style="display: inline-block; margin-right: 80px;">' +
+                                    '<span class="btn">Изображение</span>' +
+                                    '<input id="add-img-files-'+ i +'" type="file" name="new-img-files[]"/>' +
+                                '</div>' +
+                                '<div class="field" style="display: inline-block;">' +
+                                    '<label>Рубрика игры</label><br>' +
+                                    '<input type="text" value="" name="new-rubrics[]">' +
+                                '</div>' +
+                                '<div class="field" style="display: inline-block;"><a href="javascript:void(0)" class="remove-rubric">Удалить</a></div>' +
                             '</div>' +
-                            '<div class="field" style="display: inline-block;">' +
-                                '<label>Рубрика игры</label><br>' +
-                                '<input type="text" value="" name="new-rubrics[]">' +
-                            '</div>' +
-                            '<div class="field" style="display: inline-block;"><a href="javascript:void(0)" class="remove-rubric">Удалить</a></div>' +
-                        '</div>' +
-                        '<div style="clear: both;"></div>';
-            $("#rubrics").append(html);
+                            '<div style="clear: both;"></div>';
+                $("#rubrics").append(html);
+                i++;
+            }
             initMultiUploader(config);
-            ImgRubric++;
+            $("#add-rubric").parent().hide();
         });
     })
     // todo: сделать порог входящих файлов

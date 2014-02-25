@@ -294,6 +294,23 @@ class Model extends MainModel
     {
         $this->UpdateMainPageGameRubric();
         $this->UploadMainPageRubricImg();
+        $this->UploadMainPageGameScreenshot();
+        $videoLink = null;
+        $videoImg = null;
+        if(!empty($this->_p['video-link'])){
+            $videoLink = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
+            rename($this->_p['video-link'], $videoLink);
+            $videoLink = "/"."storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
+        }
+        if(!empty($this->_p['video-img'])){
+            $videoImg = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-img']);
+            rename($this->_p['video-img'], $videoImg);
+            $videoImg = "/"."storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-img']);
+        }
+        if(!empty($this->_p['deleted-video-link']) && !empty($this->_p['deleted-video-img'])){
+            unlink( substr($this->_p['deleted-video-link'], 1) );
+            unlink( substr($this->_p['deleted-video-img'], 1) );
+        }
         $dateReleaseWorld = strtotime($this->_p['date_release_world']);
         $dateReleaseRussia = strtotime($this->_p['date_release_russia']);
         $query = $this->conn->dbh->prepare("UPDATE main_page_games SET  game_mode = :game_mode, text = :text, title = :title,
@@ -332,8 +349,8 @@ class Model extends MainModel
         $query->bindParam(":official_site_link", $this->_p['official_site_link'], PDO::PARAM_STR);
         $query->bindParam(":game_engine", $this->_p['game_engine'], PDO::PARAM_STR);
         $query->bindParam(":distribution", $this->_p['distribution'], PDO::PARAM_STR);
-        $query->bindParam(":video_img", $this->_p['video_img'], PDO::PARAM_STR);
-        $query->bindParam(":video_link", $this->_p['video_link'], PDO::PARAM_STR);
+        $query->bindParam(":video_img", $videoImg, PDO::PARAM_STR);
+        $query->bindParam(":video_link", $videoLink, PDO::PARAM_STR);
         $query->bindParam(":sr_os", $this->_p['sr_os'], PDO::PARAM_STR);
         $query->bindParam(":sr_cpu", $this->_p['sr_cpu'], PDO::PARAM_STR);
         $query->bindParam(":sr_ram", $this->_p['sr_ram'], PDO::PARAM_STR);
@@ -351,12 +368,39 @@ class Model extends MainModel
         return $result;
     }
 
+    public function UploadMainPageGameScreenshot()
+    {
+        $i=0;
+        $screenName="screen-file-".$i;
+        while($i < 7){
+            if(isset($this->_p[$screenName])){
+                $imgS = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p[$screenName]);
+                $imgB = str_replace("_s", "_b", $imgS);
+                $oldImgS = $this->_p[$screenName];
+                $oldImgB = str_replace("_s", "_b", $oldImgS);
+                if(rename($oldImgS, $imgS) && rename($oldImgB, $imgB)){
+                    $imgS = "/".$imgS;
+                    $imgB = "/".$imgB;
+                    $sql = $this->conn->dbh->prepare("INSERT INTO main_page_games_screenshot SET id_main_page_game=:id_game, screenshot_s=:imgS, screenshot_b=:imgB");
+                    $sql->bindParam(":id_game", $this->_p['id-game'], PDO::PARAM_INT);
+                    $sql->bindParam(":imgS", $imgS, PDO::PARAM_STR);
+                    $sql->bindParam(":imgB", $imgB, PDO::PARAM_STR);
+                    $sql->execute();
+                }
+            }
+            $i++;
+            $screenName="screen-file-".$i;
+        }
+    }
+
     public function UpdateMainPageGameRubric()
     {
         if(isset($this->_p['new-rubrics'])){
             $idGame=$this->_p['id-game'];
             $newImgCount = 0;
             foreach($this->_p['new-rubrics'] as $rubric){
+                if($rubric==="")
+                    continue;
                 $imgName = "add-img-files-".$newImgCount;
                 if(isset($this->_p[$imgName])){
                     $imgS = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p[$imgName]);
@@ -368,8 +412,8 @@ class Model extends MainModel
                         $imgB = "/".$imgB;
                     }
                 }else{
-                    $imgS = "";
-                    $imgB = "";
+                    $imgS = null;
+                    $imgB = null;
                 }
                 $sql = $this->conn->dbh->prepare("INSERT INTO main_page_games_rubric SET id_main_page_game=:id_game, rubric=:rubric, rubric_img_s=:imgS, rubric_img_b=:imgB");
                 $sql->bindParam(":id_game", $idGame, PDO::PARAM_INT);
@@ -402,6 +446,19 @@ class Model extends MainModel
             $sql->execute();
         }
 
+        if(is_array($this->_p['rubrics']) && is_array($this->_p['id-rubrics'])){
+            $i=0;
+            foreach($this->_p['rubrics'] as $rubricName){
+                if(isset($this->_p['id-rubrics'][$i])){
+                    $upd = $this->conn->dbh->prepare("UPDATE main_page_games_rubric SET rubric=:rubricName WHERE id=:id");
+                    $upd->bindParam(":id", $this->_p['id-rubrics'][$i], PDO::PARAM_INT);
+                    $upd->bindParam(":rubricName", $rubricName, PDO::PARAM_STR);
+                    $upd->execute();
+                }
+                $i++;
+            }
+        }
+
     }
 
     public function UploadMainPageRubricImg()
@@ -413,14 +470,21 @@ class Model extends MainModel
                 $delImgArray = explode('$', $delImgId);
                 $delImgS = substr($delImgArray[1], 1);
                 $delImgB = str_replace("_s", "_b", $delImgS);
-                if( unlink($delImgS) && unlink($delImgB) ){
-                    $delId .= ($i===0) ? $delImgArray[0] : ','.$delImgArray[0];
-                    $i++;
-                }
+                unlink($delImgS);
+                unlink($delImgB);
+                $delId .= ($i===0) ? $delImgArray[0] : ','.$delImgArray[0];
+                $i++;
             }
-            $sql = $this->conn->dbh->prepare("UPDATE main_page_games_rubric SET rubric_img_b=null, rubric_img_s=NULL WHERE FIND_IN_SET(id, :id)");
-            $sql->bindParam(":id", $delId, PDO::PARAM_STR);
-            $sql->execute();
+            if($delImgArray[2]==="rubric"){
+                $sql = $this->conn->dbh->prepare("UPDATE main_page_games_rubric SET rubric_img_b=null, rubric_img_s=NULL WHERE FIND_IN_SET(id, :id)");
+                $sql->bindParam(":id", $delId, PDO::PARAM_STR);
+                $sql->execute();
+            }
+            if($delImgArray[2]==="screen"){
+                $sql = $this->conn->dbh->prepare("DELETE FROM main_page_games_screenshot WHERE FIND_IN_SET(id, :id)");
+                $sql->bindParam(":id", $delId, PDO::PARAM_STR);
+                $sql->execute();
+            }
         }
 
         if(is_array($this->_p['id-rubrics'])){
@@ -443,6 +507,10 @@ class Model extends MainModel
                 }
             }
         }
+    }
+    public function GetMainPageScreenshot($id)
+    {
+        return $this->conn->dbh->query("SELECT * FROM main_page_games_screenshot WHERE id_main_page_game=".$id)->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function GetData($page = 1)
