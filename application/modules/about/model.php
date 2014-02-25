@@ -38,6 +38,14 @@ class Model extends MainModel
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_NUM);
     }
+    public function GetRandomGame()
+    {
+        $stmt = $this->conn->dbh->prepare("SELECT name_game, source_img FROM games_forever
+        WHERE id_game
+        ORDER BY RAND() LIMIT 3");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 
 }

@@ -25,7 +25,7 @@ class Controller extends MainController
         $data['user-completed-games'] = $this->model->GetUserCompletedGames();
         $data['type-complete-game'] = $this->model->GetTypeCompleteGame();
         $this->headerTxt['title'] = "Пройденные игры - GS11";
-        $this->view->Generate('menu/auth-menu.tpl.php', 'base/add-completed-games.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());
+        $this->view->Generate('menu/auth-menu.tpl.php', 'base/add-completed-games-forever.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());
     }
 
     public function ActionView($idGame)
@@ -74,7 +74,7 @@ class Controller extends MainController
         $this->AddCss("style");
         $data['user-completed-games'] = $this->model->GetUserCompletedGames($idUser);
         $this->headerTxt['title'] = "Игры пользователя {$data['user-completed-games'][0]['nick']} - GS11";
-        $this->view->Generate('menu/auth-menu.tpl.php', 'base/add-completed-games.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());
+        $this->view->Generate('menu/auth-menu.tpl.php', 'base/add-completed-games-forever.tpl.php', $this->GetTplView(), 'index-auth.tpl.php', $data, $this->headerTxt, $this->model->CountQuery());
     }
 
 

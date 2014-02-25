@@ -84,6 +84,15 @@ class Controller extends MainController
         $data['error'] = '';
         $this->view->Generate($this->arrTpl[0], $pageUrl, $this->GetTplView(), $this->arrTpl[1], $data,  $this->headerTxt, $this->model->CountQuery());
     }
+
+    public function ActionGamesForever()
+    {
+        $data['games_forever'] = $this->model->GetRandomGame();
+        $this->headerTxt['title'] = 'Игры навсегда';
+        $data['error'] = '';
+        $this->view->Generate($this->arrTpl[0], 'about/games-forever.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
+
+    }
 }
 
 

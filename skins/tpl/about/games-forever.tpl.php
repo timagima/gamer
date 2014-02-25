@@ -10,31 +10,18 @@
 
 <div id="main">
     <?include $_SERVER['DOCUMENT_ROOT'] . '/skins/tpl/block/menu-about.block.tpl.php';?>
- <div class="right-menu">
-        <div class="left-content">
+    <div class="right-menu">
+        <?$arrClass = array("left-content","center-content","right-content");
+        foreach($data['games_forever'] as $key=>$value){?>
+        <div class="<?echo $arrClass[$key]?>">
             <div class="inner-content">
-                <h3>Dead Island</h3>
+                <h3><?echo $value['name_game']?></h3>
                 <p>Описание игры. Описание игры. Описание игры.</p>
                 <a href="#">Ссылка на игру</a>
             </div>
-            <img src="/skins/img/game-poster.jpg"/>
+            <img src="/storage<?echo $value['source_img']?>"/>
         </div>
-        <div class="center-content">
-            <div class="inner-content">
-                <h3>Dead Island</h3>
-                <p>Описание игры. Описание игры. Описание игры.</p>
-                <a href="#">Ссылка на игру</a>
-            </div>
-            <img src="/skins/img/game-poster.jpg"/>
-        </div>
-        <div class="right-content">
-            <div class="inner-content">
-                <h3>Dead Island</h3>
-                <p>Описание игры. Описание игры. Описание игры.</p>
-                <a href="#">Ссылка на игру</a>
-            </div>
-            <img src="/skins/img/game-poster.jpg"/>
-        </div>
+        <?}?>
     </div>
     <? include "/skins/tpl/block/share-soc.block.tpl.php"; ?>
 </div>
