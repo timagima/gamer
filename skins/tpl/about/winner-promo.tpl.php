@@ -1,4 +1,3 @@
-
 <div id="main">
    <div id="slider">
         <div id="internal-slider">
@@ -11,8 +10,8 @@
                 <a href="#"><img src="/skins/img/tw.png" alt="Twitter" /></a>
             </div>
             <div id="select">
-                <a id="prev-btn"></a>
-                <a id="next-btn" class="slider-action" page="next-tournament"></a>
+                <a id="prev-btn" class="slider-action" page="next-tournament" style="background:url(/skins/img/slider-btn.png) top 0 left 0;"></a>
+                <a id="next-btn"  style="background:url(/skins/img/slider-btn.png) top 0 left 100%;"></a>
             </div>
             <img src="/skins/img/slider3.jpg" alt="slider"/>
         </div>
@@ -40,7 +39,7 @@
         <div class="left-middle">
             <span>Участников</span>
             <img src="/skins/img/inquiries.png"/>
-            <p>+350</p>
+            <p>+<?echo $data['count_users'][0][0]?></p>
         </div>
         <div class="right-middle">
             <a href="#">Принять участие</a>

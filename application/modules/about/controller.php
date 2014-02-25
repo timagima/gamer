@@ -56,11 +56,9 @@ class Controller extends MainController
     {
         $data['users_winner'] = $this->model->GetLastWinner();
         $data['near_tournaments'] = $this->model->GetLastTournament();
+        $data['count_users'] = $this->model->CountUsers();
         $this->AddCss("style");
         $this->AddJs("script");
-        $resGet = $_GET['page'];
-
-
 
         $arrFileTpl = array("legend-tournament"=>"/skins/tpl/about/legend-tournament-promo.tpl.php",
         "next-tournament"=>"/skins/tpl/about/next-tournament-promo.tpl.php",
@@ -70,27 +68,21 @@ class Controller extends MainController
             include $_SERVER['DOCUMENT_ROOT'].$arrFileTpl[$_POST['page']];
             exit();
         }
-        if($resGet == 'legend-tournament')
-        {
-            $pageTitle = 'Легендарные Off-line турниры';
-            $pageUrl = 'about/legend-tournament-promo.tpl.php';
-        }
-        if($resGet == 'next-tournament' )
-        {
-            $pageTitle = 'Ближайшие Off-line турниры';
-            $pageUrl = 'about/next-tournament-promo.tpl.php';
-        }
-        if($resGet == 'winner')
-        {
-            $pageTitle = 'Победители Off-line турниров';
-            $pageUrl = 'about/winner-promo.tpl.php';
+
+        $arrInfoTpl = array(
+            "legend-tournament"=> array("Легендарные Off-line турниры","off-line турниры, PC игры, GS11","Компания GS11 дает возможность вам, участвовать в off-line турнирах по всем PC играм.","about/legend-tournament-promo.tpl.php"),
+            "next-tournament"=> array("Ближайшие Off-line турниры","Ближайшие туриниы","Следите за предстоящими off-line турнирами.","about/next-tournament-promo.tpl.php"),
+            "winner"=> array("Победители Off-line турниров","победители, off-line турниры","Здесь вы можете узнать о победтелях турниров на нашем сайте","about/winner-promo.tpl.php")
+        );
+        foreach($arrInfoTpl as $key => $value ){
+            if($key == $_GET['page']){
+                list($this->headerTxt['title'],$this->headerTxt['keywords'],
+                    $this->headerTxt['description'],$pageUrl) = $arrInfoTpl[$key];
+            }
         }
 
-        $this->headerTxt['title']= $pageTitle;
         $data['error'] = '';
         $this->view->Generate($this->arrTpl[0], $pageUrl, $this->GetTplView(), $this->arrTpl[1], $data,  $this->headerTxt, $this->model->CountQuery());
-
-
     }
 }
 

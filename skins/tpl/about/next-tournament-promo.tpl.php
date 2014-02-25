@@ -10,50 +10,38 @@
                 <a href="#"><img src="/skins/img/tw.png" alt="Twitter" /></a>
             </div>
             <div id="select">
-                <a id="prev-btn" class="slider-action" style="background:url(/skins/img/slider-btn.png) top 0 left 0;" page="winner" ></a>
-                <a id="next-btn" page="legend-tournament" class="slider-action"></a>
+                <a id="prev-btn" class="slider-action" style="background:url(/skins/img/slider-btn.png) top 0 left 0;" page="legend-tournament" ></a>
+                <a id="next-btn" class="slider-action"  style="background:url(/skins/img/slider-btn.png) top 100% left 100%;" page="winner"></a>
             </div>
             <img src="/skins/img/slider2.jpg" alt="slider"/>
         </div>
 
     </div>
     <div class="near-tournaments">
-        <div class="left-game">
-            <h3><a href="#">Название игры</a></h3>
+        <?$cssClass = array("left-game","center-game","right-game");
+        foreach($data['near_tournaments'] as $key=>$value){?>
+        <div class="<?echo $cssClass[$key]?>">
+            <h3><a href="#"><?echo $value['title']  = substr($value['title'],0,27)."..."?></a></h3>
             <p>С 1 июля, призовой фонд 1000 р</p>
-            <p class="img-center"><img src="/skins/img/icon2.jpg" alt="Heroes 3" /></p>
+            <p class="img-center"><img src="/storage<?echo $value['source_img_s']?>" /></p>
         </div>
-
-        <div class="right-game">
-            <h3><a href="#">Название игры</a></h3>
-            <p>С 1 июля, призовой фонд 1000 р</p>
-            <p class="img-center"><img src="/skins/img/icon3.jpg" alt="Dungeon Lords" /></p>
-         </div>
-
-        <div class="center-game">
-            <h3><a href="#">Название игры</a></h3>
-            <p>С 1 июля, призовой фонд 1000 р</p>
-            <p class="img-center"><img src="/skins/img/icon1.jpg" alt="Kings Bounty" /></p>
-        </div>
-
+        <? } ?>
     </div>
 
-
-
     <div class="middle-content">
-        <div class="left-middle">
-            <span>Участников</span>
-            <img src="/skins/img/inquiries.png"/>
-            <p>+350</p>
-        </div>
-        <div class="right-middle">
-            <a href="#">Принять участие</a>
-        </div>
-        <div class="center-middle">
-            <p>абсолютно</p>
-            <span>бесплатное</span>
-            <p>участие</p>
-        </div>
+            <div class="left-middle">
+                <span>Участников</span>
+                <img src="/skins/img/inquiries.png"/>
+                <p>+<?echo $data['count_users'][0][0]?></p>
+            </div>
+            <div class="right-middle">
+                <a href="#">Принять участие</a>
+            </div>
+            <div class="center-middle">
+                <p>абсолютно</p>
+                <span>бесплатное</span>
+                <p>участие</p>
+            </div>
     </div>
     <div class="bottom-content">
         <p>Все условия и правила ближайшего турнира читайте на нашем сайте <a href="#">http://gs11.ru/tournament</a>.

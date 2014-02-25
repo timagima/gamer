@@ -19,7 +19,7 @@ class Model extends MainModel
     }
     public function GetLastTournament()
     {
-        $stmt = $this->conn->dbh->prepare("SELECT t.title, t.pay, t.start_date,g.source_img_b FROM tournaments t LEFT JOIN games g ON t.id_game = g.id
+        $stmt = $this->conn->dbh->prepare("SELECT t.title, t.pay, t.start_date,g.source_img_s FROM tournaments t LEFT JOIN games g ON t.id_game = g.id
         ORDER BY t.id DESC LIMIT 3");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -31,6 +31,12 @@ class Model extends MainModel
          FROM info_winner i  LEFT JOIN users u ON u.id = i.id_user ORDER BY i.id DESC LIMIT 3");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function CountUsers()
+    {
+        $stmt = $this->conn->dbh->prepare("SELECT COUNT(*) FROM users");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_NUM);
     }
 
 
