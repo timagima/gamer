@@ -40,12 +40,9 @@ class Model extends MainModel
     }
     public function GetRandomGame()
     {
-        $stmt = $this->conn->dbh->prepare("SELECT name_game, source_img FROM games_forever
-        WHERE id_game
-        ORDER BY RAND() LIMIT 3");
+        $stmt = $this->conn->dbh->prepare("SELECT name_game, source_img, description_game, link_game_anchor,
+         link_game FROM games_forever ORDER BY RAND() LIMIT 3");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
-
 }

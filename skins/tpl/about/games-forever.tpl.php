@@ -16,8 +16,8 @@
         <div class="<?echo $arrClass[$key]?>">
             <div class="inner-content">
                 <h3><?echo $value['name_game']?></h3>
-                <p>Описание игры. Описание игры. Описание игры.</p>
-                <a href="#">Ссылка на игру</a>
+                <p><?echo $value['description_game']?></p>
+                <a href="<?echo $value['link_game']?>"><?echo $value['link_game_anchor']?></a>
             </div>
             <img src="/storage<?echo $value['source_img']?>"/>
         </div>
