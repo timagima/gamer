@@ -1,7 +1,7 @@
 <?php
 namespace application\core\mvc;
 use application\core\mvc\MainModel;
-use classes\Comments;
+use classes\comments;
 use classes\pagination;
 use classes\url;
 use classes\upload;
