@@ -204,41 +204,39 @@ use classes\url;
     <div style="border: solid 1px #34495E;">
         <h2>Screeshots</h2>
         <?php if($data['screenshot']!=false){
-            $screenCount = count($data['screenshot']);
-            $newScreenCount = (int)$data['screenshot-count']-$screenCount;
-            $i=0;
-            foreach($data['screenshot'] as $screenshot){?>
-            <div style="width: 180px; height: 180px; display: inline-block;">
-                <div id="screen-upload-btn-<?=$i?>" class="container upload" style="display: none;">
-                    <span class="btn">Скриншот</span>
-                    <input id="screen-file-<?=$i?>" type="file" name="screen-file[]"/>
-                </div>
-                <div class="edit-image" style="width: 200px;" name="show-btn">
-                    <img src="<?=$screenshot['screenshot_s']?>">
-                    <input type="hidden" name="saved-screen[]" value="<?=$screenshot['id']."$".$screenshot['screenshot_s']?>$screen">
-                </div>
-            </div>
-            <?php
-                $i++;
-            }
-
-            if($newScreenCount!==0){
-                while($newScreenCount > 0){?>
-
-                    <div style="width: 180px; height: 180px; display: inline-block;">
-                        <div id="screen-upload-btn-<?=$i?>" class="container upload">
-                            <span class="btn">Скриншот</span>
-                            <input id="screen-file-<?=$i?>" type="file" name="screen-file[]"/>
-                        </div>
+                $screenCount = count($data['screenshot']);
+                $newScreenCount = (int)$data['screenshot-count']-$screenCount;
+                $i=0;
+                foreach($data['screenshot'] as $screenshot){?>
+                <div style="width: 180px; height: 180px; display: inline-block;">
+                    <div id="screen-upload-btn-<?=$i?>" class="container upload" style="display: none;">
+                        <span class="btn">Скриншот</span>
+                        <input id="screen-file-<?=$i?>" type="file" name="screen-file[]"/>
                     </div>
-
-                    <?php $newScreenCount--;
+                    <div class="edit-image" style="width: 200px;" name="show-btn">
+                        <img src="<?=$screenshot['screenshot_s']?>">
+                        <input type="hidden" name="saved-screen[]" value="<?=$screenshot['id']."$".$screenshot['screenshot_s']?>$screen">
+                    </div>
+                </div>
+                <?php
                     $i++;
                 }
-            }
 
-            ?>
-        <?php }else{
+                if($newScreenCount!==0){
+                    while($newScreenCount > 0){?>
+
+                        <div style="width: 180px; height: 180px; display: inline-block;">
+                            <div id="screen-upload-btn-<?=$i?>" class="container upload">
+                                <span class="btn">Скриншот</span>
+                                <input id="screen-file-<?=$i?>" type="file" name="screen-file[]"/>
+                            </div>
+                        </div>
+
+                        <?php $newScreenCount--;
+                        $i++;
+                    }
+                }
+            }else{
                     for($newScreen = (int)$data['screenshot-count'], $i = 0; $newScreen > 0; $newScreen--, $i++){?>
                         <div style="width: 180px; height: 180px; display: inline-block;">
                         <div id="screen-upload-btn-<?=$i?>" class="container upload" >
@@ -248,7 +246,7 @@ use classes\url;
                         </div>
 
               <?php }
-              } ?>
+            } ?>
     </div>
 
 
