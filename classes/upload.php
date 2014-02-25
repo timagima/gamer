@@ -40,7 +40,7 @@ class Upload extends SimpleImage
             if($ext === ".webm"){
                 $videoFileName = $name.$ext;
                 move_uploaded_file($value['tmp_name'], $videoFileName);
-                echo json_encode(array($videoFileName, $this->fileName, $this->videoIcon));
+                echo json_encode(array($videoFileName, $this->fileName,$this->videoIcon));
                 return;
             }
             $fileNameSmall = $name . "_s" . $ext;

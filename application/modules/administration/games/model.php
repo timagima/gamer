@@ -470,10 +470,10 @@ class Model extends MainModel
                 $delImgArray = explode('$', $delImgId);
                 $delImgS = substr($delImgArray[1], 1);
                 $delImgB = str_replace("_s", "_b", $delImgS);
-                if( unlink($delImgS) && unlink($delImgB) ){
-                    $delId .= ($i===0) ? $delImgArray[0] : ','.$delImgArray[0];
-                    $i++;
-                }
+                unlink($delImgS);
+                unlink($delImgB);
+                $delId .= ($i===0) ? $delImgArray[0] : ','.$delImgArray[0];
+                $i++;
             }
             if($delImgArray[2]==="rubric"){
                 $sql = $this->conn->dbh->prepare("UPDATE main_page_games_rubric SET rubric_img_b=null, rubric_img_s=NULL WHERE FIND_IN_SET(id, :id)");
