@@ -250,10 +250,27 @@ use classes\url;
     </div>
 
 
-        <div id="video-upload-btn" class="container upload">
+    <?php if( $data['main-page']->video_link!=false && $data['main-page']->video_img!=false ) { ?>
+        <div id="video-upload-btn" class="container upload" style = "display: none;">
             <span class="btn">Видеофайл</span>
             <input id="video-file" type="file" name="video-file"/>
         </div>
+        <div class="span8 demo-video" style="position: relative; top: 22px;">
+            <video class="video-js" controls preload="auto" width="420" height="258" poster="<?=$data['main-page']->video_img?>" data-setup="{}">
+                <source src="<?=$data['main-page']->video_link?>" type="video/webm" />
+                </video>
+            <input type="hidden" name="video-link" value="<?=$data['main-page']->video_link?>">
+            <input type="hidden" name="video-img" value="<?=$data['main-page']->video_img?>">
+            <div style="height: 50px; width: 100%">
+                <input type="button" value="Удалить видео" id="delete-video">
+            </div>
+        </div><div style="clear: both;"></div><br>
+    <?php } else{ ?>
+        <div id="video-upload-btn" class="container upload" style = "">
+            <span class="btn">Видеофайл</span>
+            <input id="video-file" type="file" name="video-file"/>
+        </div>
+    <?php } ?>
 
     <div style="height: 50px; width: 100%">
         <input type="submit" value="Сохранить" class="right">
@@ -269,6 +286,19 @@ use classes\url;
 <script type="text/javascript">
     $(document).ready(function(){
         initMultiUploader(config);
+
+        $('#delete-video').click(function(){
+            //var parentElement =$(this).parent();
+            //alert(parentElement);
+            var removeVideoLink = $('input[name=video-link]').val();
+            var removeVideoImg = $('input[name=video-img]').val();
+            if(removeVideoLink !== undefined && removeVideoImg !== undefined){
+                $('form').append("<input type='hidden' name='deleted-video-link' value='"+removeVideoLink+"'>");
+                $('form').append("<input type='hidden' name='deleted-video-img' value='"+removeVideoImg+"'>");
+            }
+            $(this).closest(".demo-video")[0].remove();
+            $("#video-file").parent().show();
+        });
 
         $("body").on("click", ".remove-rubric", function(){
             var id = $(this).attr('id');

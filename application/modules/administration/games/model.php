@@ -295,6 +295,22 @@ class Model extends MainModel
         $this->UpdateMainPageGameRubric();
         $this->UploadMainPageRubricImg();
         $this->UploadMainPageGameScreenshot();
+        $videoLink = null;
+        $videoImg = null;
+        if(!empty($this->_p['video-link'])){
+            $videoLink = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
+            rename($this->_p['video-link'], $videoLink);
+            $videoLink = "/"."storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
+        }
+        if(!empty($this->_p['video-img'])){
+            $videoImg = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-img']);
+            rename($this->_p['video-img'], $videoImg);
+            $videoImg = "/"."storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-img']);
+        }
+        if(!empty($this->_p['deleted-video-link']) && !empty($this->_p['deleted-video-img'])){
+            unlink( substr($this->_p['deleted-video-link'], 1) );
+            unlink( substr($this->_p['deleted-video-img'], 1) );
+        }
         $dateReleaseWorld = strtotime($this->_p['date_release_world']);
         $dateReleaseRussia = strtotime($this->_p['date_release_russia']);
         $query = $this->conn->dbh->prepare("UPDATE main_page_games SET  game_mode = :game_mode, text = :text, title = :title,
@@ -333,8 +349,8 @@ class Model extends MainModel
         $query->bindParam(":official_site_link", $this->_p['official_site_link'], PDO::PARAM_STR);
         $query->bindParam(":game_engine", $this->_p['game_engine'], PDO::PARAM_STR);
         $query->bindParam(":distribution", $this->_p['distribution'], PDO::PARAM_STR);
-        $query->bindParam(":video_img", $this->_p['video_img'], PDO::PARAM_STR);
-        $query->bindParam(":video_link", $this->_p['video_link'], PDO::PARAM_STR);
+        $query->bindParam(":video_img", $videoImg, PDO::PARAM_STR);
+        $query->bindParam(":video_link", $videoLink, PDO::PARAM_STR);
         $query->bindParam(":sr_os", $this->_p['sr_os'], PDO::PARAM_STR);
         $query->bindParam(":sr_cpu", $this->_p['sr_cpu'], PDO::PARAM_STR);
         $query->bindParam(":sr_ram", $this->_p['sr_ram'], PDO::PARAM_STR);
