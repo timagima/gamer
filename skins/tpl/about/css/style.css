@@ -6,8 +6,8 @@
 #social-buttons{position:absolute;right:38px;top:30px;}
 #social-buttons a{margin-left:10px;}
 #select{position:absolute;right:1px;top:173px;}
-#prev-btn{display:block;width:60px;height:59px;background:url(/skins/img/slider-btn.png) top 100% left 0 no-repeat;float:left;cursor:pointer;}
-#next-btn{display:block;width:57px;height:59px;background:url(/skins/img/slider-btn.png) top 0 left 100% no-repeat;  margin-left:59px;cursor:pointer;}
+#prev-btn{display:block;width:60px;height:59px;background:url(/skins/img/slider-btn.png) top 100% left 100%  no-repeat;float:left;cursor:pointer;}
+#next-btn{display:block;width:57px;height:59px;background:url(/skins/img/slider-btn.png) top 100% left 0 no-repeat;  margin-left:59px;cursor:pointer;}
 .top-content{margin-top:35px;overflow:hidden;}
 .left-content{padding-left:25px;float:left;width:650px;}
 .right-content{margin-left:675px;padding:10px 0 0 40px;}
@@ -29,7 +29,7 @@
 
 .near-tournaments{margin-top:40px;overflow:hidden;padding:0 15px 0 15px;}
 .near-tournaments h3{font-size:25px;font-weight:100;margin-bottom:15px;}
-.near-tournaments h3 a{color:#1fbba6;}
+.near-tournaments h3 a{color:#1fbba6;text-decoration:none;}
 .near-tournaments p{color:#63738e;font-size:18px;margin-top:0;}
 .img-center{text-align:center;}
 .img-center img {width:196px;height:208px}

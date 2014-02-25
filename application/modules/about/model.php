@@ -32,6 +32,12 @@ class Model extends MainModel
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function CountUsers()
+    {
+        $stmt = $this->conn->dbh->prepare("SELECT COUNT(*) FROM users");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_NUM);
+    }
 
 
 }

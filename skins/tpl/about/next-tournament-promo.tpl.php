@@ -10,8 +10,8 @@
                 <a href="#"><img src="/skins/img/tw.png" alt="Twitter" /></a>
             </div>
             <div id="select">
-                <a id="prev-btn" class="slider-action" style="background:url(/skins/img/slider-btn.png) top 0 left 0;" page="winner" ></a>
-                <a id="next-btn" page="legend-tournament" class="slider-action"></a>
+                <a id="prev-btn" class="slider-action" style="background:url(/skins/img/slider-btn.png) top 0 left 0;" page="legend-tournament" ></a>
+                <a id="next-btn" class="slider-action"  style="background:url(/skins/img/slider-btn.png) top 100% left 100%;" page="winner"></a>
             </div>
             <img src="/skins/img/slider2.jpg" alt="slider"/>
         </div>
@@ -21,20 +21,18 @@
         <?$cssClass = array("left-game","center-game","right-game");
         foreach($data['near_tournaments'] as $key=>$value){?>
         <div class="<?echo $cssClass[$key]?>">
-            <h3><a href="#"><?echo $value['title'] = substr($value['title'],0,strripos(substr($value['title'],0,45),''))?></a></h3>
+            <h3><a href="#"><?echo $value['title']  = substr($value['title'],0,27)."..."?></a></h3>
             <p>С 1 июля, призовой фонд 1000 р</p>
             <p class="img-center"><img src="/storage<?echo $value['source_img_s']?>" /></p>
         </div>
         <? } ?>
     </div>
 
-
-
     <div class="middle-content">
             <div class="left-middle">
                 <span>Участников</span>
                 <img src="/skins/img/inquiries.png"/>
-                <p>+350</p>
+                <p>+<?echo $data['count_users'][0][0]?></p>
             </div>
             <div class="right-middle">
                 <a href="#">Принять участие</a>
