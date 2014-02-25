@@ -32,7 +32,7 @@ class Controller extends MainController
         {
             $this->headerTxt['title'] = "Обзоры, гайды, вики игр  - GS11";
             $data['games'] = $this->model->ListGames();
-            $this->view->Generate($this->arrTpl[0], 'guide/games-forever.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
+            $this->view->Generate($this->arrTpl[0], 'guide/games.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
         }
     }
 }

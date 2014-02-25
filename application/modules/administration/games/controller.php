@@ -29,7 +29,7 @@ class Controller extends MainController
         $this->PrepareFiles(self::$storageTemp);
         if(empty($_GET['action']))
         {
-            $tplGames = 'administration/games/list-games-forever.tpl.php';
+            $tplGames = 'administration/games/list-games.tpl.php';
             $data = $this->model->ListGames();
         }
         else
@@ -40,7 +40,7 @@ class Controller extends MainController
                 $data['difficulty'] = $this->model->GetDifficulty($_GET['id']);
             }
             $data['genre'] = $this->model->ListGenre();
-            $tplGames = 'administration/games/edit-games-forever.tpl.php';
+            $tplGames = 'administration/games/edit-games.tpl.php';
         }
         $this->view->Generate('menu/admin-menu.tpl.php', $tplGames, $this->GetTplView(), 'index-admin.tpl.php', $data);
     }

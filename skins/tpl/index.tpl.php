@@ -71,7 +71,7 @@ $(document).ready(function(){
     <div class="footer-txt left">
         <span>
             <a href="/about/company">О нас</a> |
-            <a href="/about/promo">Промо</a> |
+            <a href="/about/promo?page=winner">Промо</a> |
             <a href="http://vk.com/g_s11">Мы вконтакте</a>
 <!--            <a href="/about/help">Помощь</a> |-->
 <!--            <a href="/about/games-forever">Игры навсегда</a> |-->
