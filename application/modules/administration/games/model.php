@@ -300,12 +300,12 @@ class Model extends MainModel
         if(!empty($this->_p['video-link'])){
             $videoLink = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
             rename($this->_p['video-link'], $videoLink);
-            $videoLink = "/"."storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
+            $videoLink = "/".$videoLink;
         }
         if(!empty($this->_p['video-img'])){
             $videoImg = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-img']);
-            rename($this->_p['video-img'], $videoImg);
-            $videoImg = "/"."storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-img']);
+            copy($this->_p['video-img'], $videoImg);
+            $videoImg = "/".$videoImg;
         }
         if(!empty($this->_p['deleted-video-link']) && !empty($this->_p['deleted-video-img'])){
             unlink( substr($this->_p['deleted-video-link'], 1) );

@@ -40,13 +40,17 @@ class Upload extends SimpleImage
             if($ext === ".webm"){
                 $videoFileName = $name.$ext;
                 move_uploaded_file($value['tmp_name'], $videoFileName);
-                echo json_encode(array($videoFileName, $this->fileName,$this->videoIcon));
+                echo json_encode(array($videoFileName, $this->fileName, $this->videoIcon));
+                return;
+            }elseif($ext === ".jpeg" || $ext === ".jpg" || $ext === ".png"){
+                $fileNameSmall = $name . "_s" . $ext;
+                $fileNameBig = $name . "_b" . $ext;
+                $this->load($value['tmp_name'])->square_crop(170)->save($fileNameSmall);
+                $this->load($value['tmp_name'])->save($fileNameBig);
+            }else{
                 return;
             }
-            $fileNameSmall = $name . "_s" . $ext;
-            $fileNameBig = $name . "_b" . $ext;
-            $this->load($value['tmp_name'])->square_crop(170)->save($fileNameSmall);
-            $this->load($value['tmp_name'])->save($fileNameBig);
+
         }
         echo json_encode(array($fileNameSmall, $this->fileName));
     }

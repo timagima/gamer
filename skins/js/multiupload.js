@@ -62,8 +62,12 @@ function multiUploader(config){
             contentType: false,
             processData: false,
             success:function(data){
-                var arrFile = $.parseJSON(data);
-                self.renderImage(arrFile);
+                if(data != false){
+                    var arrFile = $.parseJSON(data);
+                    self.renderImage(arrFile);
+                }else{
+                    return;
+                }
             }
         });
         if (f+1 < file.length) {
