@@ -73,13 +73,21 @@ class Controller extends MainController
     {
         if(isset($id) && $id > 0)
         {
-            $data = $this->model->GetGame($id);
+            $data['game'] = $this->model->GetGame($id);
+            $data['rubrics'] = $this->model->GetGameRubrics($id);
             $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/guide-game.tpl.php', '', 'index-admin.tpl.php', $data);
         }
         else
         {
             echo "Игра не найдена";
         }
+
+    }
+
+    public function ActionEditGameRubric($id)
+    {
+        $data = $this->model->GetGameRubricInfo($this->_g['id']);
+        $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/edit-game-rubric.tpl.php', '', 'index-admin.tpl.php', $data);
 
     }
 

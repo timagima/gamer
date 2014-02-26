@@ -364,8 +364,13 @@ class Model extends MainModel
 
     public function GetGameRubrics($id)
     {
-        $result = $this->conn->dbh->query("SELECT * FROM main_page_games_rubric WHERE id_main_page_game=".$id)->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
+        return $this->conn->dbh->query("SELECT * FROM main_page_games_rubric WHERE id_main_page_game=".$id." ORDER BY rubric")->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+    public function  GetGameRubricInfo($id)
+    {
+        return $this->conn->dbh->query("SELECT * FROM main_page_games_rubric WHERE id=".$id)->fetch(PDO::FETCH_ASSOC);
     }
 
     public function UploadMainPageGameScreenshot()
@@ -458,7 +463,6 @@ class Model extends MainModel
                 $i++;
             }
         }
-
     }
 
     public function UploadMainPageRubricImg()
