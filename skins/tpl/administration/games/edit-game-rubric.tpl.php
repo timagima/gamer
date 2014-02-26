@@ -10,10 +10,10 @@ use classes\url;
     .search-index input {width: 948px;}
 </style>
 
-<h1><a href="<?= Url::Action("index", "administration.news") ?>">Новости</a>
-    -> <?=$data["id"] > 0 ? "Редактирование" : "Создание" ?></h1>
-<form action="<?= Url::Action("edit", "administration.news") ?>" method="POST">
+<h2>Редактирование рубрики "<?=$data['rubric']?>"</h2>
+<form action="<?= Url::Action("GuideGame", "administration.games") ?>" method="POST">
     <?=Render::Hidden($data["id"], "id")?>
+    <?=Render::Hidden($data["id_main_page_game"], "id-game")?>
     <table>
         <tr>
             <td>
@@ -23,7 +23,7 @@ use classes\url;
             </td>
             <td>
                 <div class="field fill" id="header-games">
-                    <?=Render::LabelEdit($data['header'], "header", "Заголовок", true)?>
+                    <?=Render::LabelEdit($data['rubric'], "header", "Заголовок", true)?>
                 </div>
             </td>
         </tr>
