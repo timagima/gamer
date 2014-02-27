@@ -375,8 +375,22 @@ class Model extends MainModel
 
     public function EditGameRubric($params)
     {
-        $c=true;
-        /**/
+        $videoLink = null;
+        $videoImg = null;
+        if(!empty($this->_p['video-link'])){
+            $videoLink = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
+            rename($this->_p['video-link'], $videoLink);
+            $videoLink = "/".$videoLink;
+        }
+        if(!empty($this->_p['video-img'])){
+            $videoImg = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-img']);
+            copy($this->_p['video-img'], $videoImg);
+            $videoImg = "/".$videoImg;
+        }
+        if(!empty($this->_p['deleted-video-link']) && !empty($this->_p['deleted-video-img'])){
+            unlink( substr($this->_p['deleted-video-link'], 1) );
+            unlink( substr($this->_p['deleted-video-img'], 1) );
+        }
         $query = $this->conn->dbh->prepare("
             UPDATE main_page_games_rubric
             SET
@@ -385,7 +399,9 @@ class Model extends MainModel
                 text = :text,
                 title = :title,
                 description = :description,
-                keywords = :keywords
+                keywords = :keywords,
+                video_link=:videoLink,
+                video_img=:videoImg
             WHERE id=:id");
         $parts = explode('.', $params['date']);
         $date = $parts[2] . $parts[1] . $parts[0];
@@ -396,6 +412,8 @@ class Model extends MainModel
         $query->bindParam(":description", $params['description'], PDO::PARAM_STR);
         $query->bindParam(":keywords", $params['keywords'], PDO::PARAM_STR);
         $query->bindParam(":id", $params['id'], PDO::PARAM_STR);
+        $query->bindParam(":videoLink", $videoLink, PDO::PARAM_STR);
+        $query->bindParam(":videoImg", $videoImg, PDO::PARAM_STR);
         $query->execute();
     }
 

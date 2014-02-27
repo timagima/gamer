@@ -51,7 +51,7 @@ use classes\url;
         </div>
         <div class="span8 demo-video" style="position: relative; top: 22px;">
             <video class="video-js" controls preload="auto" width="420" height="258" poster="<?=$data['video_img']?>" data-setup="{}">
-                <source src="<?=$data['main-page']->video_link?>" type="video/webm" />
+                <source src="<?=$data['video_link']?>" type="video/webm" />
             </video>
             <input type="hidden" name="video-link" value="<?=$data['video_link']?>">
             <input type="hidden" name="video-img" value="<?=$data['video_img']?>">
@@ -71,21 +71,17 @@ use classes\url;
     </div>
 </form>
 
+
 <script type="text/javascript">
-    $(document).ready(function () {
-        var config = {
-            form: "edit-game-rubric",
-            visualProgress: "modal",
-            img: true,
-            method: "MainPageGame",
-            multi: false,
-            limit: 1,
-            uploadUrl: document.location.href
-        };
-
-        initMultiUploader(config);
-
-    });
+    var config = {
+        form: "edit-game-rubric",
+        visualProgress: "modal",
+        img: true,
+        method: "MainPageGame",
+        multi: false,
+        limit: 1,
+        uploadUrl: document.location.href
+    };
 
     $(function () {
 
@@ -122,12 +118,7 @@ use classes\url;
     });
 
     $(document).ready(function () {
-
-
-
-
-
-
+        initMultiUploader(config);
         $('#delete-video').click(function(){
             //var parentElement =$(this).parent();
             //alert(parentElement);
