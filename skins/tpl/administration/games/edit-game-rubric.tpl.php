@@ -49,9 +49,10 @@ use classes\url;
             <span class="btn">Видеофайл</span>
             <input id="video-file" type="file" name="video-file"/>
         </div>
+
         <div class="span8 demo-video" style="position: relative; top: 22px;">
-            <video class="video-js" controls preload="auto" width="420" height="258" poster="<?=$data['video_img']?>" data-setup="{}">
-                <source src="<?=$data['video_link']?>" type="video/webm" />
+            <video class="video-js vjs-default-skin" controls preload="none" width="420" height="305" poster="<?=$data['video_img']?>" data-setup="{}">
+                <source src="<?=$data['video_link']?>" type='video/mp4' />
             </video>
             <input type="hidden" name="video-link" value="<?=$data['video_link']?>">
             <input type="hidden" name="video-img" value="<?=$data['video_img']?>">

@@ -5,9 +5,10 @@
     <meta name="keywords" content="<?= $headerTxt['keywords']; ?>"/>
     <meta name="description" content="<?= $headerTxt['description']; ?>"/>
     <link type="text/css" rel="stylesheet" href="/skins/css/style.css"/>
-    <link type="text/css" rel="stylesheet" href="/skins/css/nf.lightbox.css"/>
     <link type="text/css" rel="stylesheet" href="/skins/css/jquery.stars.rating.css"/>
     <link type="text/css" rel="stylesheet" href="/skins/css/stars.rating.styles.css"/>
+    <link type="text/css" rel="stylesheet" href="/skins/css/colorbox.css"/>
+    <link type="text/css" rel="stylesheet" href="/skins/css/video-js.css"/>
     <?=$arrCss;?>
 <!--            <link type="text/css" rel="stylesheet" href="/skins/css/ui.css" />-->
 
@@ -28,6 +29,7 @@
     <script type="text/javascript" src="/skins/js/multiupload.js"></script>
     <script type="text/javascript" src="/skins/js/likes.js"></script>
     <script type="text/javascript" src="/skins/js/comments.js"></script>
+    <script type="text/javascript" src="/skins/js/jquery.colorbox-min.js"></script>
     <?=$arrJs;?>
 
 

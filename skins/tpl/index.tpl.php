@@ -5,6 +5,8 @@
     <meta name="keywords" content="<?=$headerTxt['keywords']; ?>" />
     <meta name="description" content="<?=$headerTxt['description']; ?>" />
     <link type="text/css" rel="stylesheet" href="/skins/css/style.css"/>
+    <link type="text/css" rel="stylesheet" href="/skins/css/colorbox.css"/>
+    <link type="text/css" rel="stylesheet" href="/skins/css/video-js.css"/>
     <?=$arrCss;?>
 
     <script type="text/javascript" src="/skins/js/history.js?type=/&redirect=true&basepath=/skins/"></script>
@@ -14,6 +16,7 @@
     <script type="text/javascript" src="/skins/js/arctic-modal.min.js"></script>
     <script type="text/javascript" src="/skins/js/jquery.autocomplete.js"></script>
     <script type="text/javascript" src="/skins/js/jquery.customSelect.js"></script>
+    <script type="text/javascript" src="/skins/js/jquery.colorbox-min.js"></script>
     <?=$arrJs;?>
 
 
