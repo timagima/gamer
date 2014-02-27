@@ -364,8 +364,57 @@ class Model extends MainModel
 
     public function GetGameRubrics($id)
     {
-        $result = $this->conn->dbh->query("SELECT * FROM main_page_games_rubric WHERE id_main_page_game=".$id)->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
+        return $this->conn->dbh->query("SELECT * FROM main_page_games_rubric WHERE id_main_page_game=".$id." ORDER BY rubric")->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+    public function  GetGameRubricInfo($id)
+    {
+        return $this->conn->dbh->query("SELECT * FROM main_page_games_rubric WHERE id=".$id)->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function EditGameRubric($params)
+    {
+        $videoLink = null;
+        $videoImg = null;
+        if(!empty($this->_p['video-link'])){
+            $videoLink = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
+            rename($this->_p['video-link'], $videoLink);
+            $videoLink = "/".$videoLink;
+        }
+        if(!empty($this->_p['video-img'])){
+            $videoImg = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-img']);
+            copy($this->_p['video-img'], $videoImg);
+            $videoImg = "/".$videoImg;
+        }
+        if(!empty($this->_p['deleted-video-link']) && !empty($this->_p['deleted-video-img'])){
+            unlink( substr($this->_p['deleted-video-link'], 1) );
+            unlink( substr($this->_p['deleted-video-img'], 1) );
+        }
+        $query = $this->conn->dbh->prepare("
+            UPDATE main_page_games_rubric
+            SET
+                date = :date,
+                rubric = :rubric,
+                text = :text,
+                title = :title,
+                description = :description,
+                keywords = :keywords,
+                video_link=:videoLink,
+                video_img=:videoImg
+            WHERE id=:id");
+        $parts = explode('.', $params['date']);
+        $date = $parts[2] . $parts[1] . $parts[0];
+        $query->bindParam(":date", $date, PDO::PARAM_STR);
+        $query->bindParam(":text", $params['text'], PDO::PARAM_STR);
+        $query->bindParam(":rubric", $params['header'], PDO::PARAM_STR);
+        $query->bindParam(":title", $params['title'], PDO::PARAM_STR);
+        $query->bindParam(":description", $params['description'], PDO::PARAM_STR);
+        $query->bindParam(":keywords", $params['keywords'], PDO::PARAM_STR);
+        $query->bindParam(":id", $params['id'], PDO::PARAM_STR);
+        $query->bindParam(":videoLink", $videoLink, PDO::PARAM_STR);
+        $query->bindParam(":videoImg", $videoImg, PDO::PARAM_STR);
+        $query->execute();
     }
 
     public function UploadMainPageGameScreenshot()
@@ -398,6 +447,9 @@ class Model extends MainModel
         if(isset($this->_p['new-rubrics'])){
             $idGame=$this->_p['id-game'];
             $newImgCount = 0;
+            $date = date("d.m.Y");
+            $parts = explode('.', $date);
+            $date = $parts[2] . $parts[1] . $parts[0];
             foreach($this->_p['new-rubrics'] as $rubric){
                 if($rubric==="")
                     continue;
@@ -415,11 +467,12 @@ class Model extends MainModel
                     $imgS = null;
                     $imgB = null;
                 }
-                $sql = $this->conn->dbh->prepare("INSERT INTO main_page_games_rubric SET id_main_page_game=:id_game, rubric=:rubric, rubric_img_s=:imgS, rubric_img_b=:imgB");
+                $sql = $this->conn->dbh->prepare("INSERT INTO main_page_games_rubric SET id_main_page_game=:id_game, rubric=:rubric, rubric_img_s=:imgS, rubric_img_b=:imgB, date=:date");
                 $sql->bindParam(":id_game", $idGame, PDO::PARAM_INT);
                 $sql->bindParam(":rubric", $rubric, PDO::PARAM_STR);
                 $sql->bindParam(":imgS", $imgS, PDO::PARAM_STR);
                 $sql->bindParam(":imgB", $imgB, PDO::PARAM_STR);
+                $sql->bindParam(":date", $date, PDO::PARAM_STR);
                 $sql->execute();
                 $newImgCount++;
             }
@@ -458,7 +511,6 @@ class Model extends MainModel
                 $i++;
             }
         }
-
     }
 
     public function UploadMainPageRubricImg()

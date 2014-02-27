@@ -62,11 +62,20 @@ function multiUploader(config){
             contentType: false,
             processData: false,
             success:function(data){
-                if(data != false){
+                if(self.config.method === "MainPageGame"){
+                    if(self.idDivParent==="video-upload-btn" && data==false){
+                        alert("Видео только с расширением .webm");
+                        return;
+                    }
+                    if( (self.idDivParent.indexOf("screen-upload")>=0 || self.idDivParent.indexOf("img-upload")>=0) && data==false){
+                        alert("Изображения только с расширением .jpg .jpeg .png");
+                        return;
+                    }
                     var arrFile = $.parseJSON(data);
                     self.renderImage(arrFile);
                 }else{
-                    return;
+                    var arrFile = $.parseJSON(data);
+                    self.renderImage(arrFile);
                 }
             }
         });

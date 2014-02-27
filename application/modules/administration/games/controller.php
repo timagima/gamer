@@ -71,15 +71,31 @@ class Controller extends MainController
 
     public function ActionGuideGame($id)
     {
-        if(isset($id) && $id > 0)
-        {
-            $data = $this->model->GetGame($id);
+        if(isset($id) && $id > 0){
+            $data['game'] = $this->model->GetGame($id);
+            $data['rubrics'] = $this->model->GetGameRubrics($id);
+            $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/guide-game.tpl.php', '', 'index-admin.tpl.php', $data);
+        } elseif(isset($this->_p['id-game']) && $this->_p['id-game']>0) {
+            $this->model->EditGameRubric($this->_p);
+            $data['game'] = $this->model->GetGame($this->_p['id-game']);
+            $data['rubrics'] = $this->model->GetGameRubrics($this->_p['id-game']);
             $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/guide-game.tpl.php', '', 'index-admin.tpl.php', $data);
         }
-        else
-        {
+        else {
             echo "Игра не найдена";
         }
+
+    }
+
+    public function ActionEditGameRubric($id)
+    {
+        $this->PrepareFiles("storage/guide-games/".$_GET['id']);
+        $data = $this->model->GetGameRubricInfo($this->_g['id']);
+        $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/edit-game-rubric.tpl.php', '', 'index-admin.tpl.php', $data);
+    }
+
+    public function ActionSaveChangeGameRubric()
+    {
 
     }
 
