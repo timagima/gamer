@@ -45,4 +45,10 @@ class Model extends MainModel
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function GetInfoThanks()
+    {
+        $stmt = $this->conn->dbh->prepare("SELECT name_partner, source_img, link_anchor,link,text FROM thanks");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

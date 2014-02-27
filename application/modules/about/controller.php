@@ -92,6 +92,22 @@ class Controller extends MainController
         $data['error'] = '';
         $this->view->Generate($this->arrTpl[0], 'about/games-forever.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
     }
+    public function ActionThanks()
+    {
+        $data['thanks_info'] = $this->model->GetInfoThanks();
+        if(!empty($_POST['id'])){
+            foreach($data['thanks_info'] as $key => $value){
+                if($value['name_partner'] == $_POST['id']){
+                    echo json_encode($data['thanks_info'][$key]);
+                }
+            }
+            exit();
+        }
+        $this->headerTxt['title'] = 'Благодарности';
+        $data['error'] = '';
+        $this->view->Generate($this->arrTpl[0], 'about/thanks.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
+    }
+
 }
 
 
