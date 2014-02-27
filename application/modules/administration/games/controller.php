@@ -89,6 +89,7 @@ class Controller extends MainController
 
     public function ActionEditGameRubric($id)
     {
+        $this->PrepareFiles("storage/guide-games/".$_GET['id']);
         $data = $this->model->GetGameRubricInfo($this->_g['id']);
         $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/edit-game-rubric.tpl.php', '', 'index-admin.tpl.php', $data);
     }

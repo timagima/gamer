@@ -11,7 +11,7 @@ use classes\url;
 </style>
 
 <h2>Редактирование рубрики "<?=$data['rubric']?>"</h2>
-<form action="<?= Url::Action("GuideGame", "administration.games") ?>" method="POST">
+<form action="<?= Url::Action("GuideGame", "administration.games") ?>" method="POST" id="edit-game-rubric">
     <?=Render::Hidden($data["id"], "id")?>
     <?=Render::Hidden($data["id_main_page_game"], "id-game")?>
     <table>
@@ -43,6 +43,28 @@ use classes\url;
         <?=Render::LabelEdit($data['keywords'], "keywords", "Ключевые слова")?>
     </div>
     <br>
+    <!--Загрузка фидеофайла-->
+    <?php if( $data['video_link']!=false && $data['video_img']!=false ) { ?>
+        <div id="video-upload-btn" class="container upload" style = "display: none;">
+            <span class="btn">Видеофайл</span>
+            <input id="video-file" type="file" name="video-file"/>
+        </div>
+        <div class="span8 demo-video" style="position: relative; top: 22px;">
+            <video class="video-js" controls preload="auto" width="420" height="258" poster="<?=$data['video_img']?>" data-setup="{}">
+                <source src="<?=$data['main-page']->video_link?>" type="video/webm" />
+            </video>
+            <input type="hidden" name="video-link" value="<?=$data['video_link']?>">
+            <input type="hidden" name="video-img" value="<?=$data['video_img']?>">
+            <div style="height: 50px; width: 100%">
+                <input type="button" value="Удалить видео" id="delete-video">
+            </div>
+        </div><div style="clear: both;"></div><br>
+    <?php } else{ ?>
+        <div id="video-upload-btn" class="container upload">
+            <span class="btn">Видеофайл</span>
+            <input id="video-file" type="file" name="video-file"/>
+        </div>
+    <?php } ?>
 
     <div style="height: 50px; width: 100%">
         <input type="submit" value="Сохранить" class="right">
@@ -50,6 +72,21 @@ use classes\url;
 </form>
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        var config = {
+            form: "edit-game-rubric",
+            visualProgress: "modal",
+            img: true,
+            method: "MainPageGame",
+            multi: false,
+            limit: 1,
+            uploadUrl: document.location.href
+        };
+
+        initMultiUploader(config);
+
+    });
+
     $(function () {
 
         tinymce.init({
@@ -83,7 +120,27 @@ use classes\url;
             ]
         });
     });
+
     $(document).ready(function () {
+
+
+
+
+
+
+        $('#delete-video').click(function(){
+            //var parentElement =$(this).parent();
+            //alert(parentElement);
+            var removeVideoLink = $('input[name=video-link]').val();
+            var removeVideoImg = $('input[name=video-img]').val();
+            if(removeVideoLink !== undefined && removeVideoImg !== undefined){
+                $('form').append("<input type='hidden' name='deleted-video-link' value='"+removeVideoLink+"'>");
+                $('form').append("<input type='hidden' name='deleted-video-img' value='"+removeVideoImg+"'>");
+            }
+            $(this).closest(".demo-video")[0].remove();
+            $("#video-file").parent().show();
+        });
+
         $('#file').bind('change', function () {
             execUpload(false, 'file', 'info');
         })
