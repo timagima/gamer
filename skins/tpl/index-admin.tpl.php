@@ -6,17 +6,14 @@
     <meta name="keywords" content="<?=$headerTxt['keywords']; ?>" />
     <meta name="description" content="<?=$headerTxt['description']; ?>" />
     <link type="text/css" rel="stylesheet" href="/skins/css/style.css"/>
-    <link type="text/css" rel="stylesheet" href="/skins/css/nf.lightbox.css"/>
-    <!--        <link type="text/css" rel="stylesheet" href="/skins/css/ui.css" />-->
+    <link type="text/css" rel="stylesheet" href="/skins/css/video-js.css"/>
 
     <script type="text/javascript" src="/skins/js/jquery.min.js"></script>
     <script type="text/javascript" src="/skins/js/script.js"></script>
     <script type="text/javascript" src="/skins/js/arctic-modal.min.js"></script>
     <script type="text/javascript" src="/skins/js/jquery.autocomplete.js"></script>
     <script type="text/javascript" src="/skins/js/jquery.customSelect.js"></script>
-    <script type="text/javascript" src="/skins/js/jquery.ui.js"></script>
     <script type="text/javascript" src="/skins/js/service.js"></script>
-    <script type="text/javascript" src="/skins/js/NFLightBox.js"></script>
     <script type="text/javascript" src="/skins/js/multiupload.js"></script>
     <script type="text/javascript" src="/skins/js/likes.js"></script>
     <script type="text/javascript" src="/skins/js/comments.js"></script>

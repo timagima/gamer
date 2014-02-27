@@ -23,6 +23,7 @@ class Controller extends MainController
         if(isset($id) && $id > 0)
         {
             $data['obj'] = $this->model->GetGame($id);
+            $data['obj-img'] = $this->model->GetGameImg($data['obj']->id_game);
             $this->headerTxt['title'] = $data['obj']->name;
             $this->headerTxt['description'] = $data['obj']->description;
             $this->headerTxt['keywords'] = $data['obj']->keywords;

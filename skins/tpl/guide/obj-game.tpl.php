@@ -3,8 +3,12 @@
     .table-video-screen-game{text-align: left}
     .table-screen img{margin-left: 5px; width: 170px; height: 150px;}
 </style>
-<link type="text/css" rel="stylesheet" href="/skins/css/video.css"/>
-<script src="http://vjs.zencdn.net/c/video.js"></script>
+<script>
+    $(document).ready(function(){
+        //Examples of how to assign the Colorbox event to elements
+        $(".obj-img").colorbox({rel:'group1'});
+    });
+</script>
 <img class="left" style="padding-right: 25px; " src="/storage<?=$data['obj']->source_img_b; ?>" alt="<?=$data['obj']->name; ?>" title="<?=$data['obj']->name; ?>" />
 <div class="content-guide-games">
     <h3><?=$data['obj']->name; ?></h3>
@@ -46,22 +50,18 @@
         </th>
     </tr>
     <tr>
-        <td style="padding-right: 5px;">
-            <div class="span8 demo-video" style="position: relative; top: 22px;">
-                <video class="video-js" controls
-                       preload="auto" width="420" height="258" poster="<?=$data['obj']->video_img; ?>" data-setup="{}">
-                    <source src="<?=$data['obj']->video_link; ?>" type='video/webm'/>
+        <td style="padding-right: 5px; width: 420px;">
+            <div class="" style="position: relative; bottom: 2px;">
+                <video class="video-js vjs-default-skin" controls preload="none" width="420" height="305" poster="<?=$data['obj']->video_img; ?>" data-setup="{}">
+                    <source src="<?=$data['obj']->video_link; ?>" type='video/mp4' />
                 </video>
             </div>
         </td>
         <td>
-            <div class="left table-screen"><img src="http://upload.wikimedia.org/wikipedia/ru/0/05/Dark_Souls_Cover_Art.jpeg" /></div>
-            <div class="left table-screen"><img src="http://upload.wikimedia.org/wikipedia/ru/0/05/Dark_Souls_Cover_Art.jpeg" /></div>
-            <div class="left table-screen"><img src="http://upload.wikimedia.org/wikipedia/ru/0/05/Dark_Souls_Cover_Art.jpeg" /></div>
-            <div class="left table-screen"><img src="http://upload.wikimedia.org/wikipedia/ru/0/05/Dark_Souls_Cover_Art.jpeg" /></div>
-            <div class="left table-screen"><img src="http://upload.wikimedia.org/wikipedia/ru/0/05/Dark_Souls_Cover_Art.jpeg" /></div>
-            <div class="table-screen" ><img src="http://upload.wikimedia.org/wikipedia/ru/0/05/Dark_Souls_Cover_Art.jpeg" /></div>
+            <? foreach($data['obj-img'] as $r){?>
+                <div class="left table-screen"><a class="obj-img" href="<?=$r->screenshot_b; ?>" ><img src="<?=$r->screenshot_s; ?>" /></a></div>
+            <?}?>
         </td>
     </tr>
-<table>
+    <table>
 

@@ -64,7 +64,7 @@ function multiUploader(config){
             success:function(data){
                 if(self.config.method === "MainPageGame"){
                     if(self.idDivParent==="video-upload-btn" && data==false){
-                        alert("Видео только с расширением .webm");
+                        alert("Видео только с расширением .mp4");
                         return;
                     }
                     if( (self.idDivParent.indexOf("screen-upload")>=0 || self.idDivParent.indexOf("img-upload")>=0) && data==false){
@@ -86,10 +86,7 @@ function multiUploader(config){
     multiUploader.prototype.renderImage = function(arrFile){
         $("#error-img").remove();
         if(self.idFileInput === 'video-file'){
-            var singleHtml = '<div class="span8 demo-video" style="position: relative; top: 22px;">'+
-                                    '<video class="video-js" controls preload="auto" width="420" height="258" poster="/'+arrFile[2]+'" data-setup="{}"> '+
-                                    '<source src="/'+arrFile[0]+'" type="video/webm" />'+
-                                    '</video>' +
+            var singleHtml = '<video class="video-js vjs-default-skin" controls preload="none" width="420" height="305" poster="/'+arrFile[2]+'" data-setup="{}"><source src="/'+arrFile[0]+'" type="video/mp4" /></video>'+
                                     '<input type="hidden" name="video-link" value="'+arrFile[0]+'">'+
                                     '<input type="hidden" name="video-img" value="'+arrFile[2]+'">'+
                               '</div><div style="clear: both;"></div><br>';

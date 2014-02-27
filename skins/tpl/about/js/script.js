@@ -37,7 +37,6 @@ var sliderNext = {
         }
     }
 };
-
 var links = {
     legendTournament: 'Легендарные Off-line турниры',
     nextTournament: 'Ближайшие Off-line турниры',

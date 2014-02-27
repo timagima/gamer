@@ -188,10 +188,10 @@ class Model extends MainModel
         }
         else
         {
-            $file = (!$param) ? "storage".$file : $file;
+            $file = (!$param) ? "/storage".$file : $file;
             $fullPath = $this->PrepareImg($file);
-            copy( $_SERVER["DOCUMENT_ROOT"] . $file, "storage".$fullPath);
-            unlink($_SERVER["DOCUMENT_ROOT"] . $file);
+            copy( $_SERVER["DOCUMENT_ROOT"] . "/" . $file, $_SERVER["DOCUMENT_ROOT"] .  "/storage".$fullPath);
+            unlink($_SERVER["DOCUMENT_ROOT"] . "/" . $file);
             return $fullPath;
         }
 
