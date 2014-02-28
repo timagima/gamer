@@ -81,11 +81,12 @@ class Controller extends MainController
 
     }
 
-    public function ActionGameRubricArticles()
+    public function ActionGameRubricArticles($id=false)
     {
+        $id=(int)$id;
         if(isset($this->_g['id'])){
-            $data["rows"] = $this->model->GetRubricArticles($this->_g['id']);
-            $data["game-rubric"] = $this->model->GetGameRubricInfo($this->_g['id']);
+            $data["rows"] = ($id==false) ? $this->model->GetRubricArticles($this->_g['id']) : $this->model->GetRubricArticles($id);
+            $data["game-rubric"] = ($id==false) ? $this->model->GetGameRubricInfo($this->_g['id']) : $this->model->GetGameRubricInfo($id);
             $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/game-rubric-articles.tpl.php', '', 'index-admin.tpl.php', $data);
         }else{
             echo "404 - Not found";
@@ -103,8 +104,9 @@ class Controller extends MainController
 
     public function ActionDeleteRubricArticle()
     {
-        if(isset($this->_g['id'])){
-            $this->model->DeleteRubricArticle($this->_g['id']);
+        if(isset($this->_g['id-article'])){
+            $this->model->DeleteRubricArticle($this->_g['id-article']);
+            $this->ActionGameRubricArticles($this->_g['id']);
         }
 
     }

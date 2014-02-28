@@ -32,7 +32,7 @@ use classes\url;
                 <td><a href='<?= Url::Action("EditGameRubricArticle", "administration.games") ?>?id=<?= $row['id'] ?>'>Редактироавть</a>
                 </td>
                 <td><a data-action="delete"
-                       href='<?= Url::Action("delete-rubric-article", "administration.games") ?>?id=<?= $row['id'] ?>'>Удалить</a></td>
+                       href='<?= Url::Action("delete-rubric-article", "administration.games") ?>?id-article=<?= $row['id'] ?>&id=<?=$data['game-rubric']['id_rubric']?>'>Удалить</a></td>
             </tr>
         <? }?>
         </tbody>

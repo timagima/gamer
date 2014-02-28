@@ -382,7 +382,7 @@ class Model extends MainModel
 
     public function  GetGameRubricInfo($id)
     {
-        return $this->conn->dbh->query("SELECT mpg_rubric.rubric, g.name as game, g.id FROM main_page_games_rubric mpg_rubric
+        return $this->conn->dbh->query("SELECT mpg_rubric.rubric, g.name as game, g.id, mpg_rubric.id as id_rubric FROM main_page_games_rubric mpg_rubric
                                             LEFT JOIN games g ON g.id=mpg_rubric.id_main_page_game
                                             WHERE mpg_rubric.id=".$id)->fetch(PDO::FETCH_ASSOC);
     }
@@ -390,9 +390,11 @@ class Model extends MainModel
     public function DeleteRubricArticle($id)
     {
         $video = $this->conn->dbh->query("SELECT video_link, video_img FROM main_page_games_rubric_articles WHERE id=".$id)->fetch(PDO::FETCH_ASSOC);
-        //$this->conn->dbh->query("DELETE FROM main_page_games_rubric_articles WHERE id=".$id)->fetch(PDO::FETCH_ASSOC);
-        $c=true;
-
+        if($video['video_link']!=false && $video['video_img']!=false){
+            unlink($_SERVER['DOCUMENT_ROOT'].substr($video['video_link'], 1));
+            unlink($_SERVER['DOCUMENT_ROOT'].substr($video['video_img'], 1));
+        }
+        $this->conn->dbh->query("DELETE FROM main_page_games_rubric_articles WHERE id=".$id);
     }
 
     public function UploadMainPageGameScreenshot()
