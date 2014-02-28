@@ -1,7 +1,7 @@
 <style>
     .list-main-games{padding: 35px 35px 10px 35px;}
     .list-main-games img{width: 400px;}
-    .list-main-games-right{margin-left: 20px;}
+    .list-main-games-right{margin-left: 20px;} /*проверка*/
 </style>
 <div class="contents">
 <?php
