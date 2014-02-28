@@ -23,5 +23,9 @@ class Model extends MainModel
     {
         return $this->conn->dbh->query("SELECT * FROM main_page_games_screenshot WHERE id_main_page_game = " . $id)->fetchAll(PDO::FETCH_OBJ);
     }
+    public function GetGameRubric($id)
+    {
+        return $this->conn->dbh->query("SELECT * FROM main_page_games_rubric WHERE id_main_page_game = " . $id)->fetchAll(PDO::FETCH_OBJ);
+    }
 
 }

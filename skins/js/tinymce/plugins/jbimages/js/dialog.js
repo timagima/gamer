@@ -26,7 +26,7 @@ var filesDialog = {
                     var w = filesDialog.getWin();
                     tinymce = w.tinymce;
                     if(typeFile == "img")
-                        tinymce.EditorManager.activeEditor.insertContent('<img src="/' + data +'" />');
+                        tinymce.EditorManager.activeEditor.insertContent('<a class="gallery-tinymce" href="/'+ data +'"><img src="/' + data +'" /></a>');
                     else
                         tinymce.EditorManager.activeEditor.insertContent('<a href="/' + data +'" />Добавьте название</a>');
                     filesDialog.close();

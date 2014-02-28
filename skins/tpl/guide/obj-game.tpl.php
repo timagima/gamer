@@ -7,6 +7,7 @@
     $(document).ready(function(){
         //Examples of how to assign the Colorbox event to elements
         $(".obj-img").colorbox({rel:'group1'});
+        $(".gallery-tinymce").colorbox({rel:'group2'});
     });
 </script>
 <img class="left" style="padding-right: 25px; " src="/storage<?=$data['obj']->source_img_b; ?>" alt="<?=$data['obj']->name; ?>" title="<?=$data['obj']->name; ?>" />
@@ -64,4 +65,9 @@
         </td>
     </tr>
     <table>
+        <div style="width: 100%">
+            <? foreach($data['obj-rubric'] as $r){?>
+                <div style="text-align: center; float: left; padding: 10px;"><a style="color: #000000" href="<?=$r->id; ?>" ><img src="<?=$r->rubric_img_b; ?>" /><br><b><?=$r->rubric;?></b></a></div>
+            <?}?>
+        </div>
 

@@ -24,6 +24,7 @@ class Controller extends MainController
         {
             $data['obj'] = $this->model->GetGame($id);
             $data['obj-img'] = $this->model->GetGameImg($data['obj']->id_game);
+            $data['obj-rubric'] = $this->model->GetGameRubric($data['obj']->id_game);
             $this->headerTxt['title'] = $data['obj']->name;
             $this->headerTxt['description'] = $data['obj']->description;
             $this->headerTxt['keywords'] = $data['obj']->keywords;
