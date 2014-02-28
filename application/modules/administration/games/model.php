@@ -365,56 +365,19 @@ class Model extends MainModel
     public function GetGameRubrics($id)
     {
         return $this->conn->dbh->query("SELECT * FROM main_page_games_rubric WHERE id_main_page_game=".$id." ORDER BY rubric")->fetchAll(PDO::FETCH_ASSOC);
-
     }
 
-    public function  GetGameRubricInfo($id)
+    public function GetRubricArticles($id)
     {
-        return $this->conn->dbh->query("SELECT * FROM main_page_games_rubric WHERE id=".$id)->fetch(PDO::FETCH_ASSOC);
+        return $this->conn->dbh->query("SELECT mpgr_articles.id, mpgr_articles.date, mpgr_articles.header, mpg_rubric.rubric, games.name FROM main_page_games_rubric_articles mpgr_articles
+                                                LEFT JOIN main_page_games_rubric mpg_rubric ON mpg_rubric.id = mpgr_articles.id_mpg_rubric
+                                                LEFT JOIN games ON games.id = mpg_rubric.id_main_page_game
+                                                WHERE id_mpg_rubric=".$id." ORDER BY header")->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function EditGameRubric($params)
+    public function  GetGameRubricArticleInfo($id)
     {
-        $videoLink = null;
-        $videoImg = null;
-        if(!empty($this->_p['video-link'])){
-            $videoLink = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
-            rename($this->_p['video-link'], $videoLink);
-            $videoLink = "/".$videoLink;
-        }
-        if(!empty($this->_p['video-img'])){
-            $videoImg = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-img']);
-            copy($this->_p['video-img'], $videoImg);
-            $videoImg = "/".$videoImg;
-        }
-        if(!empty($this->_p['deleted-video-link']) && !empty($this->_p['deleted-video-img'])){
-            unlink( substr($this->_p['deleted-video-link'], 1) );
-            unlink( substr($this->_p['deleted-video-img'], 1) );
-        }
-        $query = $this->conn->dbh->prepare("
-            UPDATE main_page_games_rubric
-            SET
-                date = :date,
-                rubric = :rubric,
-                text = :text,
-                title = :title,
-                description = :description,
-                keywords = :keywords,
-                video_link=:videoLink,
-                video_img=:videoImg
-            WHERE id=:id");
-        $parts = explode('.', $params['date']);
-        $date = $parts[2] . $parts[1] . $parts[0];
-        $query->bindParam(":date", $date, PDO::PARAM_STR);
-        $query->bindParam(":text", $params['text'], PDO::PARAM_STR);
-        $query->bindParam(":rubric", $params['header'], PDO::PARAM_STR);
-        $query->bindParam(":title", $params['title'], PDO::PARAM_STR);
-        $query->bindParam(":description", $params['description'], PDO::PARAM_STR);
-        $query->bindParam(":keywords", $params['keywords'], PDO::PARAM_STR);
-        $query->bindParam(":id", $params['id'], PDO::PARAM_STR);
-        $query->bindParam(":videoLink", $videoLink, PDO::PARAM_STR);
-        $query->bindParam(":videoImg", $videoImg, PDO::PARAM_STR);
-        $query->execute();
+        return $this->conn->dbh->query("SELECT * FROM main_page_games_rubric_articles WHERE id=".$id)->fetch(PDO::FETCH_ASSOC);
     }
 
     public function UploadMainPageGameScreenshot()
@@ -513,6 +476,32 @@ class Model extends MainModel
         }
     }
 
+    public function EditGameRubricArticle($params)
+    {
+        $query = $this->conn->dbh->prepare("
+            UPDATE main_page_games_rubric_articles
+            SET
+                date = :date,
+                header = :header,
+                text = :text,
+                title = :title,
+                description = :description,
+                keywords = :keywords
+            WHERE id=:id
+                ");
+        $parts = explode('.', $params['date']);
+        $date = $parts[2] . $parts[1] . $parts[0];
+        $query->bindParam(":id", $params['id'], PDO::PARAM_INT);
+        $query->bindParam(":date", $date, PDO::PARAM_STR);
+        $query->bindParam(":header", $params['header'], PDO::PARAM_STR);
+        $query->bindParam(":text", $params['text'], PDO::PARAM_STR);
+        $query->bindParam(":title", $params['title'], PDO::PARAM_STR);
+        $query->bindParam(":description", $params['description'], PDO::PARAM_STR);
+        $query->bindParam(":keywords", $params['keywords'], PDO::PARAM_STR);
+        $query->execute();
+
+    }
+
     public function UploadMainPageRubricImg()
     {
         if( isset($this->_p['deletedImg']) && is_array($this->_p['deletedImg']) ){
@@ -560,6 +549,7 @@ class Model extends MainModel
             }
         }
     }
+
     public function GetMainPageScreenshot($id)
     {
         return $this->conn->dbh->query("SELECT * FROM main_page_games_screenshot WHERE id_main_page_game=".$id)->fetchAll(PDO::FETCH_ASSOC);

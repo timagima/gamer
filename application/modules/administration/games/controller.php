@@ -75,28 +75,32 @@ class Controller extends MainController
             $data['game'] = $this->model->GetGame($id);
             $data['rubrics'] = $this->model->GetGameRubrics($id);
             $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/guide-game.tpl.php', '', 'index-admin.tpl.php', $data);
-        } elseif(isset($this->_p['id-game']) && $this->_p['id-game']>0) {
-            $this->model->EditGameRubric($this->_p);
-            $data['game'] = $this->model->GetGame($this->_p['id-game']);
-            $data['rubrics'] = $this->model->GetGameRubrics($this->_p['id-game']);
-            $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/guide-game.tpl.php', '', 'index-admin.tpl.php', $data);
-        }
-        else {
+        }else {
             echo "Игра не найдена";
         }
 
     }
 
-    public function ActionEditGameRubric($id)
+    public function ActionGameRubricArticles()
     {
-        $this->PrepareFiles("storage/guide-games/".$_GET['id']);
-        $data = $this->model->GetGameRubricInfo($this->_g['id']);
-        $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/edit-game-rubric.tpl.php', '', 'index-admin.tpl.php', $data);
+        if(isset($this->_p['id'])){
+            $this->model->EditGameRubricArticle($this->_p);
+            $data["rows"] = $this->model->GetRubricArticles($this->_p['id_rubric']);
+            $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/game-rubric-articles.tpl.php', '', 'index-admin.tpl.php', $data);
+        }elseif(isset($this->_g['id'])){
+            $data["rows"] = $this->model->GetRubricArticles($this->_g['id']);
+            $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/game-rubric-articles.tpl.php', '', 'index-admin.tpl.php', $data);
+        }else{
+            echo "404 - Not found";
+        }
+
     }
 
-    public function ActionSaveChangeGameRubric()
+    public function ActionEditGameRubricArticle()
     {
-
+        $this->PrepareFiles("storage/guide-games/".$_GET['id']);
+        $data = $this->model->GetGameRubricArticleInfo($this->_g['id']);
+        $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/edit-game-rubric-article.tpl.php', '', 'index-admin.tpl.php', $data);
     }
 
     /* Конец основные игро-обзоры */

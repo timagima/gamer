@@ -69,6 +69,6 @@ include $path . "/skins/tpl/administration/common/paging-list.php"
         create_paging(data["current_page"], data["count"]);
     }
 
-    create_paging(1, <?=$data["count"]?>);
+    /*create_paging(1, <?=$data["count"]?>); */
 
 </script>

@@ -11,8 +11,9 @@ use classes\url;
 </style>
 
 <h2>Редактирование статьи "<?=$data['header']?>"</h2>
-<form action="<?= Url::Action("GuideGame", "administration.games") ?>" method="POST" id="edit-game-rubric">
+<form action="<?= Url::Action("game-rubric-articles", "administration.games") ?>" method="POST" id="edit-game-rubric-article">
     <?=Render::Hidden($data["id"], "id")?>
+    <?=Render::Hidden($data["id_mpg_rubric"], "id_rubric")?>
     <table>
         <tr>
             <td>
@@ -74,7 +75,7 @@ use classes\url;
 
 <script type="text/javascript">
     var config = {
-        form: "edit-game-rubric",
+        form: "edit-game-rubric-article",
         visualProgress: "modal",
         img: true,
         method: "MainPageGame",
