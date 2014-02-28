@@ -380,6 +380,21 @@ class Model extends MainModel
         return $this->conn->dbh->query("SELECT * FROM main_page_games_rubric_articles WHERE id=".$id)->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function  GetGameRubricInfo($id)
+    {
+        return $this->conn->dbh->query("SELECT mpg_rubric.rubric, g.name as game, g.id FROM main_page_games_rubric mpg_rubric
+                                            LEFT JOIN games g ON g.id=mpg_rubric.id_main_page_game
+                                            WHERE mpg_rubric.id=".$id)->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function DeleteRubricArticle($id)
+    {
+        $video = $this->conn->dbh->query("SELECT video_link, video_img FROM main_page_games_rubric_articles WHERE id=".$id)->fetch(PDO::FETCH_ASSOC);
+        //$this->conn->dbh->query("DELETE FROM main_page_games_rubric_articles WHERE id=".$id)->fetch(PDO::FETCH_ASSOC);
+        $c=true;
+
+    }
+
     public function UploadMainPageGameScreenshot()
     {
         $i=0;

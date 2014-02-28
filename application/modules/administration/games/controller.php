@@ -83,12 +83,9 @@ class Controller extends MainController
 
     public function ActionGameRubricArticles()
     {
-        if(isset($this->_p['id'])){
-            $this->model->EditGameRubricArticle($this->_p);
-            $data["rows"] = $this->model->GetRubricArticles($this->_p['id_rubric']);
-            $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/game-rubric-articles.tpl.php', '', 'index-admin.tpl.php', $data);
-        }elseif(isset($this->_g['id'])){
+        if(isset($this->_g['id'])){
             $data["rows"] = $this->model->GetRubricArticles($this->_g['id']);
+            $data["game-rubric"] = $this->model->GetGameRubricInfo($this->_g['id']);
             $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/game-rubric-articles.tpl.php', '', 'index-admin.tpl.php', $data);
         }else{
             echo "404 - Not found";
@@ -100,7 +97,16 @@ class Controller extends MainController
     {
         $this->PrepareFiles("storage/guide-games/".$_GET['id']);
         $data = $this->model->GetGameRubricArticleInfo($this->_g['id']);
+        $data['game-rubric'] = $this->model->GetGameRubricInfo($this->_g['id']);
         $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/edit-game-rubric-article.tpl.php', '', 'index-admin.tpl.php', $data);
+    }
+
+    public function ActionDeleteRubricArticle()
+    {
+        if(isset($this->_g['id'])){
+            $this->model->DeleteRubricArticle($this->_g['id']);
+        }
+
     }
 
     /* Конец основные игро-обзоры */

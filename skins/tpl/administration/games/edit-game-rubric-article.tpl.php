@@ -11,9 +11,10 @@ use classes\url;
 </style>
 
 <h2>Редактирование статьи "<?=$data['header']?>"</h2>
-<form action="<?= Url::Action("game-rubric-articles", "administration.games") ?>" method="POST" id="edit-game-rubric-article">
+<form action="<?= Url::Action("game-rubric-articles", "administration.games") ?>?id=<?=$data['id_mpg_rubric']?>" method="POST" id="edit-game-rubric-article">
     <?=Render::Hidden($data["id"], "id")?>
     <?=Render::Hidden($data["id_mpg_rubric"], "id_rubric")?>
+    <?=Render::Hidden($data["game-rubric"]["id"], "id-game")?>
     <table>
         <tr>
             <td>

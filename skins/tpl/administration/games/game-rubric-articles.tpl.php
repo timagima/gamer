@@ -5,7 +5,7 @@ use classes\url;
 ?>
 
 
-<h1>Управление рубрикой "<?=$data["rows"][0]['rubric']?>" игры "<?=$data["rows"][0]['name']?>"</h1>
+<h1>Статьи рубрики "<?=$data['game-rubric']['rubric']?>" -> "<?=$data['game-rubric']['game']?>"</h1>
 <div style="height: 45px">
 
     <div class="right">
@@ -32,7 +32,7 @@ use classes\url;
                 <td><a href='<?= Url::Action("EditGameRubricArticle", "administration.games") ?>?id=<?= $row['id'] ?>'>Редактироавть</a>
                 </td>
                 <td><a data-action="delete"
-                       href='<?= Url::Action("delete", "administration.news") ?>?id=<?= $row['id'] ?>'>Удалить</a></td>
+                       href='<?= Url::Action("delete-rubric-article", "administration.games") ?>?id=<?= $row['id'] ?>'>Удалить</a></td>
             </tr>
         <? }?>
         </tbody>
