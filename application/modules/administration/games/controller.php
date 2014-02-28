@@ -85,9 +85,18 @@ class Controller extends MainController
     {
         $id=(int)$id;
         if(isset($this->_g['id'])){
+            if(!empty($this->_p) && $this->_p['id']>0){
+                $this->model->EditGameRubricArticle($this->_p);
+            }
             $data["rows"] = ($id==false) ? $this->model->GetRubricArticles($this->_g['id']) : $this->model->GetRubricArticles($id);
             $data["game-rubric"] = ($id==false) ? $this->model->GetGameRubricInfo($this->_g['id']) : $this->model->GetGameRubricInfo($id);
             $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/game-rubric-articles.tpl.php', '', 'index-admin.tpl.php', $data);
+        }elseif($this->_p['id']==="0"){
+            $this->model->AddRubricArticle($this->_p['id_rubric']);
+            $data["rows"] = $this->model->GetRubricArticles($this->_p['id_rubric']);
+            $data["game-rubric"] = $this->model->GetGameRubricInfo($this->_p['id_rubric']);
+            $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/game-rubric-articles.tpl.php', '', 'index-admin.tpl.php', $data);
+
         }else{
             echo "404 - Not found";
         }
@@ -109,6 +118,14 @@ class Controller extends MainController
             $this->ActionGameRubricArticles($this->_g['id']);
         }
 
+    }
+
+    public function ActionCreateRubricArticle()
+    {
+        $data = array("id" => 0, "date" => date("d.m.Y"), "header" => "", "keywords" => "", "description" => "", "title" => "", "text" => "");
+        $data['game-rubric'] = $this->model->GetGameRubricInfo($this->_g['id']);
+        $data["id_mpg_rubric"] = $data['game-rubric']['id_rubric'];
+        $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/edit-game-rubric-article.tpl.php', '', 'index-admin.tpl.php', $data);
     }
 
     /* Конец основные игро-обзоры */

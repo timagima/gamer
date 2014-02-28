@@ -9,7 +9,7 @@ use classes\url;
 <div style="height: 45px">
 
     <div class="right">
-        <a name="create_item" id="create_item" href="<?= Url::Action("create", "administration.news") ?>">Добавить</a>
+        <a name="create_item" id="create_item" href="<?= Url::Action("create-rubric-article", "administration.games")?>?id=<?=$data['game-rubric']['id_rubric']?>">Добавить</a>
     </div>
 </div>
 

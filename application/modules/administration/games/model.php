@@ -397,6 +397,11 @@ class Model extends MainModel
         $this->conn->dbh->query("DELETE FROM main_page_games_rubric_articles WHERE id=".$id);
     }
 
+    public function AddRubricArticle($id)
+    {
+
+    }
+
     public function UploadMainPageGameScreenshot()
     {
         $i=0;

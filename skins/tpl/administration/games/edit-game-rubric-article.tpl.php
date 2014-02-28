@@ -10,8 +10,13 @@ use classes\url;
     .search-index input {width: 948px;}
 </style>
 
-<h2>Редактирование статьи "<?=$data['header']?>"</h2>
-<form action="<?= Url::Action("game-rubric-articles", "administration.games") ?>?id=<?=$data['id_mpg_rubric']?>" method="POST" id="edit-game-rubric-article">
+<h2><?php if($data['id']>0){?>
+    Редактирование статьи "<?=$data['header']?>"
+    <?php }else{?>
+     Создание новой статьи рубрик "<?=$data['game-rubric']['rubric']?>" игры "<?=$data['game-rubric']['game']?>"
+    <?php } ?>
+</h2>
+<form action="<?= Url::Action("game-rubric-articles", "administration.games") ?><?=($data['id']>0) ? "?id=".$data['id_mpg_rubric'] : ''?>" method="POST" id="edit-game-rubric-article">
     <?=Render::Hidden($data["id"], "id")?>
     <?=Render::Hidden($data["id_mpg_rubric"], "id_rubric")?>
     <?=Render::Hidden($data["game-rubric"]["id"], "id-game")?>
@@ -45,7 +50,7 @@ use classes\url;
     </div>
     <br>
     <!--Загрузка фидеофайла-->
-    <?php if( $data['video_link']!=false && $data['video_img']!=false ) { ?>
+    <?php if( !empty($data['video_link']) && !empty($data['video_img']) ) { ?>
         <div id="video-upload-btn" class="container upload" style = "display: none;">
             <span class="btn">Видеофайл</span>
             <input id="video-file" type="file" name="video-file"/>
