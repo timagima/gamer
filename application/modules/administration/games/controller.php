@@ -142,6 +142,7 @@ class Controller extends MainController
 
     public function ActionMainPage()
     {
+        // todo: Добавить проверку на игру
         if(isset($_GET['id']))
         {
             $this->PrepareFiles("storage/guide-games/".$_GET['id']);

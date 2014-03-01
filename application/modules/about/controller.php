@@ -15,6 +15,12 @@ class Controller extends MainController
 
 
     }
+
+    public function ActionPhilosophy()
+    {
+        $this->headerTxt['title'] = 'Наши убеждения - GS11';
+        $this->view->Generate($this->arrTpl[0], 'about/philosophy.tpl.php', $this->GetTplView(), $this->arrTpl[1], false, $this->headerTxt, $this->model->CountQuery());
+    }
     public function ActionTariff()
     {
         $this->headerTxt['title'] = 'Детальная информация о тарифных планах - GS11';

@@ -54,7 +54,7 @@
         <td style="padding-right: 5px; width: 420px;">
             <div class="" style="position: relative; bottom: 2px;">
                 <video class="video-js vjs-default-skin" controls preload="none" width="420" height="305" poster="<?=$data['obj']->video_img; ?>" data-setup="{}">
-                    <source src="<?=$data['obj']->video_link; ?>" type='video/mp4' />
+                    <source src="https://cloclo14.datacloudmail.ru/weblink/view/a3f9f7e807a1/Black%20Mesa%20Official%20Main%20Trailer.mp4" type='video/mp4' />
                 </video>
             </div>
         </td>
