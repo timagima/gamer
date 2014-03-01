@@ -3,7 +3,7 @@
     h2{text-align:center;margin-top:0;}
     .thanks{margin:20px 40px 0 40px;float:left;position:relative;}
     .info-window{font-size:11px; border: 1px solid #e9e9e9; width: 200px; height:200px; position: absolute !important; z-index: 100; left: 100px; bottom:20px; padding: 15px; background-color: white;display:none}
-    .remove:after{content:"Закрыть";position:absolute;left:180px;top:-2px;cursor:pointer;}
+    .info-window:after{content:"Закрыть";position:absolute;left:180px;top:-2px;cursor:pointer;}
 
 
 
@@ -23,15 +23,17 @@
                         "<p>Партнер "+obj.name_partner+"</p>" +
                         "<a href='"+obj.link+"'>Подробнее о "+obj.link_anchor+"</a>" +
                         "<p>"+obj.text+"</p>";
-                    $('#'+id).html(result).show();
+                    $('#'+id).html(result).show(500);
                 }
             });
 
 
         });
-        $('.remove').on('click',function(){
+        $('body').on('click',function(){
             $('.info-window').hide(500);
-        })
+        });
+
+
     });
 </script>
 <div id="main">
@@ -40,15 +42,15 @@
     <h2>Хотим выразить огромную благодарнсть нашим партнёрам</h2>
     <div class="thanks">
         <img src="/storage/thanks/vk-thanks.png" class="click-thanks" />
-        <div class="info-window remove" id="vkontakte" ></div>
+        <div class="info-window"  id="vkontakte" ></div>
     </div>
     <div class="thanks">
-        <img src="/storage/thanks/Yt-thanks.png" class="click-thanks" />
-        <div class="info-window remove" id="youtube" ></div>
+        <img src="/storage/thanks/Yt-thanks.png" class="click-thanks " />
+        <div class="info-window"  id="youtube" ></div>
     </div>
     <div class="thanks">
         <img src="/storage/thanks/gg-thanks.png"  class="click-thanks" />
-        <div class="info-window remove" id="google" ></div>
+        <div class="info-window"  id="google" ></div>
     </div>
 
 
