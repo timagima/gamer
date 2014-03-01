@@ -29,7 +29,7 @@ use classes\url;
             <tr>
                 <td><?=Render::FormatDate($row['date'])?></td>
                 <td class="text-left"><?=$row['header']?></td>
-                <td><a href='<?= Url::Action("edit-game-rubric-article", "administration.games") ?>?id=<?= $row['id'] ?>'>Редактироавть</a>
+                <td><a href='<?= Url::Action("edit-game-rubric-article", "administration.games") ?>?id=<?=$row['id']?>&id-game=<?=$data['game-rubric']['id']?>'>Редактироавть</a>
                 </td>
                 <td><a data-action="delete"
                        href='<?= Url::Action("delete-rubric-article", "administration.games") ?>?id-article=<?= $row['id'] ?>&id=<?=$data['game-rubric']['id_rubric']?>'>Удалить</a></td>
@@ -53,22 +53,3 @@ use classes\url;
 $path = $_SERVER["DOCUMENT_ROOT"];
 include $path . "/skins/tpl/administration/common/paging-list.php"
 ?>
-
-<script type="text/javascript">
-    //$.datepicker.setDefaults($.datepicker.regional['ru']);
-
-    function update_table(data) {
-        debugger;
-        var tbody = "";
-        $.each(data["rows"], function (key, value) {
-            tbody += ("<tr><td>" + $.datepicker.formatDate('dd.mm.yy', new Date(value['date'])) +
-                "</td><td class='text-left'>" + value['header'] + "</td><td><a href='<?=Url::Action("edit")?>?id=" + value['id'] + "'>Редактировать</a></td>" +
-                "<td><a data-action='delete' href='<?=Url::Action("delete")?>/?id=" + value['id'] + "'>Удалить</a></td></tr>");
-        });
-        $("#list table tbody").html(tbody);
-        create_paging(data["current_page"], data["count"]);
-    }
-
-    /*create_paging(1, <?=$data["count"]?>); */
-
-</script>
