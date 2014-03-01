@@ -23,14 +23,14 @@
                         "<p>Партнер "+obj.name_partner+"</p>" +
                         "<a href='"+obj.link+"'>Подробнее о "+obj.link_anchor+"</a>" +
                         "<p>"+obj.text+"</p>";
-                    $('#'+id).html(result).show(500);
+                    $('#'+id).html(result).show(300);
                 }
             });
 
 
         });
-        $('body').on('click',function(){
-            $('.info-window').hide(500);
+        $('body ').on('click',function(){
+            $('.info-window').hide(300);
         });
 
 
