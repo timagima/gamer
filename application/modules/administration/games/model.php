@@ -377,7 +377,10 @@ class Model extends MainModel
 
     public function  GetGameRubricArticleInfo($id)
     {
-        return $this->conn->dbh->query("SELECT * FROM main_page_games_rubric_articles WHERE id=".$id)->fetch(PDO::FETCH_ASSOC);
+        return $this->conn->dbh->query("SELECT mpgr_articles.*, mpg_rubric.id_main_page_game AS id_game
+                                            FROM main_page_games_rubric_articles mpgr_articles
+                                            LEFT JOIN main_page_games_rubric mpg_rubric ON mpg_rubric.id=mpgr_articles.id_mpg_rubric
+                                            WHERE mpgr_articles.id=".$id)->fetch(PDO::FETCH_ASSOC);
     }
 
     public function  GetGameRubricInfo($id)
@@ -397,8 +400,52 @@ class Model extends MainModel
         $this->conn->dbh->query("DELETE FROM main_page_games_rubric_articles WHERE id=".$id);
     }
 
-    public function AddRubricArticle($id)
+    public function AddRubricArticle($params)
     {
+
+        $videoLink = null;
+        $videoImg = null;
+        if(empty($this->_p['header']) || empty($this->_p['title']))
+            return;
+        if(!empty($this->_p['video-link'])){
+            $videoLink = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
+            rename($this->_p['video-link'], $videoLink);
+            $videoLink = "/".$videoLink;
+        }
+        if(!empty($this->_p['video-img'])){
+            $videoImg = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-img']);
+            copy($this->_p['video-img'], $videoImg);
+            $videoImg = "/".$videoImg;
+        }
+        if(!empty($this->_p['deleted-video-link']) && !empty($this->_p['deleted-video-img'])){
+            unlink( substr($this->_p['deleted-video-link'], 1) );
+            unlink( substr($this->_p['deleted-video-img'], 1) );
+        }
+        $query = $this->conn->dbh->prepare("
+            INSERT INTO main_page_games_rubric_articles
+            SET
+                date = :date,
+                header = :header,
+                text = :text,
+                title = :title,
+                description = :description,
+                keywords = :keywords,
+                video_link = :video_link,
+                video_img = :video_img,
+                id_mpg_rubric=:rubric
+                ");
+        $parts = explode('.', $params['date']);
+        $date = $parts[2] . $parts[1] . $parts[0];
+        $query->bindParam(":date", $date, PDO::PARAM_STR);
+        $query->bindParam(":header", $params['header'], PDO::PARAM_STR);
+        $query->bindParam(":text", $params['text'], PDO::PARAM_STR);
+        $query->bindParam(":title", $params['title'], PDO::PARAM_STR);
+        $query->bindParam(":description", $params['description'], PDO::PARAM_STR);
+        $query->bindParam(":keywords", $params['keywords'], PDO::PARAM_STR);
+        $query->bindParam(":video_link", $videoLink, PDO::PARAM_STR);
+        $query->bindParam(":video_img", $videoImg, PDO::PARAM_STR);
+        $query->bindParam(":rubric", $params['id_rubric'], PDO::PARAM_INT);
+        $query->execute();
 
     }
 
@@ -500,21 +547,23 @@ class Model extends MainModel
 
     public function EditGameRubricArticle($params)
     {
-        $videoLink = null;
-        $videoImg = null;
-        if(!empty($this->_p['video-link'])){
+        $videoLink = (!empty($this->_p['video-link'])) ? $this->_p['video-link'] : null;
+        $videoImg = (!empty($this->_p['video-img'])) ? $this->_p['video-img'] : null;
+        if(!empty($this->_p['video-link']) && strpos($this->_p['video-link'], "temp")){
             $videoLink = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
             rename($this->_p['video-link'], $videoLink);
             $videoLink = "/".$videoLink;
         }
-        if(!empty($this->_p['video-img'])){
+        if(!empty($this->_p['video-img']) && strpos($this->_p['video-img'], "skins")!==false){
             $videoImg = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-img']);
             copy($this->_p['video-img'], $videoImg);
             $videoImg = "/".$videoImg;
         }
         if(!empty($this->_p['deleted-video-link']) && !empty($this->_p['deleted-video-img'])){
-            unlink( substr($this->_p['deleted-video-link'], 1) );
-            unlink( substr($this->_p['deleted-video-img'], 1) );
+            if(file_exists($this->_p['deleted-video-link']))
+                unlink( substr($this->_p['deleted-video-link'], 1) );
+            if(file_exists($this->_p['deleted-video-img']))
+                unlink( substr($this->_p['deleted-video-img'], 1) );
         }
         $query = $this->conn->dbh->prepare("
             UPDATE main_page_games_rubric_articles

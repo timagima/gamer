@@ -29,7 +29,7 @@ use classes\url;
             <tr>
                 <td><?=Render::FormatDate($row['date'])?></td>
                 <td class="text-left"><?=$row['header']?></td>
-                <td><a href='<?= Url::Action("EditGameRubricArticle", "administration.games") ?>?id=<?= $row['id'] ?>'>Редактироавть</a>
+                <td><a href='<?= Url::Action("edit-game-rubric-article", "administration.games") ?>?id=<?= $row['id'] ?>'>Редактироавть</a>
                 </td>
                 <td><a data-action="delete"
                        href='<?= Url::Action("delete-rubric-article", "administration.games") ?>?id-article=<?= $row['id'] ?>&id=<?=$data['game-rubric']['id_rubric']?>'>Удалить</a></td>

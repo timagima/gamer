@@ -92,10 +92,11 @@ class Controller extends MainController
             $data["game-rubric"] = ($id==false) ? $this->model->GetGameRubricInfo($this->_g['id']) : $this->model->GetGameRubricInfo($id);
             $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/game-rubric-articles.tpl.php', '', 'index-admin.tpl.php', $data);
         }elseif($this->_p['id']==="0"){
-            $this->model->AddRubricArticle($this->_p['id_rubric']);
-            $data["rows"] = $this->model->GetRubricArticles($this->_p['id_rubric']);
-            $data["game-rubric"] = $this->model->GetGameRubricInfo($this->_p['id_rubric']);
-            $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/game-rubric-articles.tpl.php', '', 'index-admin.tpl.php', $data);
+            $this->model->AddRubricArticle($this->_p);
+            header("Location: http://".$_SERVER['SERVER_NAME']."/administration/games/game-rubric-articles/?id=".$this->_p['id_rubric']);
+            //$data["rows"] = $this->model->GetRubricArticles($this->_p['id_rubric']);
+            //$data["game-rubric"] = $this->model->GetGameRubricInfo($this->_p['id_rubric']);
+            //$this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/game-rubric-articles.tpl.php', '', 'index-admin.tpl.php', $data);
 
         }else{
             echo "404 - Not found";
@@ -107,7 +108,7 @@ class Controller extends MainController
     {
         $this->PrepareFiles("storage/guide-games/".$_GET['id']);
         $data = $this->model->GetGameRubricArticleInfo($this->_g['id']);
-        $data['game-rubric'] = $this->model->GetGameRubricInfo($this->_g['id']);
+        $data['game-rubric']['id'] = $data['id_game'];
         $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/edit-game-rubric-article.tpl.php', '', 'index-admin.tpl.php', $data);
     }
 
@@ -122,6 +123,7 @@ class Controller extends MainController
 
     public function ActionCreateRubricArticle()
     {
+        $this->PrepareFiles("storage/guide-games/".$_GET['id']);
         $data = array("id" => 0, "date" => date("d.m.Y"), "header" => "", "keywords" => "", "description" => "", "title" => "", "text" => "");
         $data['game-rubric'] = $this->model->GetGameRubricInfo($this->_g['id']);
         $data["id_mpg_rubric"] = $data['game-rubric']['id_rubric'];
