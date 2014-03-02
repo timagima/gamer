@@ -252,7 +252,7 @@ use classes\url;
             <input id="video-file" type="file" name="video-file"/>
         </div>
         <div class="span8 demo-video" style="position: relative; top: 22px;">
-            <video class="video-js vjs-default-skin" controls preload="none" width="420" height="305" poster="<?=$data['main-page']->video_img; ?>" data-setup="{}">
+            <video class="video-js vjs-default-skin" controls preload="none" width="420" height="305" poster="<?=($data['main-page']->video_img != false)?$data['main-page']->video_img:''?>" data-setup="{}">
                 <source src="<?=$data['main-page']->video_link?>" type='video/mp4' />
             </video>
             <input type="hidden" name="video-link" value="<?=$data['main-page']->video_link?>">

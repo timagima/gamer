@@ -299,20 +299,20 @@ class Model extends MainModel
         $videoImg = ( !empty($this->_p['video-img']) ) ? $this->_p['video-img'] : null;
         if( !empty($this->_p['video-link']) && strpos($this->_p['video-link'], "temp") ){
             $videoLink = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
-            if(file_exists($this->_p['video-link']))
+            if(is_file($this->_p['video-link']))
                 rename($_SERVER['DOCUMENT_ROOT'].$this->_p['video-link'], $videoLink);
             $videoLink = "/".$videoLink;
         }
         if( !empty($this->_p['img-poster']) && strpos($this->_p['img-poster'], "temp") ){
             $videoImg = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['img-poster']);
-            if(file_exists($this->_p['img-poster']))
+            if(is_file($this->_p['img-poster']))
                 rename($_SERVER['DOCUMENT_ROOT'].$this->_p['img-poster'], $videoImg);
             $videoImg = "/".$videoImg;
         }
         if(!empty($this->_p['deleted-video-link'])){
-            if(file_exists(substr($this->_p['deleted-video-img'], 1)))
+            if(is_file(substr($this->_p['deleted-video-img'], 1)))
                 unlink( $_SERVER['DOCUMENT_ROOT'].substr($this->_p['deleted-video-img'], 1) );
-            if(file_exists(substr($this->_p['deleted-video-link'], 1)))
+            if(is_file(substr($this->_p['deleted-video-link'], 1)))
                 unlink( $_SERVER['DOCUMENT_ROOT'].substr($this->_p['deleted-video-link'], 1) );
         }
         $dateReleaseWorld = strtotime($this->_p['date_release_world']);
@@ -397,8 +397,10 @@ class Model extends MainModel
     public function DeleteRubricArticle($id)
     {
         $video = $this->conn->dbh->query("SELECT video_link, video_img FROM main_page_games_rubric_articles WHERE id=".$id)->fetch(PDO::FETCH_ASSOC);
-        if($video['video_link']!=false && $video['video_img']!=false){
+        if( is_file($_SERVER['DOCUMENT_ROOT'].substr($video['video_link'], 1)) ){
             unlink($_SERVER['DOCUMENT_ROOT'].substr($video['video_link'], 1));
+        }
+        if( is_file($_SERVER['DOCUMENT_ROOT'].substr($video['video_img'], 1)) ){
             unlink($_SERVER['DOCUMENT_ROOT'].substr($video['video_img'], 1));
         }
         $this->conn->dbh->query("DELETE FROM main_page_games_rubric_articles WHERE id=".$id);
@@ -551,23 +553,25 @@ class Model extends MainModel
 
     public function EditGameRubricArticle($params)
     {
-        $videoLink = (!empty($this->_p['video-link'])) ? $this->_p['video-link'] : null;
-        $videoImg = (!empty($this->_p['video-img'])) ? $this->_p['video-img'] : null;
-        if(!empty($this->_p['video-link']) && strpos($this->_p['video-link'], "temp")){
+        $videoLink = ( !empty($this->_p['video-link']) ) ? $this->_p['video-link'] : null;
+        $videoImg = ( !empty($this->_p['video-img']) ) ? $this->_p['video-img'] : null;
+        if( !empty($this->_p['video-link']) && strpos($this->_p['video-link'], "temp") ){
             $videoLink = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
-            rename($this->_p['video-link'], $videoLink);
+            if(is_file($this->_p['video-link']))
+                rename($_SERVER['DOCUMENT_ROOT'].$this->_p['video-link'], $videoLink);
             $videoLink = "/".$videoLink;
         }
-        if(!empty($this->_p['video-img']) && strpos($this->_p['video-img'], "skins")!==false){
-            $videoImg = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-img']);
-            copy($this->_p['video-img'], $videoImg);
+        if( !empty($this->_p['img-poster']) && strpos($this->_p['img-poster'], "temp") ){
+            $videoImg = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['img-poster']);
+            if(is_file($this->_p['img-poster']))
+                rename($_SERVER['DOCUMENT_ROOT'].$this->_p['img-poster'], $videoImg);
             $videoImg = "/".$videoImg;
         }
-        if(!empty($this->_p['deleted-video-link']) && !empty($this->_p['deleted-video-img'])){
-            if(file_exists($this->_p['deleted-video-link']))
-                unlink( substr($this->_p['deleted-video-link'], 1) );
-            if(file_exists($this->_p['deleted-video-img']))
-                unlink( substr($this->_p['deleted-video-img'], 1) );
+        if(!empty($this->_p['deleted-video-link'])){
+            if(is_file(substr($this->_p['deleted-video-img'], 1)))
+                unlink( $_SERVER['DOCUMENT_ROOT'].substr($this->_p['deleted-video-img'], 1) );
+            if(is_file(substr($this->_p['deleted-video-link'], 1)))
+                unlink( $_SERVER['DOCUMENT_ROOT'].substr($this->_p['deleted-video-link'], 1) );
         }
         $query = $this->conn->dbh->prepare("
             UPDATE main_page_games_rubric_articles

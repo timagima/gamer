@@ -115,14 +115,15 @@ class Controller extends MainController
     {
         if(isset($this->_g['id-article'])){
             $this->model->DeleteRubricArticle($this->_g['id-article']);
-            $this->ActionGameRubricArticles($this->_g['id']);
+            header("Location: http://".$_SERVER['SERVER_NAME']."/administration/games/game-rubric-articles/?id=".$this->_g['id']);
+            //$this->ActionGameRubricArticles($this->_g['id']);
         }
 
     }
 
     public function ActionCreateRubricArticle()
     {
-        $this->PrepareFiles("storage/guide-games/".$_GET['id-game']);
+        $this->PrepareFiles("storage/guide-games/".$_GET['id']);
         $data = array("id" => 0, "date" => date("d.m.Y"), "header" => "", "keywords" => "", "description" => "", "title" => "", "text" => "");
         $data['game-rubric'] = $this->model->GetGameRubricInfo($this->_g['id']);
         $data["id_mpg_rubric"] = $data['game-rubric']['id_rubric'];

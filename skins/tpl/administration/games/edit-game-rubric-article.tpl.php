@@ -49,19 +49,23 @@ use classes\url;
         <?=Render::LabelEdit($data['keywords'], "keywords", "Ключевые слова")?>
     </div>
     <br>
-    <!--Загрузка фидеофайла-->
-    <?php if( !empty($data['video_link']) && !empty($data['video_img']) ) { ?>
+    <!--Загрузка видеофайла постера-->
+    <div id="img-poster-btn" class="container upload" style="display: <?=(empty($data['video_img']))?'block':'none'?>">
+        <span class="btn">Постер видео</span>
+        <input id="img-poster" type="file" name="img-poster"/>
+    </div>
+    <?php if( !empty($data['video_link']) ) { ?>
         <div id="video-upload-btn" class="container upload" style = "display: none;">
             <span class="btn">Видеофайл</span>
             <input id="video-file" type="file" name="video-file"/>
         </div>
 
         <div class="span8 demo-video" style="position: relative; top: 22px;">
-            <video class="video-js vjs-default-skin" controls preload="none" width="420" height="305" poster="<?=$data['video_img']?>" data-setup="{}">
+            <video class="video-js vjs-default-skin" controls preload="none" width="420" height="305" poster="<?=($data['video_img']!=false)?$data['video_img']:''?>" data-setup="{}">
                 <source src="<?=$data['video_link']?>" type='video/mp4' />
             </video>
             <input type="hidden" name="video-link" value="<?=$data['video_link']?>">
-            <input type="hidden" name="video-img" value="<?=$data['video_img']?>">
+            <input type="hidden" name="video-img" value="<?=($data['video_img']!=false)?$data['video_img']:''?>">
             <div style="height: 50px; width: 100%">
                 <input type="button" value="Удалить видео" id="delete-video">
             </div>
@@ -127,6 +131,7 @@ use classes\url;
     $(document).ready(function () {
         initMultiUploader(config);
         $('#delete-video').click(function(){
+            $("#img-poster-btn").show();
             //var parentElement =$(this).parent();
             //alert(parentElement);
             var removeVideoLink = $('input[name=video-link]').val();
