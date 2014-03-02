@@ -137,7 +137,8 @@ class MainController
 
 	public function AddJs($file)
     {
-        $arrUrl = explode("/", $_SERVER['REDIRECT_URL']);
+        $arrUri = explode("?", $_SERVER['REQUEST_URI']);
+        $arrUrl = explode("/", $arrUri[0]);
         $path = ($arrUrl[1] == "administration") ? "/".$arrUrl[1]."/".$arrUrl[2] : "/".$arrUrl[1];
         $name = "/skins/tpl".$path. "/js/". $file.".js";
         $this->view->RenderJs($name);
@@ -145,7 +146,8 @@ class MainController
 
 	public function AddCss($file)
     {
-        $arrUrl = explode("/", $_SERVER['REDIRECT_URL']);
+        $arrUri = explode("?", $_SERVER['REQUEST_URI']);
+        $arrUrl = explode("/", $arrUri[0]);
         $path = ($arrUrl[1] == "administration") ? "/".$arrUrl[1]."/".$arrUrl[2] : "/".$arrUrl[1];
         $name = "/skins/tpl".$path. "/css/". $file.".css";
         $this->view->RenderCss($name);

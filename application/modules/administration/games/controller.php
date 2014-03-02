@@ -111,7 +111,7 @@ class Controller extends MainController
         $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/edit-game-rubric-article.tpl.php', '', 'index-admin.tpl.php', $data);
     }
 
-    public function ActionDeleteRubricArticle()
+    public function ActionDeleteRubricArticle() //
     {
         if(isset($this->_g['id-article'])){
             $this->model->DeleteRubricArticle($this->_g['id-article']);
@@ -201,147 +201,12 @@ class Controller extends MainController
         }
     }
 
-    public function ActionUploadIMgMainPage()
-    {
-        /*if ($_SERVER['REQUEST_METHOD'] === 'POST')
-        {
-            if(count($_FILES) > 9)
-            {
-                print_r(json_encode(array("error" => "Количество файлов не должно превышать 10")));
-                exit();
-            }
-            $idGuide = $this->model->GetMainPageGame($this->_g['id']);
-            $objImage = new SimpleImage();
-            foreach ($_FILES as $key => $value)
-            {
-                $this->UploadImg($objImage, $value, $idGuide);
-                $rootApp = Url::RootApp();
-                // нужен вывод для одной картинки и для нескольких с условием если одна загрузилась, то её отображаем и сразу же грузим следующую
-
-                //$this->Json(array("result" => "success", "filename" => $rootApp . $fileName, "filename_b" => $rootApp . $fileName_b));
-                else
-                {
-                    $arrFile['big'][] = $fileName_b;
-                    $arrFile['small'][] = $fileName;
-                }
-            }
-            print_r(json_encode($arrFile));
-            unset($_SESSION['multi-load']);
-        }
-        exit();*/
-    }
-
-    private function UploadImg($objImage, $value, $idGuide)
-    {
-        $ext = "." . pathinfo($value['name'], PATHINFO_EXTENSION);
-        $name = self::$storagePath . $idGuide->id . "/"  . md5(microtime() + rand(0, 10000));
-        $fileName = $name . $ext;
-        $fileName_b = $name . "_b" . $ext;
-        $objImage->load($value['tmp_name'])->square_crop(100)->save($fileName);
-        $objImage->load($value['tmp_name'])->save($fileName_b);
-    }
-
-    public function ActionFilter()
-    {
-        $this->filter["year"] = (int)$_REQUEST["year"];
-        $this->filter["month"] = (int)$_REQUEST["month"];
-        $this->filter["day"] = strtotime($_REQUEST["day"]);
-        $this->filter["page"] = isset($_REQUEST["page"]) ? (int)$_REQUEST["page"] : 1;
-        $data["count"] = $this->model->GetFilterCount($this->filter);
-        $data["rows"] = $this->model->GetFilterData($this->filter);
-        $data["current_page"] = $this->filter["page"];
-        $this->Json($data);
-    }
-
     public function ActionCreate()
     {
         $data = array("id" => 0, "date" => date("d.m.Y"), "header" => "", "event_date" => "", "short" => "", "text" => "", "title" => "", "description" => "", "keywords" => "");
         $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/edit.tpl.php', '', 'index-admin.tpl.php', $data);
     }
 
-    public function ActionEdit()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->PrepareImages();
-            if ($this->_p["id"] > 0)
-                $res = $this->model->Edit($this->_p);
-            else
-                $res = $this->model->Add($this->_p);
-            $this->DeleteImages($res["id"]);
-            $this->Redirect("index");
-        } else {
-            $data = $this->model->GetById($_GET["id"]);
-            if ($data["source_img_top"])
-                $data["source_img"] = array(array("filename" => $data["source_img_top"], "filename_b" => $data["source_img"]));
-            $data["publ_images"] = $this->model->GetImages($_GET["id"]);
-            $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/edit.tpl.php', '', 'index-admin.tpl.php', $data);
-        }
-    }
-
-    public function ActionDelete()
-    {
-        $id = $_REQUEST["id"];
-        if ($id > 0)
-        {
-            $res = $this->model->Delete($id);
-            return $res;
-        }
-        return Route::ErrorPage404();
-    }
-
-    public function ActionUpload()
-    {
-        // todo сделать хранилище для временных картинок добавляем картинку во временную папку, после чего пишем в базу запись о картинке, и сохраняем
-        // todo перенести пути хранение файлов в текущий метод сделав в шаблоне некий hidden
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if(!empty($this->_p["multi-load"]))
-            {
-                $_SESSION['multi-load'] = 1;
-                exit();
-            }
-            if(count($_FILES) > 9)
-            {
-                print_r(json_encode(array("error" => "Количество файлов не должно превышать 10")));
-                exit();
-            }
-            $objImage = new SimpleImage();
-            foreach ($_FILES as $key => $value)
-            {
-                $ext = "." . pathinfo($value['name'], PATHINFO_EXTENSION);
-                $name = self::$storage_path . md5(microtime() + rand(0, 10000));
-                $fileName = $name . $ext;
-                $fileName_b = $name . "_b" . $ext;
-                $objImage->load($value['tmp_name'])->square_crop(360)->save($fileName);
-                $objImage->load($value['tmp_name'])->save($fileName_b);
-                $rootApp = Url::RootApp();
-                if(empty($_SESSION['multi-load']))
-                    $this->Json(array("result" => "success", "filename" => $rootApp . $fileName, "filename_b" => $rootApp . $fileName_b));
-                else
-                {
-                    $arrFile['big'][] = $fileName_b;
-                    $arrFile['small'][] = $fileName;
-                }
-            }
-            print_r(json_encode($arrFile));
-            unset($_SESSION['multi-load']);
-        }
-        exit();
-    }
-
-    private function PrepareImages()
-    {
-        $images = json_decode($this->_p['img-main']);
-        if (count($images) == 0)
-        {
-            $this->_p['source_img'] = "";
-            $this->_p['source_img_top'] = "";
-        }
-        else
-        {
-            $this->_p['source_img'] = $images->filename_b;
-            $this->_p['source_img_top'] = $images->filename;
-        }
-    }
 
     private function DeleteImages($id)
     {
@@ -355,7 +220,6 @@ class Controller extends MainController
             }
         }
         $deleteImagesList = json_decode($this->_p["publ_images_delete"]);
-
         foreach ($deleteImagesList as $image)
         {
             unlink($_SERVER['DOCUMENT_ROOT'] . $image->filename);

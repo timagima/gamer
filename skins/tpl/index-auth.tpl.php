@@ -118,7 +118,7 @@
 <!--            <a href="/about/games-forever">Игры навсегда</a> |-->
 <!--            <a href="/about/gratitude">Благодарности</a>-->
         </span><br>
-        <span>&copy; Ltd GS11, 2013. Все наши услуги не облагаются НДС.</span>
+        <span>&copy; Ltd GS11, 2014. Все наши услуги не облагаются НДС.</span>
     </div>
     <!--<a href="/about/certificate">
         <img class="right footer-certificate" src="/skins/img/certificate.png" alt="Сертификат GS11"
