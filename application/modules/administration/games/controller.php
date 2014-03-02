@@ -1,12 +1,12 @@
 <?php
 namespace application\modules\administration\games;
+use ___PHPSTORM_HELPERS\object;
 use application\core\mvc\MainController;
 use application\modules\administration\games\model;
 use classes\url;
 
 class Controller extends MainController
 {
-    private static $storage_path = "storage/guide-games/111/";
     private static $storagePath = "storage/guide-games/";
     private $filter = array("year" => "", "month" => "", "day" => "", "page" => 1);
     public $model;
@@ -59,8 +59,6 @@ class Controller extends MainController
         }
     }
     /* Конец добавление списка игр в справочник */
-
-
 
     /* Начало основные игро-обзоры */
 
@@ -135,20 +133,62 @@ class Controller extends MainController
 
 
 
-    // todo всё что ниже нужно разбирать
-    public function ActionSearchGames($param)
-    {
-        $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/search.tpl.php', '', 'index-admin.tpl.php');
-    }
+
 
     public function ActionMainPage()
     {
+        if(!empty($this->_p['id-game']))
+        {
+            $game = $this->model->GetGame($this->_p['id-game']);
+            // todo добавить проверку на not found
+            if($this->_p['id-game']>0)
+            {
+                $existGame = $this->model->GetMainPageGame($this->_p['id-game']);
+                if(empty($existGame))
+                {
+                    $id = $this->model->LastMainPageGame();
+                    $this->model->EditMainPageGame($game, $id);
+                }
+                else
+                {
+                    $this->model->EditMainPageGame($game);
+                }
+            }
+            $this->Redirect("index");
+        }
         // todo: Добавить проверку на игру
         if(isset($_GET['id']))
         {
             $this->PrepareFiles("storage/guide-games/".$_GET['id']);
             $data['game'] = $this->model->GetGame($_GET['id']);
             $data['main-page'] = $this->model->GetMainPageGame($_GET['id']);
+            if(empty($data["main-page"]))
+            {
+                $data["main-page"] = (object)array("date_release_world" => strtotime(date("d.m.Y")),
+                    "date_release_russia" => strtotime(date("d.m.Y")),
+                    "publisher" => "",
+                    "publisher_link" => "",
+                    "publisher_russia" => "",
+                    "publisher_russia_link" => "",
+                    "developer" => "",
+                    "developer_link" => "",
+                    "official_site" => "",
+                    "official_site_link" => "",
+                    "game_mode" => "",
+                    "game_engine" => "",
+                    "distribution" => "",
+                    "sr_os" => "",
+                    "sr_cpu" => "",
+                    "sr_ram" => "",
+                    "sr_video" => "",
+                    "sr_hdd" => "",
+                    "short" => "",
+                    "text" => "",
+                    "title" => "",
+                    "description" => "",
+                    "video_link" => "",
+                    "keywords" => "");
+            }
             $data['rubrics'] =  $this->model->GetGameRubrics($_GET['id']);
             $data['screenshot'] =  $this->model->GetMainPageScreenshot($_GET['id']);
             $data['screenshot-count'] = 6;
@@ -159,74 +199,6 @@ class Controller extends MainController
 
     public function ActionMainPageEdit() // редактирование главной стринцы для игр
     {
-        $game = $this->model->GetGame($this->_p['id-game']);
-        if($this->_p['id']>0)
-        {
-            $this->model->EditMainPageGame($game);
-        }
-        else
-        {
-            $this->model->AddMainPageGame($game);
-        }
-        $this->Redirect("index");
+
     }
-
-    public function ActionAddQuest()
-    {
-        $data = array("id" => 0, "date" => date("d.m.Y"), "header" => "", "event_date" => "", "short" => "", "text" => "", "title" => "", "description" => "", "keywords" => "");
-        $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/edit.tpl.php', '', 'index-admin.tpl.php', $data);
-    }
-    public function ActionAddGame()
-    {
-        $data = array("id" => 0, "date" => date("d.m.Y"), "header" => "", "event_date" => "", "short" => "", "text" => "", "title" => "", "description" => "", "keywords" => "");
-        $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/game.tpl.php', '', 'index-admin.tpl.php', $data);
-    }
-
-    public function ActionEditGame()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->PrepareImages();
-            if ($this->_p["id"] > 0)
-                $res = $this->model->Edit($this->_p);
-            else
-                $res = $this->model->Add($this->_p);
-            $this->DeleteImages($res["id"]);
-            $this->Redirect("index");
-        } else {
-            $data = $this->model->GetById($_GET["id"]);
-            if ($data["source_img_top"])
-                $data["source_img"] = array(array("filename" => $data["source_img_top"], "filename_b" => $data["source_img"]));
-            $data["publ_images"] = $this->model->GetImages($_GET["id"]);
-            $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/game.tpl.php', '', 'index-admin.tpl.php', $data);
-        }
-    }
-
-    public function ActionCreate()
-    {
-        $data = array("id" => 0, "date" => date("d.m.Y"), "header" => "", "event_date" => "", "short" => "", "text" => "", "title" => "", "description" => "", "keywords" => "");
-        $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/edit.tpl.php', '', 'index-admin.tpl.php', $data);
-    }
-
-
-    private function DeleteImages($id)
-    {
-        $deleteImages = json_decode($this->_p["source_img_delete"]);
-        if ($deleteImages)
-        {
-            foreach ($deleteImages as $image)
-            {
-                unlink($_SERVER['DOCUMENT_ROOT'] . $image->filename);
-                unlink($_SERVER['DOCUMENT_ROOT'] . $image->filename_b);
-            }
-        }
-        $deleteImagesList = json_decode($this->_p["publ_images_delete"]);
-        foreach ($deleteImagesList as $image)
-        {
-            unlink($_SERVER['DOCUMENT_ROOT'] . $image->filename);
-            unlink($_SERVER['DOCUMENT_ROOT'] . $image->filename_b);
-            $this->model->DeleteImage($id, $image->filename);
-        }
-    }
-
-
 }

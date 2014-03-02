@@ -13,10 +13,8 @@ use classes\url;
 </style>
 
 <h2><a style="text-decoration: none; color: #507fb6" href="<?= Url::Action("index", "administration.games") ?>"><?=$data['game']->name;?></a>
-    -> <?=$data['main-page']->id > 0 ? "Редактирование главной страницы " : "Создание главной страницы" ?></h2>
-<form action="<?= Url::Action("main-page-edit", "administration.games") ?>" id="main-page-edit" method="POST">
-    <?=Render::Hidden($data['main-page']->id, "id")?>
-
+    -> <?=$data['game']->id > 0 ? "Редактирование главной страницы " : "Создание главной страницы" ?></h2>
+<form action="<?= Url::Action("main-page", "administration.games") ?>" id="main-page-edit" method="POST">
     <?=Render::Hidden($data['game']->id, "id-game")?>
     <table>
         <tr>
@@ -340,8 +338,7 @@ use classes\url;
         method: "MainPageGame",
         multi: false,
         limit: 1,
-        uploadUrl: document.location.href,
-
+        uploadUrl: document.location.href
     };
 
     $(function () {

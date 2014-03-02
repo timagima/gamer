@@ -239,59 +239,7 @@ class Model extends MainModel
     {
         return $this->conn->dbh->query("SELECT * FROM main_page_games WHERE id_game = ".$id)->fetch(PDO::FETCH_OBJ);
     }
-
-    public function AddMainPageGame($objGame)
-    {
-        $dateReleaseWorld = strtotime($this->_p['date_release_world']);
-        $dateReleaseRussia = strtotime($this->_p['date_release_russia']);
-        $query = $this->conn->dbh->prepare("INSERT INTO main_page_games SET date = UNIX_TIMESTAMP(NOW()), id_game = :id_game, game_mode = :game_mode,
-                text = :text, title = :title, description = :description, keywords = :keywords,
-                date_release_world = :date_release_world,
-                date_release_russia = :date_release_russia,
-                publisher = :publisher,
-                publisher_link = :publisher_link,
-                publisher_russia = :publisher_russia,
-                publisher_russia_link = :publisher_russia_link,
-                developer = :developer,
-                developer_link = :developer_link,
-                official_site = :official_site,
-                official_site_link = :official_site_link,
-                game_engine = :game_engine,
-                distribution = :distribution,
-                video_img = :video_img,
-                video_link = :video_link,
-                sr_os = :sr_os, sr_cpu = :sr_cpu, sr_ram = :sr_ram, sr_video = :sr_video, sr_hdd = :sr_hdd");
-        $query->bindParam(":game_mode", $this->_p['game_mode'], PDO::PARAM_STR);
-        $query->bindParam(":id_game", $objGame->id, PDO::PARAM_INT);
-        $query->bindParam(":text", $this->_p['text'], PDO::PARAM_STR);
-        $query->bindParam(":title", $this->_p['title'], PDO::PARAM_STR);
-        $query->bindParam(":description", $this->_p['description'], PDO::PARAM_STR);
-        $query->bindParam(":keywords", $this->_p['keywords'], PDO::PARAM_STR);
-        $query->bindParam(":date_release_world", $dateReleaseWorld, PDO::PARAM_INT);
-        $query->bindParam(":date_release_russia", $dateReleaseRussia, PDO::PARAM_INT);
-        $query->bindParam(":publisher", $this->_p['publisher'], PDO::PARAM_STR);
-        $query->bindParam(":publisher_link", $this->_p['publisher_link'], PDO::PARAM_STR);
-        $query->bindParam(":publisher_russia", $this->_p['publisher_russia'], PDO::PARAM_STR);
-        $query->bindParam(":publisher_russia_link", $this->_p['publisher_russia_link'], PDO::PARAM_STR);
-        $query->bindParam(":developer", $this->_p['developer'], PDO::PARAM_STR);
-        $query->bindParam(":developer_link", $this->_p['developer_link'], PDO::PARAM_STR);
-        $query->bindParam(":official_site", $this->_p['official_site'], PDO::PARAM_STR);
-        $query->bindParam(":official_site_link", $this->_p['official_site_link'], PDO::PARAM_STR);
-        $query->bindParam(":game_engine", $this->_p['game_engine'], PDO::PARAM_STR);
-        $query->bindParam(":distribution", $this->_p['distribution'], PDO::PARAM_STR);
-        $query->bindParam(":video_img", $this->_p['video_img'], PDO::PARAM_STR);
-        $query->bindParam(":video_link", $this->_p['video_link'], PDO::PARAM_STR);
-        $query->bindParam(":sr_os", $this->_p['sr_os'], PDO::PARAM_STR);
-        $query->bindParam(":sr_cpu", $this->_p['sr_cpu'], PDO::PARAM_STR);
-        $query->bindParam(":sr_ram", $this->_p['sr_ram'], PDO::PARAM_STR);
-        $query->bindParam(":sr_video", $this->_p['sr_video'], PDO::PARAM_STR);
-        $query->bindParam(":sr_hdd", $this->_p['sr_hdd'], PDO::PARAM_STR);
-        $query->execute();
-        $id = $this->conn->dbh->lastInsertId();
-        //return $this->GetById($id);
-
-    }
-    public function EditMainPageGame($objGame)
+    public function EditMainPageGame($objGame, $id = null)
     {
         $this->UpdateMainPageGameRubric();
         $this->UploadMainPageRubricImg();
@@ -318,7 +266,7 @@ class Model extends MainModel
         }
         $dateReleaseWorld = strtotime($this->_p['date_release_world']);
         $dateReleaseRussia = strtotime($this->_p['date_release_russia']);
-        $query = $this->conn->dbh->prepare("UPDATE main_page_games SET  game_mode = :game_mode, text = :text, title = :title,
+        $query = $this->conn->dbh->prepare("UPDATE main_page_games SET id_game = :id_game, date = UNIX_TIMESTAMP(NOW()), game_mode = :game_mode, text = :text, title = :title,
         description = :description,
         keywords = :keywords,
         date_release_world = :date_release_world,
@@ -335,8 +283,9 @@ class Model extends MainModel
         distribution = :distribution,
         video_img = :video_img,
         video_link = :video_link,
-        sr_os = :sr_os, sr_cpu = :sr_cpu, sr_ram = :sr_ram, sr_video = :sr_video, sr_hdd = :sr_hdd WHERE id = :id");
-        $query->bindParam(":id", $this->_p['id'], PDO::PARAM_INT);
+        sr_os = :sr_os, sr_cpu = :sr_cpu, sr_ram = :sr_ram, sr_video = :sr_video, sr_hdd = :sr_hdd WHERE id_game = :id_game OR id = :id");
+        $query->bindParam(":id_game", $this->_p['id-game'], PDO::PARAM_INT);
+        $query->bindParam(":id", $id, PDO::PARAM_INT);
         $query->bindParam(":game_mode", $this->_p['game_mode'], PDO::PARAM_STR);
         $query->bindParam(":text", $this->_p['text'], PDO::PARAM_STR);
         $query->bindParam(":title", $this->_p['title'], PDO::PARAM_STR);
@@ -365,6 +314,12 @@ class Model extends MainModel
         $id = $this->conn->dbh->lastInsertId();
         //return $this->GetById($id);
 
+    }
+
+    public function LastMainPageGame()
+    {
+        $this->conn->dbh->exec("INSERT INTO main_page_games () VALUES()");
+        return $this->conn->dbh->lastInsertId();
     }
 
     public function GetGameRubrics($id)
