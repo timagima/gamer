@@ -51,4 +51,12 @@ class Model extends MainModel
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function InsertContactMessage($params)
+    {
+        $query = $this->conn->dbh->prepare("INSERT INTO message_contact SET id_rubric = :id_rubric, text = :text");
+
+        $query->bindParam(":id_rubric",$params[0]['value'],PDO::PARAM_INT);
+        $query->bindParam(":text",$params[1]['value'],PDO::PARAM_STR);
+        $query->execute();
+    }
 }
