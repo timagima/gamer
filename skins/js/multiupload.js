@@ -67,7 +67,7 @@ function multiUploader(config){
                         alert("Видео только с расширением .mp4");
                         return;
                     }
-                    if( (self.idDivParent.indexOf("screen-upload")>=0 || self.idDivParent.indexOf("img-upload")>=0) && data==false){
+                    if( (self.idDivParent.indexOf("screen")>=0 || self.idDivParent.indexOf("img")>=0) && data==false){
                         alert("Изображения только с расширением .jpg .jpeg .png");
                         return;
                     }
@@ -88,7 +88,7 @@ function multiUploader(config){
         if(self.idFileInput === 'video-file'){
             var singleHtml = '<video class="video-js vjs-default-skin" controls preload="none" width="420" height="305" poster="/'+arrFile[2]+'" data-setup="{}"><source src="/'+arrFile[0]+'" type="video/mp4" /></video>'+
                                     '<input type="hidden" name="video-link" value="'+arrFile[0]+'">'+
-                                    '<input type="hidden" name="video-img" value="'+arrFile[2]+'">'+
+                                    '<input type="hidden" name="video-img" value="">'+
                               '</div><div style="clear: both;"></div><br>';
 
         }else{

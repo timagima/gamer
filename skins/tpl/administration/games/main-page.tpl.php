@@ -93,21 +93,11 @@ use classes\url;
                     <?=Render::LabelEdit($data['main-page']->game_engine, "game_engine", "Игровой движок", true)?>
                 </div>
             </td>
-            <td class="input-link">
-                <div class="field fill">
-                    <?=Render::LabelEdit($data['main-page']->video_img, "video_img", "Изображение для видео", true)?>
-                </div>
-            </td>
         </tr>
         <tr>
             <td class="input-link">
                 <div class="field fill">
                     <?=Render::LabelEdit($data['main-page']->distribution, "distribution", "Распростронение", true)?>
-                </div>
-            </td>
-            <td class="input-link">
-                <div class="field fill">
-                    <?=Render::LabelEdit($data['main-page']->video_link, "video_link", "Видеоролик", true)?>
                 </div>
             </td>
         </tr>
@@ -177,12 +167,14 @@ use classes\url;
                     <input type="hidden" name="saved-img[]" value="<?=$r['id']."$".$r['rubric_img_s']?>$rubric">
                 </div>
                 <?php } ?>
+
                 <?php if($r['rubric_img_s']==false){?>
                 <div id="img-upload-btn-<?=$r['id']?>" class="container upload" style="display: inline-block; margin-right: 80px;">
                     <span class="btn">Изображение</span>
                     <input id="img-files-<?=$r['id']?>" type="file" name="img-files[]"/>
                 </div>
                 <?php } ?>
+
                 <div class="field" style="display: inline-block;">
                     <?=Render::Hidden($r['id'], "id-rubrics[]")?>
                     <?=Render::LabelEdit($r['rubric'], "rubrics[]", "Рубрика игры", false); ?>
@@ -250,7 +242,11 @@ use classes\url;
     </div>
 
 
-    <?php if( $data['main-page']->video_link!=false && $data['main-page']->video_img!=false ) { ?>
+    <div id="img-poster-btn" class="container upload" style="display: <?=($data['main-page']->video_img==false)?'block':'none'?>">
+        <span class="btn">Постер видео</span>
+        <input id="img-poster" type="file" name="img-poster"/>
+    </div>
+    <?php if( $data['main-page']->video_link!=false) { ?>
         <div id="video-upload-btn" class="container upload" style = "display: none;">
             <span class="btn">Видеофайл</span>
             <input id="video-file" type="file" name="video-file"/>
@@ -260,7 +256,7 @@ use classes\url;
                 <source src="<?=$data['main-page']->video_link?>" type='video/mp4' />
             </video>
             <input type="hidden" name="video-link" value="<?=$data['main-page']->video_link?>">
-            <input type="hidden" name="video-img" value="<?=$data['main-page']->video_img?>">
+            <input type="hidden" name="video-img" value="<?=($data['main-page']->video_img != false) ? $data['main-page']->video_img : '' ?>">
             <div style="height: 50px; width: 100%">
                 <input type="button" value="Удалить видео" id="delete-video">
             </div>
@@ -288,8 +284,7 @@ use classes\url;
         initMultiUploader(config);
 
         $('#delete-video').click(function(){
-            //var parentElement =$(this).parent();
-            //alert(parentElement);
+            $("#img-poster-btn").show();
             var removeVideoLink = $('input[name=video-link]').val();
             var removeVideoImg = $('input[name=video-img]').val();
             if(removeVideoLink !== undefined && removeVideoImg !== undefined){

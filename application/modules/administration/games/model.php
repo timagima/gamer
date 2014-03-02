@@ -295,21 +295,25 @@ class Model extends MainModel
         $this->UpdateMainPageGameRubric();
         $this->UploadMainPageRubricImg();
         $this->UploadMainPageGameScreenshot();
-        $videoLink = null;
-        $videoImg = null;
-        if(!empty($this->_p['video-link'])){
+        $videoLink = ( !empty($this->_p['video-link']) ) ? $this->_p['video-link'] : null;
+        $videoImg = ( !empty($this->_p['video-img']) ) ? $this->_p['video-img'] : null;
+        if( !empty($this->_p['video-link']) && strpos($this->_p['video-link'], "temp") ){
             $videoLink = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
-            rename($this->_p['video-link'], $videoLink);
+            if(file_exists($this->_p['video-link']))
+                rename($_SERVER['DOCUMENT_ROOT'].$this->_p['video-link'], $videoLink);
             $videoLink = "/".$videoLink;
         }
-        if(!empty($this->_p['video-img'])){
-            $videoImg = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-img']);
-            copy($this->_p['video-img'], $videoImg);
+        if( !empty($this->_p['img-poster']) && strpos($this->_p['img-poster'], "temp") ){
+            $videoImg = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['img-poster']);
+            if(file_exists($this->_p['img-poster']))
+                rename($_SERVER['DOCUMENT_ROOT'].$this->_p['img-poster'], $videoImg);
             $videoImg = "/".$videoImg;
         }
-        if(!empty($this->_p['deleted-video-link']) && !empty($this->_p['deleted-video-img'])){
-            unlink( substr($this->_p['deleted-video-link'], 1) );
-            unlink( substr($this->_p['deleted-video-img'], 1) );
+        if(!empty($this->_p['deleted-video-link'])){
+            if(file_exists(substr($this->_p['deleted-video-img'], 1)))
+                unlink( $_SERVER['DOCUMENT_ROOT'].substr($this->_p['deleted-video-img'], 1) );
+            if(file_exists(substr($this->_p['deleted-video-link'], 1)))
+                unlink( $_SERVER['DOCUMENT_ROOT'].substr($this->_p['deleted-video-link'], 1) );
         }
         $dateReleaseWorld = strtotime($this->_p['date_release_world']);
         $dateReleaseRussia = strtotime($this->_p['date_release_russia']);

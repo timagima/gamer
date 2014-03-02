@@ -6,7 +6,6 @@ class Upload extends SimpleImage
 {
     private $fileName, $path ,$rootDir;
     public $conn;
-    public $videoIcon = "skins/img/youtube.png";
 
     public function __construct($path)
     {
@@ -40,7 +39,7 @@ class Upload extends SimpleImage
             if($ext === ".mp4"){
                 $videoFileName = $name.$ext;
                 move_uploaded_file($value['tmp_name'], $videoFileName);
-                echo json_encode(array($videoFileName, $this->fileName, $this->videoIcon));
+                echo json_encode(array($videoFileName, $this->fileName));
                 return;
             }elseif($ext === ".jpeg" || $ext === ".jpg" || $ext === ".png"){
                 $fileNameSmall = $name . "_s" . $ext;
