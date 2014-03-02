@@ -113,6 +113,18 @@ class Controller extends MainController
         $data['error'] = '';
         $this->view->Generate($this->arrTpl[0], 'about/thanks.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
     }
+    public function ActionContacts()
+    {
+        $this->headerTxt['title'] = 'Контакты';
+        $data['error'] = '';
+        if(!empty($_POST['data'])){
+        $this->model->InsertContactMessage($_POST['data']);
+        exit();
+        }
+
+        $this->view->Generate($this->arrTpl[0], 'about/contacts.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
+    }
+
 
 }
 
