@@ -7,6 +7,7 @@ use classes\url;
 use classes\upload;
 use classes\likes;
 use PDO;
+use Exception;
 
 
 class MainController
@@ -112,8 +113,16 @@ class MainController
         {
             $method    = $this->_p['method'];
             $typeClass = $this->_p['type-class'];
-            $result    = $this->$typeClass->$method();
-            if($result) echo  $result;
+
+            try {
+                $result    = $this->$typeClass->$method();
+                if($result) echo $result;
+            }
+            catch (Exception $e) {
+                echo 'Произошла ошибка, попробуйте позже';
+                error_log('AJAX error: ' . $e->getMessage() . '; Trace: ' . json_encode($e->getTrace()) );
+            }
+
             exit();
         }
     }
