@@ -15,5 +15,3 @@ class AutoLoader
 }
 $autoLoader = new AutoLoader();
 $autoLoader->Register();
-
-?>

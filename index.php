@@ -7,6 +7,3 @@ require_once 'application/bootstrap.php'; // новые изменения
 
 
 //echo 'Время выполнения скрипта: ' . (microtime(true) - $start) . ' сек.<br />';
-?>
-
-

@@ -19,4 +19,3 @@ class MyPDO extends PDO
         return parent::query($statement);
     }
 }
-?>

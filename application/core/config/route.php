@@ -17,7 +17,7 @@ class Route
             case 'restore': $partPath = "main"; $arrRoutes['action'] = 'Restore'; break;
             default: $partPath = $arrRoutes['name']; break;
         }
-        $controllerPath = "application\\modules\\". $partPath . "\\controller";
+        $controllerPath = "application\\modules\\{$partPath}\\controller";
         $controller = new $controllerPath();
         $action = 'Action'.$arrRoutes['action'];
         method_exists ($controller , $action) ? $controller->$action($arrRoutes['param']) : Route::ErrorPage404();
