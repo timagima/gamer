@@ -1,16 +1,21 @@
-<script type="text/javascript" xmlns="http://www.w3.org/1999/html">
+<script>
     $(document).ready(function(){
         $('#main').on('click','.btn-contact',function(){
             $("#box-modal-data-gamer").arcticmodal();
-        });
-        $('#submit').on('click',function(){
-            var data = $('.myForm, select[name="rubric"]').serializeArray();
-            $.ajax({
-                type: 'POST',
-                url: document.location.href,
-                data: {'data':data}
+            var id = $(this).attr('id');
+            $('#submit').on('click',function(){
+                var data = $('.myForm').serializeArray();
+                $.ajax({
+                    type: 'POST',
+                    url: document.location.href,
+                    data: {'data':data,'id':id},
+                    success: function(data){
+                        $('#result').html(data).hide().fadeIn(500);
+                    }
                 })
-        })
+            })
+        });
+
 
     });
 
@@ -25,15 +30,15 @@
         </div>
         <div style="padding:15px; padding-bottom: 45px;">
             <form action="" class="myForm">
-                <select name="rubric">
-                    <option  value="1" >Сотрудничество</option>
-                    <option  value="2">Пресса</option>
-                    <option  value="3">Ошибка</option>
-                    <option  value="4">Другие вопросы</option>
-                </select><br>
-                <textarea type="text" name="text" id="email" cols='50' rows='4'/>Написать сообщение</textarea><br>
-                <input type="button" id="submit" value="Отправить"/>
-
+                <?if(!empty($_SESSION["user-data"])){?>
+                <textarea type="text" name="text" id="email" cols='50' rows='4' placeholder="Введте текст сообщения"/></textarea><br>
+                <a id="submit">Отправить</a>
+                <?}else{?>
+                <input type="text" name="name" placeholder="Ваше имя"/><br>
+                <input type="text" name="email" placeholder="Ваш E-mail"/><br>
+                <textarea type="text" name="text" id="email" cols='50' rows='4' placeholder="Введте текст сообщения"/></textarea><br>
+                <a id="submit">Отправить</a>
+                <?}?>
             </form>
             <div id="result"></div>
         </div>
@@ -50,6 +55,11 @@
     .btn-contact{background: #1abc9c; color: #ffffff; padding: 7px 20px; text-decoration: none;
     border-radius: 5px;cursor:pointer;}
     .btn-contact:hover {background: #2fe2bf;}
+    #submit{background: #1abc9c; color: #ffffff; padding: 7px 20px; text-decoration: none;
+     border-radius: 5px;cursor:pointer;display:block;margin-top:10px;width:70px}
+    #submit:hover{background: #2fe2bf;}
+    #result{color:#1abc9c;font-size:16px;margin-top:10px;}
+
 </style>
 <div id="main">
     <? include $_SERVER['DOCUMENT_ROOT']. '/skins/tpl/block/menu-about.block.tpl.php';?>
@@ -58,7 +68,7 @@
         <div class="contact-info">
             <h3>Для прессы:</h3>
             <div class="inner-button">
-                <a class="btn-contact">Связаться</a>
+                <a class="btn-contact" id="2">Связаться</a>
 
             </div>
             <div class="inner-text">
@@ -71,7 +81,7 @@
         <div class="contact-info">
             <h3>Для сотрудничества:</h3>
             <div class="inner-button">
-                <a class="btn-contact">Связаться</a>
+                <a class="btn-contact" id="1">Связаться</a>
             </div>
             <div class="inner-text">
                 <p>Текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст
@@ -83,7 +93,7 @@
         <div class="contact-info">
             <h3>Другие вопросы:</h3>
             <div class="inner-button">
-                <a class="btn-contact">Связаться</a>
+                <a class="btn-contact" id="4">Связаться</a>
             </div>
             <div class="inner-text">
                 <p>Текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст

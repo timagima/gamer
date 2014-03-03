@@ -117,8 +117,10 @@ class Controller extends MainController
     {
         $this->headerTxt['title'] = 'Контакты';
         $data['error'] = '';
-        if(!empty($_POST['data'])){
-        $this->model->InsertContactMessage($_POST['data']);
+        if($_SERVER['REQUEST_METHOD']=== 'POST'){
+         $this->model->InsertContactMessage($_POST['data'],$_POST['id']);
+            echo 'Ваше сообщение успешно отправлено';
+
         exit();
         }
 

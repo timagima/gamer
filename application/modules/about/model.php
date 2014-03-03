@@ -51,12 +51,25 @@ class Model extends MainModel
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function InsertContactMessage($params)
+    public function InsertContactMessage($params,$id)
     {
-        $query = $this->conn->dbh->prepare("INSERT INTO message_contact SET id_rubric = :id_rubric, text = :text");
+        $query = $this->conn->dbh->prepare("INSERT INTO message_contact SET id_rubric = :id_rubric,id_user = :id_user,name_user =:name_user,
+         email= :email, text = :text");
 
-        $query->bindParam(":id_rubric",$params[0]['value'],PDO::PARAM_INT);
-        $query->bindParam(":text",$params[1]['value'],PDO::PARAM_STR);
+         $arr = array(':name_user',':email',':text');
+            if(count($arr) > count($params)){
+                $newArr = array_reverse($arr);
+                for($i = 0; $i < count($newArr); $i++){
+                    $query->bindParam("$newArr[$i]",$params[$i]['value'],PDO::PARAM_STR);
+                }
+            }else{
+                foreach($params as $key => $value){
+                    $query->bindParam("$arr[$key]",$value['value'],PDO::PARAM_STR);
+                }
+            }
+        $query->bindParam(":id_user",$_SESSION['user-data']['id'],PDO::PARAM_INT);
+        $query->bindParam(":id_rubric",$id,PDO::PARAM_INT);
         $query->execute();
     }
+
 }
