@@ -52,8 +52,7 @@ class Model extends MainModel
             }
             else
             {
-                $query = $this->conn->dbh->prepare("UPDATE users SET date_error_auth = UNIX_TIMESTAMP(NOW()), num_try_error_auth = (SELECT num_try_error_auth FROM
-                                                    (SELECT num_try_error_auth FROM users WHERE email = :login OR phone = :login) as tmp) + 1, ip = :ip
+                $query = $this->conn->dbh->prepare("UPDATE users SET date_error_auth = UNIX_TIMESTAMP(NOW()), num_try_error_auth = num_try_error_auth + 1, ip = :ip
                                                     WHERE email = :login OR phone = :login");
                 $query->bindParam(':login', $this->_p['login'], PDO::PARAM_STR);
                 $query->bindParam(':ip', $this->ipUser, PDO::PARAM_STR);
