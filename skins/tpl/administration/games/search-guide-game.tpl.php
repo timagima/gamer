@@ -1,7 +1,6 @@
 <?php
 use classes\render;
 use classes\url;
-
 ?>
 <script>
     $(document).ready(function(){

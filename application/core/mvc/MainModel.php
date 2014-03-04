@@ -10,7 +10,7 @@ use classes\Plinq;
 use PDO;
 class MainModel
 {
-    public $conn, $ipUser, $crypt, $plinq;
+    public $conn, $ipUser, $crypt, $plinq, $rootDir;
     public $_p, $_g = array();
     public function __construct()
     {
@@ -19,6 +19,7 @@ class MainModel
         $this->_p = $_POST;
         $this->_g = $_GET;
         $this->ipUser = $_SERVER['REMOTE_ADDR'];
+        $this->rootDir = $_SERVER["DOCUMENT_ROOT"] . "/";
         $this->conn = Config::GetInstance();
         $this->crypt = new Cryptography();
 
@@ -111,6 +112,7 @@ class MainModel
             exit();
         }
     }
+
     public function ExistPhone()
     {
         $stmt = $this->conn->dbh->prepare("SELECT id FROM users WHERE phone = ?");
@@ -149,5 +151,35 @@ class MainModel
         $stmt->execute(array($_SESSION['user-data']['id']));
         $_SESSION['user-data'] = $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    /* Начало методы быстрого доступа к stmt */
+    public function Fetch($sql, $params = array(), $fetchType = PDO::FETCH_ASSOC)
+    {
+        $query = $this->conn->dbh->prepare($sql);
+        $query->execute($params);
+        return $query->fetchAll($fetchType);
+    }
+
+    public function FetchObj($sql, $params = array())
+    {
+        return $this->Fetch($sql, $params, PDO::FETCH_OBJ);
+    }
+
+    public function FetchColumn($sql, $params = array())
+    {
+        return $this->Fetch($sql, $params, PDO::FETCH_COLUMN);
+    }
+
+    public function Execute($sql, $params = array())
+    {
+        $query = $this->conn->dbh->prepare($sql);
+        return $query->execute($params);
+    }
+
+    public function LastInsertId()
+    {
+        return $this->conn->dbh->lastInsertId();
+    }
+    /* Конец методы быстрого доступа к stmt */
 
 }

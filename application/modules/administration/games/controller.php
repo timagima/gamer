@@ -61,7 +61,6 @@ class Controller extends MainController
     /* Конец добавление списка игр в справочник */
 
     /* Начало основные игро-обзоры */
-
     public function ActionSearchGuideGame()
     {
         $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/search-guide-game.tpl.php', '', 'index-admin.tpl.php');
@@ -194,11 +193,6 @@ class Controller extends MainController
             $data['screenshot-count'] = 6;
             $this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/main-page.tpl.php', '', 'index-admin.tpl.php', $data);
         }
-
-    }
-
-    public function ActionMainPageEdit() // редактирование главной стринцы для игр
-    {
 
     }
 }

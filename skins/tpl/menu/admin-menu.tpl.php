@@ -40,7 +40,7 @@
                     <li>
                         <a href="/">Редакция</a>
                         <ul>
-                            <li><a href="/administration/news">Новости</a></li>
+                            <li><a href="/administration/press/news">Новости</a></li>
                             <li><a href="/administration/games">Игровые обзоры</a></li>
                         </ul>
                     </li>

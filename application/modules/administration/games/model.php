@@ -6,11 +6,10 @@ use PDO;
 
 class Model extends MainModel
 {
-    private $game, $sourceImgType, $rootDir;
+    private $game, $sourceImgType;
     public function __construct()
     {
         parent::__construct();
-        $this->rootDir = $_SERVER["DOCUMENT_ROOT"] . "/";
     }
 
     /* Начало добавление списка игр*/

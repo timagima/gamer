@@ -1,9 +1,7 @@
 <?php
 use classes\render;
 use classes\url;
-
 ?>
-
 
 <h1>Статьи рубрики "<?=$data['game-rubric']['rubric']?>" -> "<?=$data['game-rubric']['game']?>"</h1>
 <div style="height: 45px">
@@ -36,20 +34,5 @@ use classes\url;
             </tr>
         <? }?>
         </tbody>
-        <tfoot>
-        <tr>
-            <td colspan="5" style="text-align: right" id="paging">
-
-            </td>
-            <script type="text/html" id="paging_template">
-                <a class="pager-item" data-page="{i}" href="<?= Url::Action("index") ?>?page={i}">{title}</a>
-            </script>
-        </tr>
-        </tfoot>
     </table>
 </div>
-
-<?php
-$path = $_SERVER["DOCUMENT_ROOT"];
-include $path . "/skins/tpl/administration/common/paging-list.php"
-?>

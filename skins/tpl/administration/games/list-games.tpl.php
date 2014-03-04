@@ -2,8 +2,6 @@
 use classes\render;
 use classes\url;
 ?>
-
-
 <h1>Список игр</h1>
 <div style="height: 45px">
 

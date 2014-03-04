@@ -82,6 +82,28 @@ class Upload extends SimpleImage
         echo json_encode(array($fileName, $this->fileName));
     }
 
+    public function ImgNews()
+    {
+        foreach ($_FILES as $key => $value)
+        {
+            $this->fileName = $key;
+            $this->path = "storage/temp";
+            $ext = "." . pathinfo($value['name'], PATHINFO_EXTENSION);
+            $name = $this->path . "/" . md5(microtime() + rand(0, 10000));
+            if($ext === ".jpeg" || $ext === ".jpg" || $ext === ".png")
+            {
+                $file = $name . $ext;
+                $this->load($value['tmp_name'])->square_crop(170)->save($file);
+            }
+            else
+            {
+                return;
+            }
+
+        }
+        echo json_encode(array($file, $this->fileName));
+    }
+
     // todo: нужно написать метод для валидации входящих файлов
 
     // Метод загрузки изображений в временную папку на сервере и создание обрезанного изображения

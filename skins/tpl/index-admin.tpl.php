@@ -10,6 +10,7 @@
 
     <script type="text/javascript" src="/skins/js/jquery.min.js"></script>
     <script type="text/javascript" src="/skins/js/script.js"></script>
+    <script type="text/javascript" src="/skins/js/script-admin.js"></script>
     <script type="text/javascript" src="/skins/js/arctic-modal.min.js"></script>
     <script type="text/javascript" src="/skins/js/jquery.autocomplete.js"></script>
     <script type="text/javascript" src="/skins/js/jquery.customSelect.js"></script>
@@ -17,6 +18,8 @@
     <script type="text/javascript" src="/skins/js/multiupload.js"></script>
     <script type="text/javascript" src="/skins/js/likes.js"></script>
     <script type="text/javascript" src="/skins/js/comments.js"></script>
+    <script type="text/javascript" src="/skins/js/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript" src="/skins/js/tinymce/jquery.tinymce.min.js"></script>
 
 
 
