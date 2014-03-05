@@ -117,12 +117,19 @@ class Controller extends MainController
     {
         $this->headerTxt['title'] = 'Контакты';
         $data['error'] = '';
-        if($_SERVER['REQUEST_METHOD']=== 'POST'){
-         $this->model->InsertContactMessage($_POST['data'],$_POST['id']);
-            echo 'Ваше сообщение успешно отправлено';
-
+        if($_SERVER['REQUEST_METHOD']=== 'POST')
+        {
+            if($_SESSION['code-captcha'] == $_POST['code-captcha-input'])
+            {
+                $this->model->InsertContactMessage($_POST['data'],$_POST['id']);
+                echo 1;
+                exit();
+            }
+        echo 0;
         exit();
         }
+
+
 
         $this->view->Generate($this->arrTpl[0], 'about/contacts.tpl.php', $this->GetTplView(), $this->arrTpl[1], $data, $this->headerTxt, $this->model->CountQuery());
     }

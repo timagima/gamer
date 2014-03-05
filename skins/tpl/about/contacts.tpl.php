@@ -1,31 +1,38 @@
 <script>
     $(document).ready(function(){
         $('#main').on('click','.btn-contact',function(){
-            $("#box-modal-data-gamer").arcticmodal();
+            $("#box-modal-data-contact").arcticmodal();
             $('span').removeClass();
                 var id = $(this).attr('id');
                     $('#submit').on('click',function(){
+                        var captcha = $('#code-captcha-input').val();
                         var data = $('.myForm').serializeArray();
                             if(data.length > 1){
                                 if(validName() && validEmail()){
-                                    sendMessage(id,data);
+                                    sendMessage(id,data,captcha);
                                 }
                             }else{
-                                sendMessage(id,data);
+                                sendMessage(id,data,captcha);
                             }
                     })
         });
-        function sendMessage(id,data){
+        function sendMessage(id,data,captcha){
             $.ajax({
                 type: 'POST',
                 url: document.location.href,
-                data: {'data':data,'id':id},
-                dataFilter: function(){
-                    $(".myForm").find("input,textarea").val('');
-                    $('span').removeClass();
-                    $("#modal-result").arcticmodal();
+                data: {'id':id,'data':data,'code-captcha-input':captcha},
+                success: function(data){
+                    if(data == 0){
+                        changeCaptcha();
+                        $("#code-captcha-input").val('');
+                    }else{
+                        changeCaptcha();
+                        $(".myForm").find("input,textarea").val('');
+                        $('span').removeClass();
+                        $("#modal-result").arcticmodal();
+                    }
                 },
-                success: function(){
+                complete: function(){
                     setTimeout(function(){
                         $("#modal-result").arcticmodal('close');
                     },3000);
@@ -65,14 +72,14 @@
 
 </script>
 <div class="hide">
-    <div class="box-modal" id="box-modal-data-gamer" style="width: 500px">
+    <div class="box-modal" id="box-modal-data-contact" style="width: 530px">
         <div class="header-modal">
             <b>Отправить сообщение</b>
             <div class="box-modal_close arcticmodal-close" onclick="closeModalAll()">
                 <img src="/skins/img/interface/close-modal.png">
             </div>
         </div>
-        <div style="padding:15px; padding-bottom: 45px;">
+        <div style="padding:15px; padding-bottom: 25px;overflow:hidden;">
             <form action="" class="myForm">
                 <?if(!empty($_SESSION["user-data"])){?>
                 <textarea type="text" name="text" id="email" cols='45' rows='4' placeholder="Введте текст сообщения"/></textarea><br>
@@ -87,10 +94,17 @@
                     <span id="valid-email-result"></span>
                 </div>
                 <textarea type="text" name="text"  cols='50' rows='4' placeholder="Введте текст сообщения"/></textarea><br>
+                <div class="captcha">
+                    <a href="javascript:changeCaptcha()">
+                        <img id="captcha-image" class="left" width="180" height="80" src="/main/captcha">
+                    </a>
+                    <span style="margin-left: 15px">Введите текст с картинки</span>
+                </div>
+                <input type="text" id="code-captcha-input" placeholder="Текст с картинки" />
                 <a id="submit">Отправить</a>
                 <?}?>
             </form>
-            <div id="result"></div>
+
         </div>
     </div>
 </div>
@@ -113,11 +127,13 @@
     border-radius: 5px;cursor:pointer;}
     .btn-contact:hover {background: #2fe2bf;}
     #submit{background: #1abc9c; color: #ffffff; padding: 7px 20px; text-decoration: none;
-     border-radius: 5px;cursor:pointer;display:block;margin-top:10px;width:70px}
+     border-radius: 5px;cursor:pointer;display:block;margin-top:17px;width:70px;float:right;}
     #submit:hover{background: #2fe2bf;}
     #result{color:#1abc9c;font-size:16px;margin-top:10px;}
     .center-input-contact,.top-input-contact{position:relative;margin-bottom:10px;}
     #valid-name-result, #valid-email-result{position:absolute;left:160px;top:10px;}
+    .captcha{margin-top:10px}
+    #code-captcha-input{margin:15px 0 0 15px;}
 
 </style>
 <div id="main">
@@ -130,7 +146,7 @@
                 <a class="btn-contact" id="2">Связаться</a>
 
             </div>
-            <div class="inner-text">
+           <div class="inner-text">
                 <p>Текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст
                     текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст
                     текст текст текст текст текст текст текст текст текст текст текст текст текст текст текст

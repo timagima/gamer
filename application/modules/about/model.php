@@ -53,10 +53,11 @@ class Model extends MainModel
     }
     public function InsertContactMessage($params,$id)
     {
-        $query = $this->conn->dbh->prepare("INSERT INTO message_contact SET id_rubric = :id_rubric,id_user = :id_user,name_user =:name_user,
-         email= :email, text = :text");
 
-         $arr = array(':name_user',':email',':text');
+            $query = $this->conn->dbh->prepare("INSERT INTO message_contact SET id_rubric = :id_rubric,id_user = :id_user,name_user =:name_user,
+            email= :email, text = :text");
+
+            $arr = array(':name_user',':email',':text');
             if(count($arr) > count($params)){
                 $newArr = array_reverse($arr);
                 for($i = 0; $i < count($newArr); $i++){
@@ -67,9 +68,13 @@ class Model extends MainModel
                     $query->bindParam("$arr[$key]",$value['value'],PDO::PARAM_STR);
                 }
             }
-        $query->bindParam(":id_user",$_SESSION['user-data']['id'],PDO::PARAM_INT);
-        $query->bindParam(":id_rubric",$id,PDO::PARAM_INT);
-        $query->execute();
+            $query->bindParam(":id_user",$_SESSION['user-data']['id'],PDO::PARAM_INT);
+            $query->bindParam(":id_rubric",$id,PDO::PARAM_INT);
+            $query->execute();
+
+
+
+
     }
 
 }
