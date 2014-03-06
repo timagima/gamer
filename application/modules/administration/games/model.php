@@ -243,26 +243,7 @@ class Model extends MainModel
         $this->UpdateMainPageGameRubric();
         $this->UploadMainPageRubricImg();
         $this->UploadMainPageGameScreenshot();
-        $videoLink = ( !empty($this->_p['video-link']) ) ? $this->_p['video-link'] : null;
-        $videoImg = ( !empty($this->_p['video-img']) ) ? $this->_p['video-img'] : null;
-        if( !empty($this->_p['video-link']) && strpos($this->_p['video-link'], "temp") ){
-            $videoLink = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
-            if(is_file($this->_p['video-link']))
-                rename($this->rootDir.$this->_p['video-link'], $this->rootDir.$videoLink);
-            $videoLink = "/".$videoLink;
-        }
-        if( !empty($this->_p['img-poster']) && strpos($this->_p['img-poster'], "temp") ){
-            $videoImg = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['img-poster']);
-            if(is_file($this->_p['img-poster']))
-                rename($this->rootDir.$this->_p['img-poster'], $this->rootDir.$videoImg);
-            $videoImg = "/".$videoImg;
-        }
-        if(!empty($this->_p['deleted-video-link'])){
-            if(is_file(substr($this->_p['deleted-video-img'], 1)))
-                unlink( $this->rootDir.substr($this->_p['deleted-video-img'], 1) );
-            if(is_file(substr($this->_p['deleted-video-link'], 1)))
-                unlink( $this->rootDir.substr($this->_p['deleted-video-link'], 1) );
-        }
+        $video = $this->CheckVideoPoster();
         $dateReleaseWorld = strtotime($this->_p['date_release_world']);
         $dateReleaseRussia = strtotime($this->_p['date_release_russia']);
         $query = $this->conn->dbh->prepare("UPDATE main_page_games SET id_game = :id_game, date = UNIX_TIMESTAMP(NOW()), game_mode = :game_mode, text = :text, title = :title,
@@ -302,8 +283,8 @@ class Model extends MainModel
         $query->bindParam(":official_site_link", $this->_p['official_site_link'], PDO::PARAM_STR);
         $query->bindParam(":game_engine", $this->_p['game_engine'], PDO::PARAM_STR);
         $query->bindParam(":distribution", $this->_p['distribution'], PDO::PARAM_STR);
-        $query->bindParam(":video_img", $videoImg, PDO::PARAM_STR);
-        $query->bindParam(":video_link", $videoLink, PDO::PARAM_STR);
+        $query->bindParam(":video_img", $video[1], PDO::PARAM_STR);
+        $query->bindParam(":video_link", $video[0], PDO::PARAM_STR);
         $query->bindParam(":sr_os", $this->_p['sr_os'], PDO::PARAM_STR);
         $query->bindParam(":sr_cpu", $this->_p['sr_cpu'], PDO::PARAM_STR);
         $query->bindParam(":sr_ram", $this->_p['sr_ram'], PDO::PARAM_STR);
@@ -364,20 +345,7 @@ class Model extends MainModel
     public function AddRubricArticle($params)
     {
 
-        $videoLink = ( !empty($this->_p['video-link']) ) ? $this->_p['video-link'] : null;
-        $videoImg = ( !empty($this->_p['video-img']) ) ? $this->_p['video-img'] : null;
-        if( !empty($this->_p['video-link']) && strpos($this->_p['video-link'], "temp") ){
-            $videoLink = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
-            if(is_file($this->_p['video-link']))
-                rename($this->rootDir.$this->_p['video-link'], $this->rootDir.$videoLink);
-            $videoLink = "/".$videoLink;
-        }
-        if( !empty($this->_p['img-poster']) && strpos($this->_p['img-poster'], "temp") ){
-            $videoImg = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['img-poster']);
-            if(is_file($this->_p['img-poster']))
-                rename($this->rootDir.$this->_p['img-poster'], $this->rootDir.$videoImg);
-            $videoImg = "/".$videoImg;
-        }
+        $video = $this->CheckVideoPoster();
         $query = $this->conn->dbh->prepare("
             INSERT INTO main_page_games_rubric_articles
             SET
@@ -399,8 +367,8 @@ class Model extends MainModel
         $query->bindParam(":title", $params['title'], PDO::PARAM_STR);
         $query->bindParam(":description", $params['description'], PDO::PARAM_STR);
         $query->bindParam(":keywords", $params['keywords'], PDO::PARAM_STR);
-        $query->bindParam(":video_link", $videoLink, PDO::PARAM_STR);
-        $query->bindParam(":video_img", $videoImg, PDO::PARAM_STR);
+        $query->bindParam(":video_link", $video[0], PDO::PARAM_STR);
+        $query->bindParam(":video_img", $video[1], PDO::PARAM_STR);
         $query->bindParam(":rubric", $params['id_rubric'], PDO::PARAM_INT);
         $query->execute();
 
@@ -500,26 +468,7 @@ class Model extends MainModel
 
     public function EditGameRubricArticle($params)
     {
-        $videoLink = ( !empty($this->_p['video-link']) ) ? $this->_p['video-link'] : null;
-        $videoImg = ( !empty($this->_p['video-img']) ) ? $this->_p['video-img'] : null;
-        if( !empty($this->_p['video-link']) && strpos($this->_p['video-link'], "temp") ){
-            $videoLink = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
-            if(is_file($this->_p['video-link']))
-                rename($this->rootDir.$this->_p['video-link'], $this->rootDir.$videoLink);
-            $videoLink = "/".$videoLink;
-        }
-        if( !empty($this->_p['img-poster']) && strpos($this->_p['img-poster'], "temp") ){
-            $videoImg = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['img-poster']);
-            if(is_file($this->_p['img-poster']))
-                rename($this->rootDir.$this->_p['img-poster'], $this->rootDir.$videoImg);
-            $videoImg = "/".$videoImg;
-        }
-        if(!empty($this->_p['deleted-video-link'])){
-            if(is_file(substr($this->_p['deleted-video-img'], 1)))
-                unlink( $this->rootDir.substr($this->_p['deleted-video-img'], 1) );
-            if(is_file(substr($this->_p['deleted-video-link'], 1)))
-                unlink( $this->rootDir.substr($this->_p['deleted-video-link'], 1) );
-        }
+        $video = $this->CheckVideoPoster();
         $query = $this->conn->dbh->prepare("
             UPDATE main_page_games_rubric_articles
             SET
@@ -542,8 +491,8 @@ class Model extends MainModel
         $query->bindParam(":title", $params['title'], PDO::PARAM_STR);
         $query->bindParam(":description", $params['description'], PDO::PARAM_STR);
         $query->bindParam(":keywords", $params['keywords'], PDO::PARAM_STR);
-        $query->bindParam(":video_link", $videoLink, PDO::PARAM_STR);
-        $query->bindParam(":video_img", $videoImg, PDO::PARAM_STR);
+        $query->bindParam(":video_link", $video[0], PDO::PARAM_STR);
+        $query->bindParam(":video_img", $video[1], PDO::PARAM_STR);
         $query->execute();
 
     }
@@ -594,6 +543,31 @@ class Model extends MainModel
                 }
             }
         }
+    }
+
+    public function CheckVideoPoster()
+    {
+        $videoLink = ( !empty($this->_p['video-link']) ) ? $this->_p['video-link'] : null;
+        $videoImg = ( !empty($this->_p['video-img']) ) ? $this->_p['video-img'] : null;
+        if( !empty($this->_p['video-link']) && strpos($this->_p['video-link'], "temp") ){
+            $videoLink = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
+            if(is_file($this->_p['video-link']))
+                rename($this->rootDir.$this->_p['video-link'], $this->rootDir.$videoLink);
+            $videoLink = "/".$videoLink;
+        }
+        if( !empty($this->_p['img-poster']) && strpos($this->_p['img-poster'], "temp") ){
+            $videoImg = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['img-poster']);
+            if(is_file($this->_p['img-poster']))
+                rename($this->rootDir.$this->_p['img-poster'], $this->rootDir.$videoImg);
+            $videoImg = "/".$videoImg;
+        }
+        if(!empty($this->_p['deleted-video-link'])){
+            if(is_file(substr($this->_p['deleted-video-img'], 1)))
+                unlink( $this->rootDir.substr($this->_p['deleted-video-img'], 1) );
+            if(is_file(substr($this->_p['deleted-video-link'], 1)))
+                unlink( $this->rootDir.substr($this->_p['deleted-video-link'], 1) );
+        }
+        return array($videoLink, $videoImg);
     }
 
     public function GetMainPageScreenshot($id)
