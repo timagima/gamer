@@ -84,6 +84,8 @@ class Controller extends MainController
         if(isset($this->_g['id'])){
             if(!empty($this->_p) && $this->_p['id']>0){
                 $this->model->EditGameRubricArticle($this->_p);
+                header("Location: http://".$_SERVER['SERVER_NAME']."/administration/games/game-rubric-articles/?id=".$this->_p['id_rubric']);
+                exit;
             }
             $data["rows"] = ($id==false) ? $this->model->GetRubricArticles($this->_g['id']) : $this->model->GetRubricArticles($id);
             $data["game-rubric"] = ($id==false) ? $this->model->GetGameRubricInfo($this->_g['id']) : $this->model->GetGameRubricInfo($id);
@@ -91,6 +93,7 @@ class Controller extends MainController
         }elseif($this->_p['id']==="0"){
             $this->model->AddRubricArticle($this->_p);
             header("Location: http://".$_SERVER['SERVER_NAME']."/administration/games/game-rubric-articles/?id=".$this->_p['id_rubric']);
+            exit;
             //$data["rows"] = $this->model->GetRubricArticles($this->_p['id_rubric']);
             //$data["game-rubric"] = $this->model->GetGameRubricInfo($this->_p['id_rubric']);
             //$this->view->Generate('menu/admin-menu.tpl.php', 'administration/games/game-rubric-articles.tpl.php', '', 'index-admin.tpl.php', $data);
