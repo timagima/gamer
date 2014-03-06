@@ -21,14 +21,17 @@
                 type: 'POST',
                 url: document.location.href,
                 data: {'id':id,'data':data,'code-captcha-input':captcha},
+                beforeSend: function(){
+                    $(".result-send").html('<img class="ajax" src="/skins/img/ajax.gif">').show();
+                },
                 success: function(data){
                     if(data == 0){
                         changeCaptcha();
                         $("#code-captcha-input").val('');
                     }else{
-                        changeCaptcha();
                         $(".myForm").find("input,textarea").val('');
                         $('span').removeClass();
+                        $('#box-modal-data-contact').arcticmodal('close');
                         $("#modal-result").arcticmodal();
                     }
                 },
@@ -36,6 +39,7 @@
                     setTimeout(function(){
                         $("#modal-result").arcticmodal('close');
                     },3000);
+                    $(".result-send").hide();
                 }
             })
         }
@@ -81,9 +85,10 @@
         </div>
         <div style="padding:15px; padding-bottom: 25px;overflow:hidden;">
             <form action="" class="myForm">
-                <?if(!empty($_SESSION["user-data"])){?>
+                <?if(!empty($_SESSION["user-data"]) && !empty($_SESSION["auth"])){?>
                 <textarea type="text" name="text" id="email" cols='45' rows='4' placeholder="Введте текст сообщения"/></textarea><br>
-                <a id="submit">Отправить</a>
+                    <div class="result-send"></div>
+                    <a id="submit">Отправить</a>
                 <?}else{?>
                 <div class="top-input-contact">
                     <input type="text" id="name"  name="name" placeholder="Ваше имя"/><br>
@@ -101,6 +106,7 @@
                     <span style="margin-left: 15px">Введите текст с картинки</span>
                 </div>
                 <input type="text" id="code-captcha-input" placeholder="Текст с картинки" />
+                    <div class="result-send"></div>
                 <a id="submit">Отправить</a>
                 <?}?>
             </form>
@@ -134,6 +140,7 @@
     #valid-name-result, #valid-email-result{position:absolute;left:160px;top:10px;}
     .captcha{margin-top:10px}
     #code-captcha-input{margin:15px 0 0 15px;}
+    .result-send{position:absolute;right:10px;top:45px}
 
 </style>
 <div id="main">
