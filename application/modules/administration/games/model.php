@@ -384,7 +384,7 @@ class Model extends MainModel
                 $imgB = str_replace("_s", "_b", $imgS);
                 $oldImgS = $this->_p[$screenName];
                 $oldImgB = str_replace("_s", "_b", $oldImgS);
-                if(rename($oldImgS, $imgS) && rename($oldImgB, $imgB)){
+                if(rename($this->rootDir.$oldImgS, $this->rootDir.$imgS) && rename($this->rootDir.$oldImgB, $this->rootDir.$imgB)){
                     $imgS = "/".$imgS;
                     $imgB = "/".$imgB;
                     $sql = $this->conn->dbh->prepare("INSERT INTO main_page_games_screenshot SET id_main_page_game=:id_game, screenshot_s=:imgS, screenshot_b=:imgB");
@@ -413,7 +413,7 @@ class Model extends MainModel
                     $imgB = str_replace("_s", "_b", $imgS);
                     $oldImgS = $this->_p[$imgName];
                     $oldImgB = str_replace("_s", "_b", $oldImgS);
-                    if(rename($oldImgS, $imgS) && rename($oldImgB, $imgB)){
+                    if(rename($this->rootDir.$oldImgS, $this->rootDir.$imgS) && rename($this->rootDir.$oldImgB, $this->rootDir.$imgB)){
                         $imgS = "/".$imgS;
                         $imgB = "/".$imgB;
                     }
@@ -443,8 +443,8 @@ class Model extends MainModel
             $path->execute();
             $pathDelImgs = $path->fetchAll(PDO::FETCH_ASSOC);
             foreach($pathDelImgs as $pathImg){
-                unlink(substr($pathImg['rubric_img_s'], 1));
-                unlink(substr($pathImg['rubric_img_b'], 1));
+                unlink($this->rootDir.substr($pathImg['rubric_img_s'], 1));
+                unlink($this->rootDir.substr($pathImg['rubric_img_b'], 1));
             }
 
             $sql = $this->conn->dbh->prepare("DELETE FROM main_page_games_rubric WHERE FIND_IN_SET(id, :id)");
@@ -506,8 +506,8 @@ class Model extends MainModel
                 $delImgArray = explode('$', $delImgId);
                 $delImgS = substr($delImgArray[1], 1);
                 $delImgB = str_replace("_s", "_b", $delImgS);
-                unlink($delImgS);
-                unlink($delImgB);
+                unlink($this->rootDir.$delImgS);
+                unlink($this->rootDir.$delImgB);
                 $delId .= ($i===0) ? $delImgArray[0] : ','.$delImgArray[0];
                 $i++;
             }
@@ -531,7 +531,7 @@ class Model extends MainModel
                     $imgB = str_replace("_s", "_b", $imgS);
                     $oldImgS = $this->_p[$imgName];
                     $oldImgB = str_replace("_s", "_b", $oldImgS);
-                    if(rename($oldImgS, $imgS) && rename($oldImgB, $imgB)){
+                    if(rename($this->rootDir.$oldImgS, $this->rootDir.$imgS) && rename($this->rootDir.$oldImgB, $this->rootDir.$imgB)){
                         $imgS = "/".$imgS;
                         $imgB = "/".$imgB;
                         $sql = $this->conn->dbh->prepare("UPDATE main_page_games_rubric SET rubric_img_s=:rubricImgS, rubric_img_b=:rubricImgB WHERE id=:id");
@@ -551,20 +551,20 @@ class Model extends MainModel
         $videoImg = ( !empty($this->_p['video-img']) ) ? $this->_p['video-img'] : null;
         if( !empty($this->_p['video-link']) && strpos($this->_p['video-link'], "temp") ){
             $videoLink = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['video-link']);
-            if(is_file($this->_p['video-link']))
+            if(is_file($this->rootDir.$this->_p['video-link']))
                 rename($this->rootDir.$this->_p['video-link'], $this->rootDir.$videoLink);
             $videoLink = "/".$videoLink;
         }
         if( !empty($this->_p['img-poster']) && strpos($this->_p['img-poster'], "temp") ){
             $videoImg = "storage/guide-games/" . $this->_p['id-game'] . "/" . basename($this->_p['img-poster']);
-            if(is_file($this->_p['img-poster']))
+            if(is_file($this->rootDir.$this->_p['img-poster']))
                 rename($this->rootDir.$this->_p['img-poster'], $this->rootDir.$videoImg);
             $videoImg = "/".$videoImg;
         }
         if(!empty($this->_p['deleted-video-link'])){
-            if(is_file(substr($this->_p['deleted-video-img'], 1)))
+            if(is_file($this->rootDir.substr($this->_p['deleted-video-img'], 1)))
                 unlink( $this->rootDir.substr($this->_p['deleted-video-img'], 1) );
-            if(is_file(substr($this->_p['deleted-video-link'], 1)))
+            if(is_file($this->rootDir.substr($this->_p['deleted-video-link'], 1)))
                 unlink( $this->rootDir.substr($this->_p['deleted-video-link'], 1) );
         }
         return array($videoLink, $videoImg);
