@@ -120,7 +120,7 @@ class Controller extends MainController
         if($_SERVER['REQUEST_METHOD']=== 'POST')
         {
             if($_SESSION['code-captcha'] == $_POST['code-captcha-input'])
-            {
+           {
                 $this->model->InsertContactMessage($_POST['data'],$_POST['id']);
                 echo 1;
                 exit();

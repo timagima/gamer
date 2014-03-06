@@ -44,6 +44,12 @@
                             <li><a href="/administration/games">Игровые обзоры</a></li>
                         </ul>
                     </li>
+                    <li>
+                        <a href="/">О нас</a>
+                        <ul>
+                            <li><a href="/administration/about/message">Сообщения</a></li>
+                        </ul>
+                    </li>
 
                 </ul>
             </div>
