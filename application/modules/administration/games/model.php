@@ -421,7 +421,7 @@ class Model extends MainModel
                     $imgS = null;
                     $imgB = null;
                 }
-                $sql = $this->conn->dbh->prepare("INSERT INTO main_page_games_rubric SET id_main_page_game=:id_game, rubric=:rubric, rubric_img_s=:imgS, rubric_img_b=:imgB, date=UNIX_TIMESTAMP(NOW())");
+                $sql = $this->conn->dbh->prepare("INSERT INTO main_page_games_rubric SET id_main_page_game=:id_game, rubric=:rubric, rubric_img_s=:imgS, rubric_img_b=:imgB");
                 $sql->bindParam(":id_game", $idGame, PDO::PARAM_INT);
                 $sql->bindParam(":rubric", $rubric, PDO::PARAM_STR);
                 $sql->bindParam(":imgS", $imgS, PDO::PARAM_STR);
