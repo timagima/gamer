@@ -23,12 +23,12 @@ class Controller extends MainController
     public function ActionMessage()
     {
         if(!empty($_POST['id'])){
-            if($_POST['id'] == 'read'){
-                $this->model->updateContact();
+
+                $this->model->updateContact($_POST['id']);
                 exit();
-            }
+
         }
-        $data['message_contact'] =  $this->model->getMessageContact();
+        $data['message_contact'] =  array_reverse($this->model->getMessageContact());
         $data['count_message'] = $this->model->countMessage();
         $this->view->Generate('menu/admin-menu.tpl.php', 'administration/about/message.list.tpl.php', '', 'index-admin.tpl.php',$data);
     }

@@ -18,16 +18,18 @@ class Model extends MainModel
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_NUM);
     }
-    public function updateContact()
+    public function updateContact($id)
     {
-        $query = $this->conn->dbh->prepare("UPDATE `message_contact` SET `index`= 1");
+        $query = $this->conn->dbh->prepare("UPDATE `message_contact` SET `index`= 1 WHERE `id` = $id");
         $query->execute();
 
     }
     public function getMessageContact()
     {
-        $stmt = $this->conn->dbh->prepare("SELECT m.id_rubric, m.id_user, m.name_user, m.email, m.text
-        FROM rubric_contact r LEFT JOIN message_contact m ON m.id_rubric = r.id WHERE `index` = 0");
+        $stmt = $this->conn->dbh->prepare("SELECT m.id_user, m.name_user, m.email, m.text, r.name_rubric, u.nick,m.id
+        FROM message_contact m  LEFT JOIN rubric_contact r ON m.id_rubric = r.id
+        LEFT JOIN users u ON m.id_user = u.id
+        WHERE `index` = 0");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
