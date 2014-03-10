@@ -6,8 +6,8 @@ use classes\url;
 
     $(document).ready(function(){
         $('#submit').on('click',function(e){
-            var data = $('#myForm,option[value]').serializeArray();
-            $("#myForm").find("input,textarea").val('');
+            var data = $('#myFormGame,option[value]').serializeArray();
+            $("#myFormGame").find("input,textarea").val('');
             $.ajax({
                 type: 'POST',
                 url: document.location.href,
@@ -22,11 +22,11 @@ use classes\url;
         initMultiUploader(config);
     });
     var config = {
-        form: "myForm",
+        form: "myFormGame",
         dragArea: "dragAndDropFiles",
         visualProgress: "modal",
         img: true,
-        method: "ImgNews",
+        method: "UploadImg",
         uploadUrl: document.location.href
     }
 
@@ -41,7 +41,7 @@ use classes\url;
 <?=Render::Hidden($data->id, "id")?>
 
 
-<form action="" id="myForm" method="POST" enctype="multipart/form-data">
+<form action="" id="myFormGame" method="POST" enctype="multipart/form-data">
     <?=Render::Hidden($data->id, "id")?>
     <div class="field" style="margin: 30px 0 30px;">
         <?if(empty($data->source_img)){?>
@@ -64,13 +64,7 @@ use classes\url;
                 echo "<option>".$res->name."</option>";
             }?>
         </select><br>
-    <?}else{?>
-        <div class="style-input">
-            <?=Render::LabelEdit($data->name_game, "name_game", "Название игры", true)?>
-        </div>
-        <br>
     <?}?>
-
     <div class="text">
         <?=Render::LabelTextArea($data->description_game, "description", "Описание игры")?>
     </div>

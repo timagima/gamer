@@ -28,7 +28,7 @@ use classes\url;
                 <td><a href='<?= Url::Action("edit-thanks", "administration.about") ?>?id=<?= $row->id; ?>'>Редактировать</a>
                 </td>
                 <td><a data-action="delete"
-                       href='<?= Url::Action("delete", "administration.about") ?>?id=<?= $row->id; ?>'>Удалить</a></td>
+                       href='<?= Url::Action("delete-thanks", "administration.about") ?>?id=<?= $row->id; ?>'>Удалить</a></td>
             </tr>
         <? }?>
         </tbody>

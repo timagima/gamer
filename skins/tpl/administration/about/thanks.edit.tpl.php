@@ -7,7 +7,7 @@ use classes\url;
     $(document).ready(function(){
         $('#submit').on('click',function(e){
             var data = $('#myFormThanks').serializeArray();
-            $("#myForm").find("input,textarea").val('');
+            $("#myFormThanks").find("input,textarea").val('');
             $.ajax({
                 type: 'POST',
                 url: document.location.href,
@@ -26,7 +26,7 @@ use classes\url;
         dragArea: "dragAndDropFiles",
         visualProgress: "modal",
         img: true,
-        method: "ImgNews",
+        method: "UploadImg",
         uploadUrl: document.location.href
     }
 

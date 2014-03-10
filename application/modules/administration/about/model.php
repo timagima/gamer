@@ -3,6 +3,7 @@ namespace application\modules\administration\about;
 use application\core\mvc\MainModel;
 use classes\render;
 use PDO;
+use classes\SimpleImage;
 
 class Model extends MainModel
 {
@@ -45,15 +46,23 @@ class Model extends MainModel
     {
         return $this->conn->dbh->query("SELECT * FROM games")->fetchAll(PDO::FETCH_OBJ);
     }
-    public function MoveImgGamesForever($params)
+    public function WorkImg($params,$path,$bool)
     {
-            $path =  basename($params);
-            copy($this->rootDir.$params,$this->rootDir."storage/legend-game/".$path);
+        if($bool == false)
+        {
+            unlink($this->rootDir .$path.$params);
+        }else
+        {
+            $img =  basename($params);
+            copy($this->rootDir.$params,$this->rootDir.$path.$img);
             unlink($this->rootDir . $params);
+        }
     }
+
     public function SetDataGameForever($params)
     {
-        $this->MoveImgGamesForever($params[1]['value'],false);
+
+        $this->WorkImg($params[1]['value'],"storage/legend-game/",true);
         $imgLink = array_splice($params,0,2);
         $stmt = $this->conn->dbh->prepare("INSERT INTO games_forever SET name_game = :name_game,
         description_game = :description, link_game_anchor =:link_anchor, link_game = :link_game, source_img = :source_img");
@@ -67,12 +76,11 @@ class Model extends MainModel
     }
     public function EditDataGameForever($params)
     {
-        $this->MoveImgGamesForever($params[1]['value'],true);
         $imgLink = array_splice($params,0,2);
-        $stmt = $this->conn->dbh->prepare("UPDATE games_forever SET name_game = :name_game,
+        $stmt = $this->conn->dbh->prepare("UPDATE games_forever SET
         description_game = :description, link_game_anchor =:link_anchor, link_game = :link_game,
         source_img = :source_img WHERE id = :id");
-        $arr = array(':name_game',':description',':link_anchor',':link_game');
+        $arr = array(':description',':link_anchor',':link_game');
         foreach($params as $key => $value)
         {
             $stmt->bindParam("$arr[$key]",$value['value'],PDO::PARAM_STR);
@@ -82,14 +90,18 @@ class Model extends MainModel
         $stmt->execute();
 
     }
+
     public function RemoveGameForever($id)
     {
+        $img = $this->conn->dbh->query("SELECT source_img FROM games_forever WHERE id = $id")->fetchAll(PDO::FETCH_ASSOC);;
+        $this->WorkImg($img[0]['source_img'],"storage/legend-game/",false);
         $stmt = $this->conn->dbh->prepare("DELETE FROM games_forever WHERE id = :id");
         $stmt->bindParam(":id",$id, PDO::PARAM_INT);
         $stmt->execute();
     }
 
-             /*********Начадл работа с благодарнастьями********/
+
+             /*********Начало работа с благодарностями********/
 
        public function ListThanks()
        {
@@ -98,5 +110,44 @@ class Model extends MainModel
     public function GetDataThanks()
     {
         return $this->FetchObj("SELECT *  FROM thanks WHERE id = :id", array(":id" => $_GET["id"]));
+    }
+    public function SetDataThanks($params)
+    {
+
+        $this->WorkImg($params[1]['value'],"storage/thanks/",true);
+        $imgLink = array_splice($params,0,2);
+        $stmt = $this->conn->dbh->prepare("INSERT INTO thanks SET name_partner = :name_partner,
+         link_anchor =:link_anchor, link = :link, text = :text,source_img = :source_img");
+
+        $arr = array(':name_partner',':link_anchor',':link',':text');
+        foreach($params as $key => $value)
+        {
+            $stmt->bindParam("$arr[$key]",$value['value'],PDO::PARAM_STR);
+        }
+        $stmt->bindParam(":source_img", basename($imgLink[1]['value']), PDO::PARAM_STR);
+        $stmt->execute();
+    }
+    public function RemoveDataThanks($id)
+    {
+        $img = $this->conn->dbh->query("SELECT source_img FROM thanks WHERE id = $id")->fetchAll(PDO::FETCH_ASSOC);;
+        $this->WorkImg($img[0]['source_img'],"storage/thanks/",false);
+        $stmt = $this->conn->dbh->prepare("DELETE FROM thanks WHERE id = :id");
+        $stmt->bindParam(":id",$id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+    public function EditDataThanks($params)
+    {
+        $imgLink = array_splice($params,0,2);
+        $stmt = $this->conn->dbh->prepare("UPDATE thanks SET name_partner = :name_partner,
+        link_anchor =:link_anchor, link = :link, text = :text, source_img = :source_img WHERE id = :id");
+        $arr = array(':name_partner',':link_anchor',':link',':text');
+        foreach($params as $key => $value)
+        {
+            $stmt->bindParam("$arr[$key]",$value['value'],PDO::PARAM_STR);
+        }
+        $stmt->bindParam(":source_img", basename($imgLink[1]['value']), PDO::PARAM_STR);
+        $stmt->bindParam(":id", $imgLink[0]['value'], PDO::PARAM_STR);
+        $stmt->execute();
+
     }
 }

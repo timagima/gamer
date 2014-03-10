@@ -13,7 +13,7 @@ class Controller extends MainController
 
     //private static $storage_path = "storage/legend-game";
     //private static $storagePath = "storage/legend-game";
-    public  $model,$rootDir;
+    public  $model,$rootDir,$resize;
 
     function __construct()
     {
@@ -42,6 +42,7 @@ class Controller extends MainController
     }
     public function ActionAddGame()
     {
+
         $this->PrepareFiles(self::$storageTemp);
         if(!empty($_POST['data']))
         {
@@ -57,21 +58,30 @@ class Controller extends MainController
         if(!empty($_POST['data']))
         {
             $this->model->EditDataGameForever($_POST['data']);
-            print_r( $_POST['data']['deletedImg[]']);
-
             exit();
         }
+
         $this->view->Generate('menu/admin-menu.tpl.php', 'administration/about/games.edit.tpl.php', '', 'index-admin.tpl.php',$data);
     }
-    public function ActionDelete()
+    public function ActionDeleteGame()
     {
         $id = $_GET["id"];
         if ($id > 0)
         {
             $this->model->RemoveGameForever($id);
         }
-            $this->Redirect("games", "administration.games");
+            $this->Redirect("games", "administration.about");
         }
+    public function ActionDeleteThanks()
+    {
+        $id = $_GET["id"];
+        if ($id > 0)
+        {
+            $this->model->RemoveDataThanks($id);
+        }
+        $this->Redirect("thanks", "administration.about");
+    }
+
 
     public function ActionThanks()
     {
@@ -80,12 +90,25 @@ class Controller extends MainController
     }
     public function ActionEditThanks()
     {
+
+        if(!empty($_POST['data']))
+        {
+            $this->model->EditDataThanks($_POST['data']);
+            exit();
+        }
+
         $data = $this->model->GetDataThanks()[0];
         $this->view->Generate('menu/admin-menu.tpl.php', 'administration/about/thanks.edit.tpl.php', '', 'index-admin.tpl.php',$data);
+
     }
     public function ActionAddThanks()
     {
         $this->PrepareFiles(self::$storageTemp);
+        if(!empty($_POST['data']))
+        {
+            $this->model->SetDataThanks($_POST['data']);
+            exit();
+        }
         $this->view->Generate('menu/admin-menu.tpl.php', 'administration/about/thanks.edit.tpl.php', '', 'index-admin.tpl.php');
 
     }
