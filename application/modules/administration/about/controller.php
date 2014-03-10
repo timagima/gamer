@@ -13,11 +13,10 @@ class Controller extends MainController
 
     //private static $storage_path = "storage/legend-game";
     //private static $storagePath = "storage/legend-game";
-    public  $model,$rootDir,$resize;
+    public  $model,$rootDir;
 
     function __construct()
     {
-
         parent::__construct();
         $this->model = new Model();
     }
@@ -54,13 +53,13 @@ class Controller extends MainController
     }
     public function ActionEditGame()
     {
+        $this->PrepareFiles(self::$storageTemp);
         $data = $this->model->GetDataGameForever()[0];
         if(!empty($_POST['data']))
         {
-            $this->model->EditDataGameForever($_POST['data']);
+            $this->model->EditDataGameForever($_POST['data'],$_POST['data'][0]['value']);
             exit();
         }
-
         $this->view->Generate('menu/admin-menu.tpl.php', 'administration/about/games.edit.tpl.php', '', 'index-admin.tpl.php',$data);
     }
     public function ActionDeleteGame()
@@ -90,10 +89,10 @@ class Controller extends MainController
     }
     public function ActionEditThanks()
     {
-
+        $this->PrepareFiles(self::$storageTemp);
         if(!empty($_POST['data']))
         {
-            $this->model->EditDataThanks($_POST['data']);
+            $this->model->EditDataThanks($_POST['data'],$_POST['data'][0]['value']);
             exit();
         }
 

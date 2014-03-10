@@ -74,8 +74,10 @@ class Model extends MainModel
         $stmt->bindParam(":source_img", basename($imgLink[1]['value']), PDO::PARAM_STR);
         $stmt->execute();
     }
-    public function EditDataGameForever($params)
+    public function EditDataGameForever($params,$id)
     {
+
+        $this->WorkImg($params[1]['value'],"storage/legend-game/",true);
         $imgLink = array_splice($params,0,2);
         $stmt = $this->conn->dbh->prepare("UPDATE games_forever SET
         description_game = :description, link_game_anchor =:link_anchor, link_game = :link_game,
@@ -88,7 +90,12 @@ class Model extends MainModel
         $stmt->bindParam(":source_img", basename($imgLink[1]['value']), PDO::PARAM_STR);
         $stmt->bindParam(":id", $imgLink[0]['value'], PDO::PARAM_STR);
         $stmt->execute();
-
+        if($imgLink[1]['name']== 'deletedImg[]')
+        {
+            $this->WorkImg($imgLink[1]['value'],"storage/legend-game/",false);
+            $stmt = $this->conn->dbh->prepare("UPDATE games_forever SET source_img = '' WHERE id = $id");
+            $stmt->execute();
+        }
     }
 
     public function RemoveGameForever($id)
@@ -103,22 +110,20 @@ class Model extends MainModel
 
              /*********Начало работа с благодарностями********/
 
-       public function ListThanks()
-       {
-           return $this->conn->dbh->query("SELECT id, name_partner FROM thanks")->fetchAll(PDO::FETCH_OBJ);
-       }
+    public function ListThanks()
+    {
+        return $this->conn->dbh->query("SELECT id, name_partner FROM thanks")->fetchAll(PDO::FETCH_OBJ);
+    }
     public function GetDataThanks()
     {
         return $this->FetchObj("SELECT *  FROM thanks WHERE id = :id", array(":id" => $_GET["id"]));
     }
     public function SetDataThanks($params)
     {
-
         $this->WorkImg($params[1]['value'],"storage/thanks/",true);
         $imgLink = array_splice($params,0,2);
         $stmt = $this->conn->dbh->prepare("INSERT INTO thanks SET name_partner = :name_partner,
          link_anchor =:link_anchor, link = :link, text = :text,source_img = :source_img");
-
         $arr = array(':name_partner',':link_anchor',':link',':text');
         foreach($params as $key => $value)
         {
@@ -135,8 +140,9 @@ class Model extends MainModel
         $stmt->bindParam(":id",$id, PDO::PARAM_INT);
         $stmt->execute();
     }
-    public function EditDataThanks($params)
+    public function EditDataThanks($params,$id)
     {
+        $this->WorkImg($params[1]['value'],"storage/thanks/",true);
         $imgLink = array_splice($params,0,2);
         $stmt = $this->conn->dbh->prepare("UPDATE thanks SET name_partner = :name_partner,
         link_anchor =:link_anchor, link = :link, text = :text, source_img = :source_img WHERE id = :id");
@@ -148,6 +154,11 @@ class Model extends MainModel
         $stmt->bindParam(":source_img", basename($imgLink[1]['value']), PDO::PARAM_STR);
         $stmt->bindParam(":id", $imgLink[0]['value'], PDO::PARAM_STR);
         $stmt->execute();
-
+        if($imgLink[1]['name']== 'deletedImg[]')
+        {
+            $this->WorkImg($imgLink[1]['value'],"storage/thanks/",false);
+            $stmt = $this->conn->dbh->prepare("UPDATE thanks SET source_img = '' WHERE id = $id");
+            $stmt->execute();
+        }
     }
 }
