@@ -9,22 +9,20 @@ class Model extends MainModel
     function __construct()
     {
         parent::__construct();
-
     }
 
-    public function countMessage()
+    public function CountMessage()
     {
         $stmt = $this->conn->dbh->prepare("SELECT  COUNT(`index`) FROM message_contact WHERE `index` = 0");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_NUM);
     }
-    public function updateContact($id)
+    public function UpdateContact($id)
     {
         $query = $this->conn->dbh->prepare("UPDATE `message_contact` SET `index`= 1 WHERE `id` = $id");
         $query->execute();
-
     }
-    public function getMessageContact()
+    public function GetMessageContact()
     {
         $stmt = $this->conn->dbh->prepare("SELECT m.id_user, m.name_user, m.email, m.text, r.name_rubric, u.nick,m.id
         FROM message_contact m  LEFT JOIN rubric_contact r ON m.id_rubric = r.id
@@ -33,6 +31,72 @@ class Model extends MainModel
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+           /*********Начало работа с играми***********/
 
+    public function ListGameForever()
+    {
+        return $this->conn->dbh->query("SELECT id, name_game FROM games_forever")->fetchAll(PDO::FETCH_OBJ);
+    }
+    public function GetDataGameForever()
+    {
+        return $this->FetchObj("SELECT *  FROM games_forever WHERE id = :id", array(":id" => $_GET["id"]));
+    }
+    public function ListGames()
+    {
+        return $this->conn->dbh->query("SELECT * FROM games")->fetchAll(PDO::FETCH_OBJ);
+    }
+    public function MoveImgGamesForever($params)
+    {
+            $path =  basename($params);
+            copy($this->rootDir.$params,$this->rootDir."storage/legend-game/".$path);
+            unlink($this->rootDir . $params);
+    }
+    public function SetDataGameForever($params)
+    {
+        $this->MoveImgGamesForever($params[1]['value'],false);
+        $imgLink = array_splice($params,0,2);
+        $stmt = $this->conn->dbh->prepare("INSERT INTO games_forever SET name_game = :name_game,
+        description_game = :description, link_game_anchor =:link_anchor, link_game = :link_game, source_img = :source_img");
+        $arr = array(':name_game',':description',':link_anchor',':link_game');
+        foreach($params as $key => $value)
+        {
+            $stmt->bindParam("$arr[$key]",$value['value'],PDO::PARAM_STR);
+        }
+        $stmt->bindParam(":source_img", basename($imgLink[1]['value']), PDO::PARAM_STR);
+        $stmt->execute();
+    }
+    public function EditDataGameForever($params)
+    {
+        $this->MoveImgGamesForever($params[1]['value'],true);
+        $imgLink = array_splice($params,0,2);
+        $stmt = $this->conn->dbh->prepare("UPDATE games_forever SET name_game = :name_game,
+        description_game = :description, link_game_anchor =:link_anchor, link_game = :link_game,
+        source_img = :source_img WHERE id = :id");
+        $arr = array(':name_game',':description',':link_anchor',':link_game');
+        foreach($params as $key => $value)
+        {
+            $stmt->bindParam("$arr[$key]",$value['value'],PDO::PARAM_STR);
+        }
+        $stmt->bindParam(":source_img", basename($imgLink[1]['value']), PDO::PARAM_STR);
+        $stmt->bindParam(":id", $imgLink[0]['value'], PDO::PARAM_STR);
+        $stmt->execute();
 
+    }
+    public function RemoveGameForever($id)
+    {
+        $stmt = $this->conn->dbh->prepare("DELETE FROM games_forever WHERE id = :id");
+        $stmt->bindParam(":id",$id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+             /*********Начадл работа с благодарнастьями********/
+
+       public function ListThanks()
+       {
+           return $this->conn->dbh->query("SELECT id, name_partner FROM thanks")->fetchAll(PDO::FETCH_OBJ);
+       }
+    public function GetDataThanks()
+    {
+        return $this->FetchObj("SELECT *  FROM thanks WHERE id = :id", array(":id" => $_GET["id"]));
+    }
 }

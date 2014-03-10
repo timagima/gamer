@@ -48,6 +48,9 @@
                         <a href="/">О нас</a>
                         <ul>
                             <li><a href="/administration/about/message">Сообщения</a></li>
+                            <li><a href="/administration/about/games">Игры навсегда</a></li>
+                            <li><a href="/administration/about/thanks">Партнеры</a></li>
+
                         </ul>
                     </li>
 

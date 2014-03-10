@@ -19,7 +19,7 @@
                 <p><?echo $value['description_game']?></p>
                 <a href="<?echo $value['link_game']?>"><?echo $value['link_game_anchor']?></a>
             </div>
-            <img src="/storage<?echo $value['source_img']?>"/>
+            <img src="/storage/legend-game/<?echo $value['source_img']?>"/>
         </div>
         <?}?>
     </div>
